@@ -25,7 +25,7 @@
         </el-input>
       </div>
       <div class="header__item header__right-menu right-menu">
-        <template v-if="loggedIn">
+        <template v-if="isAuthenticated">
           <nuxt-link
             to="/favourites"
             class="right-menu__avatar right-menu__item"
@@ -37,15 +37,20 @@
             />
             <span class="right-menu__text">Избранное</span>
           </nuxt-link>
-          <nuxt-link to="/my" class="right-menu__avatar right-menu__item">
-            <el-avatar
-              size="small"
-              fit="cover"
-              src="https://sun9-36.userapi.com/impg/c857024/v857024380/138e8f/PEk89jpM9Ak.jpg?size=713x794&quality=96&sign=f579ea1a3516878153044238d0959999&type=album"
-              alt="Аватар пользователя"
-            ></el-avatar>
-            <span class="right-menu__text">Кабинет</span>
-          </nuxt-link>
+          <el-dropdown trigger="click" class="right-menu__avatar right-menu__item">
+            <span class="right-menu__item">
+              <el-avatar
+                size="small"
+                fit="cover"
+                src="https://sun9-36.userapi.com/impg/c857024/v857024380/138e8f/PEk89jpM9Ak.jpg?size=713x794&quality=96&sign=f579ea1a3516878153044238d0959999&type=album"
+                alt="Аватар пользователя"
+              ></el-avatar>
+              <span class="right-menu__text">Кабинет</span>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item @click.native="logout">Выйти</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
         <template v-else>
           <el-button type="primary" plain @click="$refs.loginModal.openModal()"
@@ -62,6 +67,7 @@
 </template>
 
 <script>
+import { mapState, mapGetters } from "vuex";
 import LoginModal from "./LoginModal.vue";
 export default {
   components: {
@@ -76,6 +82,7 @@ export default {
   },
   created() {
     this.setupNav(this.$route.name);
+    console.log(this.isAuthenticated);
   },
   methods: {
     setupNav(routeName) {
@@ -102,6 +109,17 @@ export default {
     openLoginModal() {},
     goToRegisterPage() {
       this.$router.push({ path: "/register" });
+    },
+    logout() {
+      this.$store.dispatch('auth/logout').then(() => {
+        this.$router.push({ path: "/" });
+      })
+    }
+  },
+  computed: {
+    ...mapState(["auth"]),
+    isAuthenticated() {
+      return this.$store.getters["auth/isAuthenticated"];
     }
   },
   watch: {
@@ -122,8 +140,8 @@ export default {
   height: 65px;
   background-color: #fff;
   font-size: 12px;
-  z-index: 1000; 
-  
+  z-index: 1000;
+
   &__inner {
     display: flex;
     justify-content: space-between;
@@ -172,6 +190,8 @@ export default {
 
   &__avatar {
     cursor: pointer;
+    font-size: 12px;
+    color: #000;
   }
 
   &__text {

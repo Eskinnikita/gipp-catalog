@@ -8,7 +8,7 @@
   >
     <el-form :model="form">
       <el-form-item label="Почта">
-        <el-input v-model="form.name"></el-input>
+        <el-input v-model="form.email"></el-input>
       </el-form-item>
       <el-form-item label="Пароль">
         <el-input type="password" v-model="form.password"></el-input>
@@ -39,7 +39,10 @@ export default {
       this.dialogFormVisible = false;
     },
     login() {
-        console.log(this.form)
+        this.$store.dispatch('auth/loginUser', this.form)
+        .then(() => {
+          this.closeModal()
+        })
     }
   }
 };
