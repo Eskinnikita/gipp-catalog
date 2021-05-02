@@ -1,11 +1,11 @@
 <template>
   <div>
     <Header />
-    <div class="page">
+    <main class="page">
       <div class="page__container">
         <Nuxt />
       </div>
-    </div>
+    </main>
   </div>
 </template>
 
@@ -34,14 +34,19 @@ a {
   text-decoration: none;
 }
 
-.el-avatar>img {
+.el-avatar > img {
   width: 100% !important;
 }
 
-.page__container {
-  padding: 85px 15px 0;
-  margin: 0 auto;
-  max-width: 1020px;
-  // border: 1px solid black;
+.page {
+  &__container {
+    min-height: 100vh;
+    padding: 15px;
+    margin: 85px auto 20px;
+    max-width: 1020px;
+    background-color: #fff;
+    border-radius: 4px;
+    // border: 1px solid black;
+  }
 }
 </style>

@@ -25,51 +25,60 @@
         </el-input>
       </div>
       <div class="header__item header__right-menu right-menu">
-        <nuxt-link to="/favourites" class="right-menu__avatar right-menu__item">
-          <img
-            class="right-menu__image"
-            src="../assets/icons/heart.svg"
-            alt=""
-          />
-          <span class="right-menu__text">Избранное</span>
-        </nuxt-link>
-        <nuxt-link to="/my" class="right-menu__avatar right-menu__item">
-          <el-avatar
-            size="small"
-            fit="cover"
-            src="https://sun9-36.userapi.com/impg/c857024/v857024380/138e8f/PEk89jpM9Ak.jpg?size=713x794&quality=96&sign=f579ea1a3516878153044238d0959999&type=album"
-            alt="Аватар пользователя"
-          ></el-avatar>
-          <span class="right-menu__text">Кабинет</span>
-        </nuxt-link>
+        <template v-if="loggedIn">
+          <nuxt-link
+            to="/favourites"
+            class="right-menu__avatar right-menu__item"
+          >
+            <img
+              class="right-menu__image"
+              src="../assets/icons/heart.svg"
+              alt=""
+            />
+            <span class="right-menu__text">Избранное</span>
+          </nuxt-link>
+          <nuxt-link to="/my" class="right-menu__avatar right-menu__item">
+            <el-avatar
+              size="small"
+              fit="cover"
+              src="https://sun9-36.userapi.com/impg/c857024/v857024380/138e8f/PEk89jpM9Ak.jpg?size=713x794&quality=96&sign=f579ea1a3516878153044238d0959999&type=album"
+              alt="Аватар пользователя"
+            ></el-avatar>
+            <span class="right-menu__text">Кабинет</span>
+          </nuxt-link>
+        </template>
+        <template v-else>
+          <el-button type="primary" plain @click="$refs.loginModal.openModal()"
+            >Вход</el-button
+          >
+          <el-button type="primary" @click="goToRegisterPage"
+            >Регистрация</el-button
+          >
+        </template>
       </div>
     </div>
+    <login-modal ref="loginModal" />
   </header>
 </template>
 
 <script>
+import LoginModal from "./LoginModal.vue";
 export default {
+  components: {
+    LoginModal
+  },
   data() {
     return {
       activeIndex: "1",
-      search: ""
+      search: "",
+      loggedIn: false
     };
   },
-  created() {},
-  methods: {
-    handleSelect(key, keyPath) {
-      if (+key === 1) {
-        this.activeIndex = "1";
-        this.$router.push({ path: "/catalog" });
-      } else {
-        this.activeIndex = "2";
-        this.$router.push({ path: "/news" });
-      }
-    }
+  created() {
+    this.setupNav(this.$route.name);
   },
-  watch: {
-    $route(to, from) {
-      const routeName = to.name;
+  methods: {
+    setupNav(routeName) {
       switch (routeName) {
         case "news":
           this.activeIndex = "2";
@@ -80,6 +89,25 @@ export default {
         default:
           this.activeIndex = "9999";
       }
+    },
+    handleSelect(key, keyPath) {
+      if (+key === 1) {
+        this.activeIndex = "1";
+        this.$router.push({ path: "/catalog" });
+      } else {
+        this.activeIndex = "2";
+        this.$router.push({ path: "/news" });
+      }
+    },
+    openLoginModal() {},
+    goToRegisterPage() {
+      this.$router.push({ path: "/register" });
+    }
+  },
+  watch: {
+    $route(to, from) {
+      const routeName = to.name;
+      this.setupNav(routeName);
     }
   }
 };
@@ -90,12 +118,12 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1000;
   width: 100%;
   height: 65px;
   background-color: #fff;
   font-size: 12px;
-
+  z-index: 1000; 
+  
   &__inner {
     display: flex;
     justify-content: space-between;
