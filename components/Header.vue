@@ -3,7 +3,7 @@
     <div class="header__inner">
       <div class="header__item header__left">
         <nuxt-link to="/" class="header__logo-link">
-          <img src="../assets/logo.svg" alt="Логотип ГИПП" />
+          <img src="../assets/logo.svg" alt="Логотип ГИПП"/>
         </nuxt-link>
       </div>
       <div class="header__navbar navbar">
@@ -48,27 +48,31 @@
               <span class="right-menu__text">Кабинет</span>
             </span>
             <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item @click.native="goToProfile">Профиль</el-dropdown-item>
               <el-dropdown-item @click.native="logout">Выйти</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
         <template v-else>
           <el-button type="primary" plain @click="$refs.loginModal.openModal()"
-            >Вход</el-button
+          >Вход
+          </el-button
           >
           <el-button type="primary" @click="goToRegisterPage"
-            >Регистрация</el-button
+          >Регистрация
+          </el-button
           >
         </template>
       </div>
     </div>
-    <login-modal ref="loginModal" />
+    <login-modal ref="loginModal"/>
   </header>
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import {mapState, mapGetters} from "vuex";
 import LoginModal from "./LoginModal.vue";
+
 export default {
   components: {
     LoginModal
@@ -82,7 +86,6 @@ export default {
   },
   created() {
     this.setupNav(this.$route.name);
-    console.log(this.isAuthenticated);
   },
   methods: {
     setupNav(routeName) {
@@ -100,20 +103,22 @@ export default {
     handleSelect(key, keyPath) {
       if (+key === 1) {
         this.activeIndex = "1";
-        this.$router.push({ path: "/catalog" });
+        this.$router.push({path: "/catalog"});
       } else {
         this.activeIndex = "2";
-        this.$router.push({ path: "/news" });
+        this.$router.push({path: "/news"});
       }
     },
-    openLoginModal() {},
     goToRegisterPage() {
-      this.$router.push({ path: "/register" });
+      this.$router.push({path: "/register"});
     },
     logout() {
       this.$store.dispatch('auth/logout').then(() => {
-        this.$router.push({ path: "/" });
+        this.$router.push({path: "/"});
       })
+    },
+    goToProfile() {
+      this.$router.push({path: "/profile"});
     }
   },
   computed: {
@@ -206,6 +211,7 @@ export default {
   justify-content: flex-start;
   align-items: center;
   margin: 0 50px;
+
   &__search {
     max-width: 460px;
     width: 100%;

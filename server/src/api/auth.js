@@ -5,63 +5,70 @@ const jwt = require('jsonwebtoken')
 const router = express.Router()
 
 router.post('/login', async (req, res) => {
-    const {email, password} = req.body
+  const {email, password} = req.body
 
-    const userWithEmail = await User.findOne({ where: {email}}).catch(
-        e => {
-            console.log("Error: ", e)
-        }
-    )
-
-    if(!userWithEmail) {
-        return res.status(400).json({
-            message: "Неверная почта или пароль!"
-        })
+  const userWithEmail = await User.findOne({where: {email}}).catch(
+    e => {
+      console.log("Error: ", e)
     }
+  )
 
-    if(userWithEmail.password != password) {
-        return res.status(400).json({
-            message: "Неверная почта или пароль!"
-        })
-    }
+  if (!userWithEmail) {
+    return res.status(400).json({
+      message: "Неверная почта или пароль!"
+    })
+  }
 
-    const jwtToken = jwt.sign(
-        {id: userWithEmail.id, email: userWithEmail.email},
-        process.env.JWT_SECRET
-    )
+  if (userWithEmail.password !== password) {
+    return res.status(400).json({
+      message: "Неверная почта или пароль!"
+    })
+  }
 
-    const userWithToken = JSON.parse(JSON.stringify(userWithEmail))
-    userWithToken.token = jwtToken
+  const jwtToken = jwt.sign(
+    {id: userWithEmail.id, email: userWithEmail.email},
+    process.env.JWT_SECRET
+  )
 
-    res.status(200).json(userWithToken)
+  const userWithToken = JSON.parse(JSON.stringify(userWithEmail))
+  userWithToken.token = jwtToken
+
+  res.status(200).json(userWithToken)
 })
 
 router.post('/register', async (req, res) => {
-    const {name, email, password} = req.body
+  const {name, email, password, role} = req.body
 
-    const existedUser = await User.findOne({where: {email}}).catch(
-        e => {
-            console.log("Error", e)
-        }
+  const existedUser = await User.findOne({where: {email}}).catch(
+    e => {
+      console.log("Error", e)
+    }
+  )
+
+  if (existedUser) {
+    res.status(409).json({
+      message: "Пользователь уже существует!"
+    })
+  }
+
+  const newUser = new User({name, email, password, role})
+  const createdUser = await newUser.save().catch(
+    e => {
+      console.log("Error: ", e);
+      res.status(500).json({error: "Ошибка регистрации"});
+    }
+  )
+
+  if (createdUser) {
+    const jwtToken = jwt.sign(
+      {id: createdUser.id, email: createdUser.email},
+      process.env.JWT_SECRET
     )
 
-    if(existedUser) {
-        res.status(409).json({
-            message: "Пользователь уже существует!"
-        })
-    }
-
-    const newUser = new User({name, email, password})
-    const createdUser = await newUser.save().catch(
-        e => {
-            console.log("Error: ", e);
-            res.status(500).json({ error: "Ошибка регистрации" });
-        }
-    )
-
-    if(createdUser) {
-        res.json(createdUser)
-    }
+    const userWithToken = JSON.parse(JSON.stringify(createdUser))
+    userWithToken.token = jwtToken
+    res.status(201).json(userWithToken)
+  }
 })
 
 module.exports = router
