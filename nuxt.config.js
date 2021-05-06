@@ -24,7 +24,8 @@ export default {
   plugins: [
     '@/plugins/element-ui',
     '@/plugins/persistedstate.js',
-    '@/plugins/axios.js'
+    '@/plugins/axios.js',
+    { src: '@/plugins/nuxt-quill-plugin.js', ssr: false }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

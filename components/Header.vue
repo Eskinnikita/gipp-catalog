@@ -48,7 +48,8 @@
               <span class="right-menu__text">Кабинет</span>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click.native="goToProfile">Профиль</el-dropdown-item>
+              <el-dropdown-item @click.native="goTo('/cabinet')">Личный кабинет</el-dropdown-item>
+              <el-dropdown-item @click.native="goTo('/profile')">Профиль</el-dropdown-item>
               <el-dropdown-item @click.native="logout">Выйти</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -117,8 +118,8 @@ export default {
         this.$router.push({path: "/"});
       })
     },
-    goToProfile() {
-      this.$router.push({path: "/profile"});
+    goTo(dest) {
+      this.$router.push({path: dest});
     }
   },
   computed: {

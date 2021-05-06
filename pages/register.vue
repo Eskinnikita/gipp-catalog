@@ -1,5 +1,6 @@
 <template>
   <div class="reg">
+    <h2 class="title">Регистрация</h2>
     <el-radio-group v-model="role" style="margin-bottom: 30px;">
       <el-radio-button label="1">Читатель</el-radio-button>
       <el-radio-button label="2">Представитель организации</el-radio-button>
@@ -9,50 +10,23 @@
       <!-- USER FORM -->
       <reader-form v-if="+role === 1"/>
       <!-- COMPANY FORM -->
-      <el-form class="reg__form" v-if="+role === 2" ref="form" :model="form">
-        <el-form-item label="Наименование организации">
-          <el-input v-model="form.name"></el-input>
-        </el-form-item>
-        <el-form-item label="Почта">
-          <el-input v-model="form.email"></el-input>
-        </el-form-item>
-        <el-form-item label="Телефон">
-          <el-input v-model="form.phone"></el-input>
-        </el-form-item>
-        <el-form-item label="Адрес">
-          <el-input v-model="form.address"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary">Оставить заявку</el-button>
-        </el-form-item>
-      </el-form>
+      <comp-form v-if="+role === 2"/>
       <!-- PUBLISHER FORM -->
-      <el-form class="reg__form" v-if="+role === 3" ref="form" :model="form">
-        <el-form-item label="Название издательства">
-          <el-input v-model="form.name"></el-input>
-        </el-form-item>
-        <el-form-item label="Почта">
-          <el-input v-model="form.email"></el-input>
-        </el-form-item>
-        <el-form-item label="Телефон">
-          <el-input v-model="form.password"></el-input>
-        </el-form-item>
-        <el-form-item label="Адрес">
-          <el-input v-model="form.address"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary">Оставить заявку</el-button>
-        </el-form-item>
-      </el-form>
+      <pub-form v-if="+role === 3"/>
     </div>
   </div>
 </template>
 
 <script>
 import readerForm from "@/components/regForms/readerForm"
+import compForm from "@/components/regForms/compForm"
+import pubForm from "@/components/regForms/pubForm"
+
 export default {
   components: {
-    readerForm
+    readerForm,
+    compForm,
+    pubForm
   },
   data() {
     return {
@@ -65,9 +39,7 @@ export default {
       console.log(this.form)
     }
   },
-  watch: {
-
-  }
+  watch: {}
 };
 </script>
 

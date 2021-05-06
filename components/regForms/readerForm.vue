@@ -56,10 +56,10 @@ export default {
       },
       rules: {
         password: [
-          { validator: validatePass, trigger: 'blur' }
+          {required: true, validator: validatePass, trigger: 'blur' }
         ],
         checkPassword: [
-          { validator: validatePass2, trigger: 'blur' }
+          {required: true, validator: validatePass2, trigger: 'blur' }
         ],
         email: [
           { required: true, message: 'Пожалуйста, введите вашу почту', trigger: 'blur' },

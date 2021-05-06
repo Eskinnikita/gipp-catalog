@@ -20,6 +20,7 @@ html {
   font-size: 16px;
   word-spacing: 1px;
   background-color: #ebeef5;
+  color: #000;
 }
 
 *,
@@ -46,7 +47,12 @@ a {
     max-width: 1020px;
     background-color: #fff;
     border-radius: 4px;
-    // border: 1px solid black;
   }
+}
+
+.title {
+  font-weight: normal;
+  margin: 10px 0 20px;
+  padding: 0 15px;
 }
 </style>
