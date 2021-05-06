@@ -69,7 +69,10 @@ export default {
     sendRequest() {
       this.$refs["userForm"].validate((valid) => {
         if (valid) {
-          this.isThankYou = true
+          this.$store.dispatch('auth/makeRequest', this.form)
+            .then(() => {
+              this.isThankYou = true
+            })
         } else {
           console.log(this.form)
           console.log('error submit!!');

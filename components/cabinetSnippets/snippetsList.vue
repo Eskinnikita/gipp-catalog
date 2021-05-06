@@ -11,7 +11,12 @@
           ></el-input>
         </el-col>
       </el-row>
-      <user-snippet v-for="(item, index) in items" :user-info="item" :key="index"/>
+      <template v-if="filterItems.length">
+        <user-snippet v-for="(item, index) in filterItems" :user-info="item" :key="index"/>
+      </template>
+      <template v-else>
+        Список пуст
+      </template>
     </template>
     <template v-else>
       <div class="snippet-list__not-found">
@@ -27,11 +32,22 @@ export default {
   components: {
     userSnippet
   },
+  data() {
+    return {
+      search: ''
+    }
+  },
   props: {
-    search: '',
     items: {
       type: Array,
       required: true
+    }
+  },
+  computed: {
+    filterItems() {
+      return this.items.filter( item => {
+        return item.name.toLowerCase().replace(/\s/g, '').includes(this.search.toLowerCase().replace(/\s/g, ''))
+      })
     }
   }
 }

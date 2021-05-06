@@ -24,7 +24,7 @@ router.get('/users/all/:role', passport.authenticate('jwt', { session: false }) 
         console.log("Error")
         break;
     }
-    const users = await Model.findAll({where: {role}}).catch(
+    const users = await Model.findAll({where: {role}, attributes: { exclude: ['password'] }}).catch(
       e => {
         console.log("Error", e)
       }

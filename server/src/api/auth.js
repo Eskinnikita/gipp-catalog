@@ -1,5 +1,7 @@
 const express = require('express')
 const User = require('../models/user')
+const Publisher = require('../models/publisher')
+const Organ = require('../models/organization')
 const jwt = require('jsonwebtoken')
 
 const router = express.Router()
@@ -70,5 +72,37 @@ router.post('/register', async (req, res) => {
     res.status(201).json(userWithToken)
   }
 })
+
+router.post('/request', async (req, res) => {
+  const {name, phone, email, address, role, approved} = req.body
+  let Model
+  if (+role === 2) {
+    Model = Organ
+  } else {
+    Model = Publisher
+  }
+  const existedRequest = await Model.findOne({where: {email}}).catch(
+    e => {
+      console.log("Error", e)
+    }
+  )
+
+  if (existedRequest) {
+    res.status(409).json({
+      message: "Вы уже подавали заявку! Ожидайте рассмотрения администратором портала"
+    })
+  }
+
+  const newRequest = new Model({name, phone, email, address, role, approved})
+  const createdRequest = await newRequest.save().catch(
+    e => {
+      console.log("Error: ", e);
+      res.status(500).json({error: "Ошибка регистрации"});
+    }
+  )
+
+  res.status(201).json(createdRequest)
+})
+
 
 module.exports = router

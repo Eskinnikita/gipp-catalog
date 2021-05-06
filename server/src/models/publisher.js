@@ -21,6 +21,10 @@ const Publisher = sequelize.define("Publisher", {
   role: {
     type: DataTypes.INTEGER,
     allowNull: false
+  },
+  approved: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false
   }
 });
 

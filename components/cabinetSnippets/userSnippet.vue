@@ -1,23 +1,27 @@
 <template>
   <div class="user-snippet">
-    <el-row :gutter="10">
-      <el-col :md="2">
+    <div class="user-snippet__left">
+      <div class="user-snippet__avatar">
         <el-avatar icon="el-icon-user-solid" size="large"></el-avatar>
-      </el-col>
-      <el-col :md="20">
+      </div>
+      <div>
         <div class="user-snippet__snippet-info snippet-info">
           <h4 class="snippet-info__name">{{ userInfo.name }}</h4>
           <div class="reader-snippet__additional-info">
             <div class="reader-snippet__additional-info-item">
-              <i class="el-icon-message"/> {{userInfo.email}}
+              <i class="el-icon-message"/> {{ userInfo.email }}
             </div>
           </div>
         </div>
-      </el-col>
-      <el-col :md="2">
-        <el-button type="danger" icon="el-icon-delete" circle></el-button>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
+    <div v-if="+userInfo.role === 1">
+      <el-button type="danger" icon="el-icon-delete" circle></el-button>
+    </div>
+    <div v-if="notApproved">
+      <el-button type="success">Принять</el-button>
+      <el-button type="danger">Отклонить</el-button>
+    </div>
   </div>
 </template>
 
@@ -27,6 +31,11 @@ export default {
     userInfo: {
       type: Object,
       required: true
+    }
+  },
+  computed: {
+    notApproved() {
+      return (+this.userInfo.role === 2 || +this.userInfo.role === 3) && !this.userInfo.approved
     }
   }
 }
@@ -38,8 +47,18 @@ export default {
   margin-bottom: 10px;
   border-bottom: 1px solid #E4E7ED;
   padding: 15px 5px;
-  &__info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
+  &__avatar {
+    margin-right: 30px;
+  }
+
+  &__left {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
   }
 
   &__additional-info-item {

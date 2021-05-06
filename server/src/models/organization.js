@@ -21,7 +21,11 @@ const Organ = sequelize.define("Organ", {
   role: {
     type: DataTypes.INTEGER,
     allowNull: false
-  }
+  },
+  approved: {
+  type: DataTypes.BOOLEAN,
+    allowNull: false
+}
 });
 
 module.exports = Organ;

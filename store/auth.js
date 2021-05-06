@@ -28,6 +28,14 @@ export const actions = {
       console.log(e)
     }
   },
+  async makeRequest({commit}, request) {
+    try {
+      let res = null
+      await this.$axios.$post('/request', request)
+    } catch (e) {
+      console.log(e)
+    }
+  },
   async createUser({commit}, newUserData) {
     try {
       let res = null
