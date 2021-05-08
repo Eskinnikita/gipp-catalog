@@ -40,7 +40,6 @@ router.get('/users/all/:role', passport.authenticate('jwt', {session: false}), a
 
 router.post('/users/confirm', passport.authenticate('jwt', {session: false}), async (req, res) => {
   try {
-    console.log('TYE', req.body)
     const {role, id} = req.body
     let Model
     switch (role) {
@@ -78,10 +77,50 @@ router.post('/users/confirm', passport.authenticate('jwt', {session: false}), as
       console.log(e)
     })
 
-    res.status(200).send(request)
+    res.status(200).json(request)
   } catch (e) {
-    res.status(500).json({message: err})
+    res.status(500).json({message: e})
   }
 })
+
+router.post('/users/deny', passport.authenticate('jwt', {session: false}), async (req, res) => {
+  try {
+    const {role, id, comment} = req.body
+    let Model
+    switch (role) {
+      case 2:
+        Model = Organ;
+        break;
+      case 3:
+        Model = Publisher;
+        break;
+      default:
+        console.log("Error")
+        break;
+    }
+
+    const request = await Model.findOne({where: {id}})
+
+    const email = request.dataValues.email
+
+    const info = await transporter.sendMail({
+      from: process.env.MAIL_CLIENT_USERNAME, // sender address
+      to: email, // list of receivers
+      subject: "Отклонение заявки!", // Subject line
+      text: "Ваша заявка подтверждена, в можете авторизоваться на сайте, спользуя следующие данные:", // plain text body
+      html: `<b>К сожалению ваша заявка была отклонена, ниже вы можете ознакомиться с комментарием администратора</b><br/>
+      <p>${comment}</p>`
+    }).catch(e => {
+      console.log(e)
+    })
+
+    const destroyedRequest = await Model.destroy({where: {id}})
+    console.log(destroyedRequest)
+    res.status(200).json(destroyedRequest)
+  } catch (e) {
+    res.status(500).json({message: e})
+  }
+})
+
 
 module.exports = router

@@ -1,5 +1,6 @@
 <template>
   <div class="snippet-list">
+    <!-- ДИАЛОГ ПОДТВЕЖДЕНИЯ ЗАЯВКИ -->
     <el-dialog
       title="Подтверждение заявки"
       :visible.sync="dialogVisible"
@@ -12,15 +13,35 @@
         <el-button type="primary" @click="confirmRequest">Подтвердить</el-button>
       </span>
     </el-dialog>
+    <!-- ДИАЛОГ ОТКЛОНЕНИЯ ЗАЯВКИ -->
+    <el-dialog
+      title="Подтверждение заявки"
+      :visible.sync="denyDialogVisible"
+      width="30%">
+      <span>
+        Отклонить заявку?
+      </span>
+      <el-form>
+        <el-form-item label="Причина отклонения">
+          <el-input v-model="denyComment" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="denyDialogVisible = false">Отменить</el-button>
+        <el-button type="primary" @click="denyRequest">Подтвердить</el-button>
+      </span>
+    </el-dialog>
+    <!-- СПИСОК ЗАЯВОК -->
     <div v-if="notApprovedItems.length" class="snippet-list__not-approved">
       <template v-if="notApprovedItems.length">
-        <user-snippet @openDialog="openConfirmDialog" v-for="(item, index) in notApprovedItems" :user-info="item"
+        <user-snippet @openDialog="openConfirmDialog" @openDenyDialog="openDenyDialog" v-for="(item, index) in notApprovedItems" :user-info="item"
                       :key="index"/>
       </template>
       <template v-else>
         Список пуст
       </template>
     </div>
+    <!-- СПИСОК ПОЛЬЗОВАТЕЛЕЙ -->
     <div class="snippet-list__search-container">
       <el-input
         class="snippet-list__search"
@@ -28,7 +49,7 @@
         prefix-icon="el-icon-search"
         v-model="search"
       ></el-input>
-      <nuxt-link to="/editor">
+      <nuxt-link v-if="activeRole === '4'" to="/editor">
         <el-button type="primary" plain>
           + Добавить
         </el-button>
@@ -36,7 +57,7 @@
     </div>
     <template v-if="items.length">
       <template v-if="filterItems.length">
-        <user-snippet @openDialog="openConfirmDialog" v-for="(item, index) in filterItems" :user-info="item"
+        <user-snippet v-for="(item, index) in filterItems" :user-info="item"
                       :key="index"/>
       </template>
       <template v-else>
@@ -64,7 +85,10 @@ export default {
     return {
       search: '',
       dialogVisible: false,
-      userOnConfirm: null
+      denyDialogVisible: false,
+      userOnConfirm: null,
+      userOnDeny: null,
+      denyComment: ''
     }
   },
   props: {
@@ -86,6 +110,11 @@ export default {
       this.userOnConfirm = data
       this.dialogVisible = true
     },
+    openDenyDialog(data) {
+      console.log('ZHOSPS')
+      this.userOnConfirm = data
+      this.denyDialogVisible = true
+    },
     confirmRequest() {
       this.$store.dispatch('users/confirmRequest', {
         id: this.userOnConfirm.id,
@@ -93,7 +122,17 @@ export default {
       }).then(() => {
         this.dialogVisible = false
       })
-    }
+    },
+    denyRequest() {
+      this.$store.dispatch('users/denyRequest', {
+        id: this.userOnConfirm.id,
+        role: this.userOnConfirm.role,
+        comment: this.denyComment
+      }).then(() => {
+        this.denyComment = ''
+        this.denyDialogVisible = false
+      })
+    },
   },
   computed: {
     filterItems() {

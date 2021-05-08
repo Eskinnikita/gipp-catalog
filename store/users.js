@@ -6,8 +6,11 @@ export const mutations = {
   SET_USERS(state, users) {
     state.users = users
   },
-  REMOVE_USER(state, user) {
-
+  REMOVE_USER(state, id) {
+    const userIndex = state.users.findIndex(el => {
+      return el.id === id
+    })
+    state.users.splice(userIndex, 1)
   }
 }
 
@@ -29,12 +32,24 @@ export const actions = {
       res = await this.$axios.$post('/users/confirm', data)
       if(res) {
         console.log(res)
-        commit('REMOVE_USER', res)
+        commit('REMOVE_USER', data)
       }
     } catch (e) {
       console.log(e)
     }
-  }
+  },
+  async denyRequest({commit}, data) {
+    try {
+      let res = null
+      res = await this.$axios.$post('/users/deny', data)
+      if(res) {
+        console.log(res)
+        commit('REMOVE_USER', data.id)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  },
 }
 
 export const getters = {

@@ -20,7 +20,7 @@
     </div>
     <div v-if="notApproved">
       <el-button type="success" @click="openConfirmModal" plain>Принять</el-button>
-      <el-button type="danger" plain>Отклонить</el-button>
+      <el-button type="danger" @click="openDenyModal" plain>Отклонить</el-button>
     </div>
   </div>
 </template>
@@ -38,7 +38,11 @@ export default {
   methods: {
     openConfirmModal(){
       this.$emit('openDialog', this.userInfo)
-    }
+    },
+    openDenyModal(){
+      console.log('dfdf')
+      this.$emit('openDenyDialog', this.userInfo)
+    },
   },
   computed: {
     notApproved() {
