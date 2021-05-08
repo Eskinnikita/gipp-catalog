@@ -8,20 +8,39 @@ const router = express.Router()
 
 router.post('/login', async (req, res) => {
   const {email, password} = req.body
+  let userWithEmail
+  await Promise.all([
+    User.findOne({where: {email}}),
+    Publisher.findOne({where: {email}})
+  ])
+    .then((data) => {
+      for(let i = 0; i < data.length; i++) {
+        if(data[i] !== null) {
+          userWithEmail = data[i].dataValues
+        }
+      }
+    })
+    .catch(
+      e => {
+        console.log("Error", e)
+      }
+    )
 
-  const userWithEmail = await User.findOne({where: {email}}).catch(
-    e => {
-      console.log("Error: ", e)
-    }
-  )
-
+  // const userWithEmail = await User.findOne({where: {email}}).catch(
+  //   e => {
+  //     console.log("Error: ", e)
+  //   }
+  // )
+  //
   if (!userWithEmail) {
+    console.log('1', userWithEmail, password)
     return res.status(400).json({
       message: "Неверная почта или пароль!"
     })
   }
 
   if (userWithEmail.password !== password) {
+    console.log('2',userWithEmail, password)
     return res.status(400).json({
       message: "Неверная почта или пароль!"
     })
