@@ -15,22 +15,29 @@
         </div>
       </div>
     </div>
-    <div v-if="+userInfo.role === 1">
+    <div v-if="+userInfo.role === 1 || userInfo.approved">
       <el-button type="danger" icon="el-icon-delete" circle></el-button>
     </div>
     <div v-if="notApproved">
-      <el-button type="success">Принять</el-button>
-      <el-button type="danger">Отклонить</el-button>
+      <el-button type="success" @click="openConfirmModal" plain>Принять</el-button>
+      <el-button type="danger" plain>Отклонить</el-button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
+  components: {
+  },
   props: {
     userInfo: {
       type: Object,
       required: true
+    }
+  },
+  methods: {
+    openConfirmModal(){
+      this.$emit('openDialog', this.userInfo)
     }
   },
   computed: {

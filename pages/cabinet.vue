@@ -7,7 +7,7 @@
       <el-tab-pane label="Новости" name="news"></el-tab-pane>
     </el-tabs>
     <div class="cabinet__tab-content">
-      <snippets-list :items="users"/>
+      <snippets-list v-if="activeTab !== '4'" :items="approvedUsers" :notApprovedItems="notApprovedUsers" :activeRole="activeTab"/>
     </div>
   </div>
 </template>
@@ -23,7 +23,7 @@ export default {
   },
   data() {
     return {
-      activeTab: '1'
+      activeTab: '3'
     }
   },
   methods: {
@@ -33,8 +33,21 @@ export default {
     }
   },
   computed: {
-    users() {
-      return this.$store.state.users.users
+    approvedUsers() {
+      return this.$store.state.users.users.filter(el => {
+        if ('approved' in el) {
+          return el.approved
+        } else {
+          return el
+        }
+      })
+    },
+    notApprovedUsers() {
+      return this.$store.state.users.users.filter(el => {
+        if ('approved' in el) {
+          return !el.approved
+        }
+      })
     }
   }
 }

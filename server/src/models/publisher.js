@@ -10,6 +10,10 @@ const Publisher = sequelize.define("Publisher", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
   phone: {
     type: DataTypes.STRING,
     allowNull: false,

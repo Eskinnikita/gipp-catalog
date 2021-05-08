@@ -14,6 +14,10 @@ const Organ = sequelize.define("Organ", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
   address: {
     type: DataTypes.STRING,
     allowNull: false
