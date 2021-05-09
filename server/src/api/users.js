@@ -108,7 +108,7 @@ router.post('/users/deny', passport.authenticate('jwt', {session: false}), async
       to: email, // list of receivers
       subject: "Отклонение заявки!", // Subject line
       text: "Ваша заявка подтверждена, в можете авторизоваться на сайте, спользуя следующие данные:", // plain text body
-      html: `<b>К сожалению ваша заявка была отклонена, ниже вы можете ознакомиться с комментарием администратора</b><br/>
+      html: `<b>К сожалению, ваша заявка была отклонена, ниже вы можете ознакомиться с комментарием администратора</b><br/>
       <p>${comment}</p>`
     }).catch(e => {
       console.log(e)

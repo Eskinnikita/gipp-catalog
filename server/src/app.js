@@ -6,7 +6,6 @@ const helmet = require("helmet");
 require("./auth/passport");
 
 const app = express()
-
 const api = require("./api");
 const middlewares = require("./middlewares");
 
@@ -17,6 +16,7 @@ app.use(express.json())
 app.use(cors())
 app.use(morgan('dev'))
 app.use(helmet());
+app.use('/uploads', express.static('uploads'))
 
 app.get("/api/healthcheck", async (req, res) => {
     try {
