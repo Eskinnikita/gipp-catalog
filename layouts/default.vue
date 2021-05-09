@@ -55,4 +55,28 @@ a {
   margin: 10px 0 20px;
   padding: 0 15px;
 }
+
+.el-upload--picture-card {
+  height: 240px !important;
+  width: 180px !important;
+  line-height: normal;
+  font-size: 12px;
+  padding: 70px 10px 0;
+}
+
+.el-upload-list__item {
+  height: 240px !important;
+  width: 180px !important;
+
+  img {
+    object-fit: cover;
+  }
+}
+
+textarea {
+  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
+  Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 12px !important;
+
+}
 </style>

@@ -23,13 +23,17 @@
           <el-tab-pane label="Каталог" name="1">
             <div class="profile-page__tab-title-container">
               <h3 class="profile-page__tab-title">Наши издания</h3>
-              <el-button icon="el-icon-edit" type="primary">Добавить</el-button>
+              <nuxt-link to="/publication/create">
+                <el-button icon="el-icon-edit" type="primary">Добавить</el-button>
+              </nuxt-link>
             </div>
           </el-tab-pane>
           <el-tab-pane label="Новости" name="2">
             <div class="profile-page__tab-title-container">
               <h3 class="profile-page__tab-title">Наши Новости</h3>
-              <el-button icon="el-icon-edit" type="primary">Добавить</el-button>
+              <nuxt-link to="/editor">
+                <el-button icon="el-icon-edit" type="primary">Добавить</el-button>
+              </nuxt-link>
             </div>
           </el-tab-pane>
           <el-tab-pane label="Комментарии" name="3">

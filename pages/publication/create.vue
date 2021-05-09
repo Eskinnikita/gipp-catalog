@@ -1,0 +1,203 @@
+<template>
+  <div class="pub-create">
+    <h3 class="pub-create__title">Создание издания</h3>
+    <h4 class="pub-create__title">Обложка</h4>
+    <div class="pub-create__cover">
+      <el-upload
+        :on-success="handleAvatarSuccess"
+        action="#"
+        list-type="picture-card"
+        :auto-upload="false">
+        <div slot="file" slot-scope="{file}" v-if="publication.imageUrl">
+          <img
+            class="el-upload-list__item-thumbnail"
+            :src="publication.imageUrl" alt=""
+          >
+          <span class="el-upload-list__item-actions">
+        <span
+          v-if="!disabled"
+          class="el-upload-list__item-delete"
+          @click="handleRemove"
+        >
+          <i class="el-icon-delete"></i>
+        </span>
+      </span>
+        </div>
+        <i style="margin-bottom: 15px" slot="default" class="el-icon-plus"></i>
+        <p>Нажмите или перетащите изображение для загрузки</p>
+      </el-upload>
+      <h4 class="pub-create__title"></h4>
+      <div class="pub-create__form">
+        <el-form :model="publication" status-icon :rules="rules" ref="ruleForm">
+          <el-form-item label="Название">
+            <el-input v-model="publication.title" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="Описание">
+            <el-input
+              type="textarea"
+              :rows="4"
+              placeholder="Введите описание"
+              v-model="publication.desc">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="Выберите тип"><br>
+            <el-select v-model="publication.type" placeholder="Select">
+              <el-option
+                v-for="item in pubTypes"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Выберите возрастной рейтинг"><br>
+            <el-select v-model="publication.age" placeholder="Select">
+              <el-option
+                v-for="item in age"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Выберите периодичность"> <br>
+            <el-row>
+              <el-col :md="4">
+                <el-input
+                  placeholder="Количество"
+                  type="number"
+                  v-model="publication.periodicity.count">
+                </el-input>
+              </el-col>
+              <el-col :md="1" style="text-align: center">
+                <span>в</span>
+              </el-col>
+              <el-col :md="4">
+                <el-select v-model="publication.periodicity.period" placeholder="Select">
+                  <el-option
+                    v-for="item in period"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-col>
+            </el-row>
+          </el-form-item>
+          <el-form-item label="Количество полос">
+            <el-input type="number" v-model="publication.strips" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="Средний вес одного выпуска (в граммах)">
+            <el-input type="number" v-model="publication.weight" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="Подписной индекс">
+            <el-input type="number" v-model="publication.subindex" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="Выберите один или несколько тегов"> <br/>
+          <el-select v-model="publication.tags" multiple placeholder="Select">
+            <el-option
+              v-for="item in age"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+            </el-form-item>
+          <el-form-item class="pub-create__controls">
+            <el-button type="primary">Создать</el-button>
+            <el-button>Назад</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      disabled: false,
+      publication: {
+        imageUrl: '',
+        title: '',
+        desc: '',
+        type: 'Журнал',
+        age: '0+',
+        periodicity: {
+          count: null,
+          period: 'неделю'
+        },
+      },
+      rules: {},
+      pubTypes: [{
+        value: 'Журнал',
+        label: 'Журнал'
+      }, {
+        value: 'Газета',
+        label: 'Газета'
+      }, {
+        value: 'Книга',
+        label: 'Книга'
+      }, {
+        value: 'Зарубежное издание',
+        label: 'Зарубежное издание'
+      }],
+      age: [{
+        value: '0+',
+        label: '0+'
+      }, {
+        value: '6+',
+        label: '6+'
+      }, {
+        value: '12+',
+        label: '12+'
+      }, {
+        value: '16+',
+        label: '16+'
+      }],
+      period: [{
+        value: 'неделю',
+        label: 'неделю'
+      }, {
+        value: 'месяц',
+        label: 'месяц'
+      }, {
+          value: 'триместр',
+          label: 'триместр'
+        },
+        {
+          value: 'полугодие',
+          label: 'полугодие'
+        },
+        {
+          value: 'год',
+          label: 'год'
+        }]
+    }
+  },
+  methods: {
+    handleRemove() {
+      this.publication.imageUrl = ''
+    },
+    handleAvatarSuccess(res, file) {
+      this.publication.imageUrl = URL.createObjectURL(file.raw);
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.pub-create {
+  &__title {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #E4E7ED;
+    margin: 15px 0;
+  }
+
+  &__controls {
+    margin-top: 40px;
+  }
+}
+
+</style>
