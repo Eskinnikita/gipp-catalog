@@ -48,8 +48,8 @@
               <span class="right-menu__text">Кабинет</span>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click.native="goTo('/cabinet')">Личный кабинет</el-dropdown-item>
-              <el-dropdown-item @click.native="goTo('/profile')">Профиль</el-dropdown-item>
+              <el-dropdown-item v-if="auth.user.role === 4" @click.native="goTo('cabinet')">Личный кабинет</el-dropdown-item>
+              <el-dropdown-item @click.native="goToProfile">Профиль</el-dropdown-item>
               <el-dropdown-item @click.native="logout">Выйти</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -120,6 +120,13 @@ export default {
     },
     goTo(dest) {
       this.$router.push({path: dest});
+    },
+    goToProfile() {
+      const userRole = this.auth.user.role
+      const userId = this.auth.user.id
+      if(userRole === 3) {
+        this.$router.push({path: `/publisher/${userId}`});
+      }
     }
   },
   computed: {
@@ -147,6 +154,7 @@ export default {
   background-color: #fff;
   font-size: 12px;
   z-index: 1000;
+  border-bottom: 2px solid #ebeef5;
 
   &__inner {
     display: flex;
