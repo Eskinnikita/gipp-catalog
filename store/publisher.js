@@ -5,6 +5,9 @@ export const state = () => ({
 export const mutations = {
   SET_PUBLISHER(state, publisher) {
     state.publisher = publisher
+  },
+  SET_EMPTY_PUBLISHER(state) {
+    state.publisher = {}
   }
 }
 
@@ -16,6 +19,13 @@ export const actions = {
       if(res) {
         commit('SET_PUBLISHER', res)
       }
+    } catch (e) {
+      console.log(e)
+    }
+  },
+  async updatePublisher({commit}, data) {
+    try {
+      await this.$axios.$patch(`/publisher/${data.id}`, data.formData)
     } catch (e) {
       console.log(e)
     }

@@ -2,28 +2,34 @@
   <div class="profile-page">
     <div class="profile-page__left left">
       <img
-        src="https://sun9-40.userapi.com/impg/itywp4F8rPPn0_JKAZtxFGSkfxJWWjwuhT-_0w/Wc_Ac5ulgLg.jpg?size=1550x1550&quality=96&sign=01054ff448f6127c17823700b34b1f10&type=album"
+        v-if="publisher.logoUrl"
+        :src="logoUrl"
         class="profile-page__image left__item" alt="profile image"/>
+      <div class="profile-page__image-placeholder left__item" v-else>
+
+      </div>
       <div class="profile-page__controls left__item">
-        <el-button type="primary">Редактировать</el-button>
+        <el-button type="primary">Подписаться</el-button>
         <el-button type="primary" plain icon="el-icon-share"></el-button>
+      </div>
+      <div class="left__item" v-if="isUserAdmin">
+        <nuxt-link :to="`${publisherId}/edit`">
+          <el-button style="width: 100%" type="primary">Редактировать</el-button>
+        </nuxt-link>
       </div>
       <info-block/>
     </div>
     <div class="profile-page__right left__item">
       <h3 class="profile-page__title">{{ publisher.name }}</h3>
-      <p class="profile-page__desc">
-        В Издательскую Группу «Азбука-Аттикус» входят четыре издательства. Каждое специализируется на определенных нишах
-        книжного рынка и стремится достичь совершенства именно в них: «Азбука» — русская и зарубежная классика,
-        современная художественная литература, фэнтези и фантастика,
-        культурология, искусство, книги для детей, комиксы и манга.
+      <p class="profile-page__desc" v-if="publisher.description">
+        {{ publisher.description }}
       </p>
       <div class="profile-page__content">
         <el-tabs v-model="activeTab">
           <el-tab-pane label="Каталог" name="1">
             <div class="profile-page__tab-title-container">
               <h3 class="profile-page__tab-title">Наши издания</h3>
-              <nuxt-link to="/publication/create">
+              <nuxt-link v-if="isUserAdmin" to="/publication/create">
                 <el-button icon="el-icon-edit" type="primary">Добавить</el-button>
               </nuxt-link>
             </div>
@@ -31,7 +37,7 @@
           <el-tab-pane label="Новости" name="2">
             <div class="profile-page__tab-title-container">
               <h3 class="profile-page__tab-title">Наши Новости</h3>
-              <nuxt-link to="/editor">
+              <nuxt-link v-if="isUserAdmin" to="/editor">
                 <el-button icon="el-icon-edit" type="primary">Добавить</el-button>
               </nuxt-link>
             </div>
@@ -41,7 +47,8 @@
           </el-tab-pane>
         </el-tabs>
         <div class="profile-page__tab-content">
-          <publisher-catalog :publications="publisher.Publications" v-if="activeTab === '1' && publisher.Publications"/>
+          <publisher-catalog :publications="publisher.Publications"
+                             v-if="activeTab === '1' && publisher.Publications"/>
           <profile-news v-if="activeTab === '2'"/>
           <profile-comments v-if="activeTab === '3'"/>
         </div>
@@ -65,20 +72,37 @@ export default {
     profileComments
   },
   created() {
-    console.log(process.env.baseUrl)
-    this.publisherId = this.$route.params.id
+    this.serverUrl = process.env.serverUrl
+    this.publisherId = +this.$route.params.id
     this.$store.dispatch('publisher/getPublisher', +this.publisherId)
   },
   data() {
     return {
+      serverUrl: null,
       publisherId: null,
       activeTab: '1'
     }
   },
   computed: {
+    logoUrl() {
+      return this.serverUrl + '/' + this.publisher.logoUrl
+    },
     publisher() {
       return this.$store.state.publisher.publisher
+    },
+    user() {
+      return this.$store.state.auth.user
+    },
+    isUserAdmin() {
+      if (this.user) {
+        return (this.publisherId === this.user.id && (+this.user.role === 3)) || +this.user.role === 4
+      } else {
+        return false
+      }
     }
+  },
+  beforeDestroy() {
+    this.$store.commit('publisher/SET_EMPTY_PUBLISHER')
   }
 }
 </script>
@@ -91,7 +115,7 @@ export default {
   min-height: 100vh;
 
   &__left {
-    width: 230px;
+    max-width: 210px;
     margin-right: 40px;
   }
 
@@ -143,6 +167,23 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+
+  &__image-placeholder {
+    width: 100%;
+    height: 200px;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("../../../assets/logo.svg");
+      filter: opacity(40%);
+    }
   }
 }
 

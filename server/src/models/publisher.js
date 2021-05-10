@@ -30,6 +30,18 @@ const Publisher = sequelize.define("Publisher", {
   approved: {
     type: DataTypes.BOOLEAN,
     allowNull: false
+  },
+  description: {
+    type: DataTypes.TEXT,
+  },
+  contactPhone: {
+    type: DataTypes.STRING,
+  },
+  contactMail: {
+    type: DataTypes.STRING,
+  },
+  logoUrl: {
+    type: DataTypes.STRING
   }
 });
 

@@ -1,12 +1,17 @@
 <template>
   <div class="publisher-catalog">
     <div class="publisher-catalog__grid">
-      <cover-snippet
-        v-for="(publication, index) in publications"
-        :publication="publication"
-        :route="'publication'"
-        :key="index"
-      />
+      <template v-if="publications.length">
+        <cover-snippet
+          v-for="(publication, index) in publications"
+          :publication="publication"
+          :route="'/publication'"
+          :key="index"
+        />
+      </template>
+      <template v-else>
+        Список пуст
+      </template>
     </div>
   </div>
 </template>

@@ -42,6 +42,7 @@ export default {
         this.$store.dispatch('auth/loginUser', this.form)
         .then(() => {
           this.closeModal()
+          this.$router.push({path: '/'})
         })
     }
   }
