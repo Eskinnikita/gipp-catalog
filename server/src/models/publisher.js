@@ -1,4 +1,5 @@
 const { DataTypes } = require("sequelize");
+const Publication = require('./publication')
 const sequelize = require("../database");
 
 const Publisher = sequelize.define("Publisher", {
@@ -31,5 +32,9 @@ const Publisher = sequelize.define("Publisher", {
     allowNull: false
   }
 });
+
+Publisher.hasMany(Publication, {
+  foreignKey: 'publisherId'
+})
 
 module.exports = Publisher;

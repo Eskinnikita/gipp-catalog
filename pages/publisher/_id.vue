@@ -2,7 +2,7 @@
   <div class="profile-page">
     <div class="profile-page__left left">
       <img
-        src="https://lh3.googleusercontent.com/proxy/oCNYKCQ3hKKRwq-CUEWq5pNKZ1dr5QgMGYPmcg546odf38HZUEUrVxWJAeZn0G3Hlg19fNMeZW0h3Gfo6I1vFc0B9TYPWOWsQFMoZdoLchvLbRqw-uXyqxu5RLKNspR4fBOo3QECkGlpGqIyQGcgG5Ulrj3-oclWJpwDiN-R-TQH333k4RtygWnP1m6qOGpe8ORmLRRYbhiekCeZGVrRmCzq_2wVLrAZFd0"
+        src="https://sun9-40.userapi.com/impg/itywp4F8rPPn0_JKAZtxFGSkfxJWWjwuhT-_0w/Wc_Ac5ulgLg.jpg?size=1550x1550&quality=96&sign=01054ff448f6127c17823700b34b1f10&type=album"
         class="profile-page__image left__item" alt="profile image"/>
       <div class="profile-page__controls left__item">
         <el-button type="primary">Редактировать</el-button>
@@ -11,7 +11,7 @@
       <info-block/>
     </div>
     <div class="profile-page__right left__item">
-      <h3 class="profile-page__title">Издательский дом «Азбука-Аттикус»</h3>
+      <h3 class="profile-page__title">{{ publisher.name }}</h3>
       <p class="profile-page__desc">
         В Издательскую Группу «Азбука-Аттикус» входят четыре издательства. Каждое специализируется на определенных нишах
         книжного рынка и стремится достичь совершенства именно в них: «Азбука» — русская и зарубежная классика,
@@ -41,7 +41,7 @@
           </el-tab-pane>
         </el-tabs>
         <div class="profile-page__tab-content">
-          <publisher-catalog v-if="activeTab === '1'"/>
+          <publisher-catalog :publications="publisher.Publications" v-if="activeTab === '1' && publisher.Publications"/>
           <profile-news v-if="activeTab === '2'"/>
           <profile-comments v-if="activeTab === '3'"/>
         </div>
@@ -57,16 +57,27 @@ import profileNews from "@/components/profile/profileNews"
 import profileComments from "@/components/profile/profileComments"
 
 export default {
+  layout: 'transparent',
   components: {
     infoBlock,
     publisherCatalog,
     profileNews,
     profileComments
   },
-  layout: 'transparent',
+  created() {
+    console.log(process.env.baseUrl)
+    this.publisherId = this.$route.params.id
+    this.$store.dispatch('publisher/getPublisher', +this.publisherId)
+  },
   data() {
     return {
+      publisherId: null,
       activeTab: '1'
+    }
+  },
+  computed: {
+    publisher() {
+      return this.$store.state.publisher.publisher
     }
   }
 }

@@ -1,16 +1,45 @@
 <template>
-  <div class="cover-snippet">
-    <img class="cover-snippet__image"
-         src="https://mk0leobooksiim6pt1a5.kinstacdn.com/wp-content/uploads/2021/03/Smeshariky_cover_04_2021.jpg"
-         alt="">
-    <div class="cover-snippet__info">
-      <h5 class="cover-snippet__title">Название выпуска, lfdlfdfdf fd fdf</h5>
+    <div class="cover-snippet" @click="goTo">
+      <img class="cover-snippet__image"
+           :src="coverUrl"
+           alt="">
+      <div class="cover-snippet__info">
+        <h5 class="cover-snippet__title">{{ publication.title }}</h5>
+      </div>
     </div>
-  </div>
 </template>
 
 <script>
-export default {}
+export default {
+  props: {
+    publication: {
+      type: Object,
+      required: true
+    },
+    route: {
+      type: String,
+      required: false
+    }
+  },
+  created() {
+    this.imageUrl = process.env.serverUrl
+  },
+  data() {
+    return {
+      imageUrl: ''
+    }
+  },
+  methods: {
+    goTo() {
+      this.$router.push({path: `${this.route}/${this.publication.id}`})
+    }
+  },
+  computed: {
+    coverUrl() {
+      return this.imageUrl + '/' + this.publication.coverLink
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

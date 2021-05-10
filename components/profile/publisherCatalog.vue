@@ -2,7 +2,9 @@
   <div class="publisher-catalog">
     <div class="publisher-catalog__grid">
       <cover-snippet
-        v-for="index in 10"
+        v-for="(publication, index) in publications"
+        :publication="publication"
+        :route="'publication'"
         :key="index"
       />
     </div>
@@ -14,6 +16,12 @@ import coverSnippet from "@/components/snippets/coverSnippet"
 export default {
   components: {
     coverSnippet
+  },
+  props: {
+    publications: {
+      type: Array,
+      required: true
+    }
   }
 }
 </script>
