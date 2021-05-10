@@ -4,30 +4,19 @@
       Вы уверены, что хотите внести изменения?
     </confirm-dialog>
     <h3 class="pub-create__title">Создание издания</h3>
-    <h4 class="pub-create__title">Обложка</h4>
+    <h4 class="pub-create__title">Обложка <span style="font-weight: normal">(нажмите на обложку для изменения)</span></h4>
     <div class="pub-create__cover">
       <el-upload
-        :on-change="handleChange"
+        class="avatar-uploader"
         action="#"
-        list-type="picture-card"
-        :auto-upload="false">
-        <div slot="file" slot-scope="{file}" v-if="imageUrl">
-          <img
-            class="el-upload-list__item-thumbnail"
-            :src="imageUrl" alt=""
-          >
-          <span class="el-upload-list__item-actions">
-        <span
-          v-if="!disabled"
-          class="el-upload-list__item-delete"
-          @click="handleRemove(file)"
-        >
-          <i class="el-icon-delete" ></i>
-        </span>
-      </span>
-        </div>
-        <i style="margin-bottom: 15px" slot="default" class="el-icon-plus"></i>
-        <p>Нажмите или перетащите изображение для загрузки</p>
+        :show-file-list="false"
+        :on-change="handleChange"
+        :on-success="handleAvatarSuccess">
+        <img v-if="imageUrl" :src="imageUrl" alt="Обложка" class="avatar">
+        <template v-else>
+          <i style="margin-bottom: 15px" slot="default" class="el-icon-plus"></i>
+          <p>Нажмите или перетащите  <br> изображение  <br> для загрузки</p>
+        </template>
       </el-upload>
       <h4 class="pub-create__title"></h4>
       <div class="pub-create__form">
@@ -205,11 +194,11 @@ export default {
         }
       });
     },
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw);
+    },
     handleChange(file, fileList) {
       this.imageFile = file.raw
-    },
-    handleRemove(file) {
-      this.imageUrl = ''
     },
     createPublication() {
       this.publication.weight = +this.publication.weight

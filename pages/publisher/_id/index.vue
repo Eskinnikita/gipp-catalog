@@ -160,7 +160,7 @@ export default {
     min-height: 100vh;
     background-color: #fff;
     border-radius: 4px;
-    padding: 20px;
+    padding: 20px 20px 40px;
   }
 
   &__title {
