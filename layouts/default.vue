@@ -31,7 +31,6 @@ html {
 }
 
 a {
-  color: #000 !important;
   text-decoration: none;
 }
 
@@ -105,5 +104,9 @@ textarea {
   Roboto, "Helvetica Neue", Arial, sans-serif;
   font-size: 12px !important;
 
+}
+
+.el-tabs__item {
+  color: #606266 !important;
 }
 </style>

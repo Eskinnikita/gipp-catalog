@@ -1,12 +1,13 @@
 <template>
-  <div class="profile-page">
+  <div class="profile-page" v-if="pageReady">
     <div class="profile-page__left left">
-      <img
-        v-if="publisher && publisher.logoUrl"
-        :src="logoUrl"
-        class="profile-page__image left__item" alt="profile image"/>
-      <div class="profile-page__image-placeholder left__item" v-if="publisher && !publisher.logoUrl">
-
+      <div class="profile-page__image-container left__item">
+        <img
+          v-if="publisher && publisher.logoUrl"
+          :src="logoUrl"
+          class="profile-page__image" alt="profile image"/>
+      </div>
+      <div class="profile-page__image-placeholder left__item" v-if="publisher && !publisher.logoUrl && publisher.logoUrl !== undefined">
       </div>
       <div class="profile-page__controls left__item">
         <el-button type="primary">Подписаться</el-button>
@@ -74,10 +75,13 @@ export default {
   created() {
     this.serverUrl = process.env.serverUrl
     this.publisherId = +this.$route.params.id
-    this.$store.dispatch('publisher/getPublisher', +this.publisherId)
+    this.$store.dispatch('publisher/getPublisher', +this.publisherId).then(() => {
+      this.pageReady = true
+    })
   },
   data() {
     return {
+      pageReady: false,
       serverUrl: null,
       publisherId: null,
       activeTab: '1'
@@ -131,8 +135,8 @@ export default {
   min-height: 100vh;
 
   &__left {
-    max-width: 210px;
-    margin-right: 40px;
+    max-width: 190px;
+    margin-right: 30px;
   }
 
   &__right {
@@ -161,6 +165,7 @@ export default {
     background-color: #fff;
     border-radius: 4px;
     padding: 20px 20px 40px;
+    color: #606266;
   }
 
   &__title {
@@ -200,6 +205,11 @@ export default {
       background-image: url("../../../assets/logo.svg");
       filter: opacity(40%);
     }
+  }
+
+  &__image-container {
+    padding: 15px;
+    background-color: #fff;
   }
 }
 

@@ -40,9 +40,10 @@
           <el-dropdown trigger="click" class="right-menu__avatar right-menu__item">
             <span class="right-menu__item">
               <el-avatar
+                v-if="user.logoUrl || user.avatarUrl"
                 size="small"
                 fit="cover"
-                src="https://sun9-36.userapi.com/impg/c857024/v857024380/138e8f/PEk89jpM9Ak.jpg?size=713x794&quality=96&sign=f579ea1a3516878153044238d0959999&type=album"
+                :src="logoUrl"
                 alt="Аватар пользователя"
               ></el-avatar>
               <span class="right-menu__text">Кабинет</span>
@@ -80,13 +81,15 @@ export default {
   },
   data() {
     return {
+      serverUrl: '',
       activeIndex: "1",
       search: "",
       loggedIn: false
     };
   },
   created() {
-    this.setupNav(this.$route.name);
+    this.setupNav(this.$route.name)
+    this.serverUrl = process.env.serverUrl
   },
   methods: {
     setupNav(routeName) {
@@ -133,7 +136,13 @@ export default {
     ...mapState(["auth"]),
     isAuthenticated() {
       return this.$store.getters["auth/isAuthenticated"];
-    }
+    },
+    user() {
+      return this.$store.state.auth.user
+    },
+    logoUrl() {
+      return this.serverUrl + '/' + this.user.logoUrl
+    },
   },
   watch: {
     $route(to, from) {

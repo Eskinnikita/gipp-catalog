@@ -9,6 +9,6 @@ const publisherApi = require("./publisher")
 router.use(authApi)
 router.use(usersApi)
 router.use('/publication', publicationsApi)
-router.use('/publisher/', publisherApi)
+router.use('/publisher', publisherApi)
 
 module.exports = router;

@@ -113,7 +113,6 @@ export default {
             position: 'bottom-right'
           });
           this.$refs.confirmModal.opened = false
-          // this.$router.push({path: `/publisher/${this.publisherId}`});
         })
     },
     parseForUpdate(publisherInfo) {

@@ -1,4 +1,5 @@
 const express = require('express')
+const sequelize = require('sequelize')
 const Publisher = require('../models/publisher')
 const Publication = require('../models/publication')
 const multer = require('multer')
@@ -41,8 +42,11 @@ router.get('/:id', async (req, res) => {
           model: Publication,
           key: 'publications',
           required: false,
-          attributes: ['id', 'coverLink', 'title'],
+          attributes: ['id', 'coverLink', 'title', 'updatedAt'],
         },
+      ],
+      order: [
+        [Publication, 'updatedAt', 'DESC']
       ]
     }).catch(e => {
       res.status(404).json({message: e})

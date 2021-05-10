@@ -1,7 +1,9 @@
 const express = require('express')
 const multer = require('multer')
 const passport = require('passport')
+const { Op } = require("sequelize");
 const Publication = require('../models/publication')
+const Publisher = require('../models/publisher')
 
 const router = express.Router()
 
@@ -40,6 +42,45 @@ router.post('/create', upload.single('cover'), async (req, res) => {
         res.status(409).json({message: e})
       })
     res.status(200).json(newPublication)
+  } catch (e) {
+    res.status(500).json({message: e})
+  }
+})
+
+router.get('/:id', async (req, res) => {
+  try {
+    const id = req.params.id
+    const publication = await Publication.findOne({
+      where: {id}
+    }).catch(e => {
+      res.status(404).json({message: e})
+    })
+    const publicationCopy = JSON.parse(JSON.stringify(publication))
+    publicationCopy.publisher = await Publisher.findOne({
+      where: {id: publication.publisherId},
+      attributes: ['id', 'name'],
+      include: [
+        {
+          model: Publication,
+          key: 'publications',
+          required: false,
+          attributes: ['id', 'coverLink', 'title',  'count', 'period', 'age', 'updatedAt'],
+          limit: 3,
+          where: {
+            id: {
+              [Op.ne]: id
+            }
+          }
+        },
+      ],
+      order: [
+        [Publication, 'updatedAt', 'DESC']
+      ]
+    }).catch(e => {
+      res.status(404).json({message: e})
+    })
+
+    res.status(200).json(publicationCopy)
   } catch (e) {
     res.status(500).json({message: e})
   }
