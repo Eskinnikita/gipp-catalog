@@ -1,34 +1,25 @@
 <template>
   <div class="page-info">
-    <div class="page-info__item">
-      <div class="page-info__title">
-        Электронная почта:
-      </div>
-      <div class="page-info__text">
-        ladeuxmaster@gmail.com
-      </div>
-    </div>
-    <div class="page-info__item">
-      <div class="page-info__title">
-        Электронная почта:
-      </div>
-      <div class="page-info__text">
-        ladeuxmaster@gmail.com
-      </div>
-    </div>
-    <div class="page-info__item">
-      <div class="page-info__title">
-        Электронная почта:
-      </div>
-      <div class="page-info__text">
-        ladeuxmaster@gmail.com
-      </div>
+    <div class="page-info__item" v-for="(item, index) in infoItems" v-if="item.value" :key="index">
+        <div class="page-info__title">
+          {{ item.label }}
+        </div>
+        <div class="page-info__text">
+          {{ item.value }}
+        </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  props: {
+    infoItems: {
+      type: Array,
+      required: true
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -37,7 +28,7 @@ export default {}
   font-size: 14px;
   background-color: #fff;
   border-radius: 4px;
-  &__item {
+  &__item:not(:last-child) {
     margin-bottom: 20px;
   }
 

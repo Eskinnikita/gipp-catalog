@@ -2,10 +2,10 @@
   <div class="profile-page">
     <div class="profile-page__left left">
       <img
-        v-if="publisher.logoUrl"
+        v-if="publisher && publisher.logoUrl"
         :src="logoUrl"
         class="profile-page__image left__item" alt="profile image"/>
-      <div class="profile-page__image-placeholder left__item" v-else>
+      <div class="profile-page__image-placeholder left__item" v-if="publisher && !publisher.logoUrl">
 
       </div>
       <div class="profile-page__controls left__item">
@@ -17,7 +17,7 @@
           <el-button style="width: 100%" type="primary">Редактировать</el-button>
         </nuxt-link>
       </div>
-      <info-block/>
+      <info-block :info-items="info"/>
     </div>
     <div class="profile-page__right left__item">
       <h3 class="profile-page__title">{{ publisher.name }}</h3>
@@ -84,6 +84,22 @@ export default {
     }
   },
   computed: {
+    info() {
+      return [
+        {
+          label: 'Электронная почта',
+          value: this.publisher.contactMail
+        },
+        {
+          label: 'Телефон',
+          value: this.publisher.contactPhone
+        },
+        {
+          label: 'Адрес',
+          value: this.publisher.address
+        }
+      ]
+    },
     logoUrl() {
       return this.serverUrl + '/' + this.publisher.logoUrl
     },
