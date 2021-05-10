@@ -1,5 +1,8 @@
 <template>
   <div class="pub-create">
+    <confirm-dialog ref="confirmModal" :on-confirm="createPublication" title="Подтверждение">
+      Вы уверены, что хотите внести изменения?
+    </confirm-dialog>
     <h3 class="pub-create__title">Создание издания</h3>
     <h4 class="pub-create__title">Обложка</h4>
     <div class="pub-create__cover">
@@ -108,7 +111,7 @@
 <!--            </el-select>-->
 <!--          </el-form-item>-->
           <el-form-item class="pub-create__controls">
-            <el-button type="primary" @click="createPublication">Создать</el-button>
+            <el-button type="primary" @click="openConfirmModal">Создать</el-button>
             <el-button>Назад</el-button>
           </el-form-item>
         </el-form>
@@ -118,7 +121,11 @@
 </template>
 
 <script>
+import confirmDialog from "@/components/modals/confirmDialog"
 export default {
+  components: {
+    confirmDialog
+  },
   data() {
     return {
       imageFile: null,
@@ -188,6 +195,16 @@ export default {
     }
   },
   methods: {
+    openConfirmModal() {
+      this.$refs["pubForm"].validate((valid) => {
+        if (valid) {
+          this.$refs.confirmModal.opened = true
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    },
     handleChange(file, fileList) {
       this.imageFile = file.raw
     },
@@ -195,22 +212,21 @@ export default {
       this.imageUrl = ''
     },
     createPublication() {
-      this.$refs["pubForm"].validate((valid) => {
-        if (valid) {
-          this.publication.weight = +this.publication.weight
-          this.publication.strips = +this.publication.strips
-          const formData = new FormData();
-          formData.append('publication', JSON.stringify(this.publication))
-          formData.append('cover', this.imageFile)
-          this.$store.dispatch('publication/createPublication', formData)
-            .then(res => {
-              this.$router.push({path: `/publication/${res.id}`});
-            })
-        } else {
-          console.log('error submit!!');
-          return false;
-        }
-      });
+      this.publication.weight = +this.publication.weight
+      this.publication.strips = +this.publication.strips
+      const formData = new FormData();
+      formData.append('publication', JSON.stringify(this.publication))
+      formData.append('cover', this.imageFile)
+      this.$store.dispatch('publication/createPublication', formData)
+        .then(res => {
+          this.$notify({
+            title: 'Успешное добавление',
+            message: 'Издание успешно добавлено!',
+            type: 'success',
+            position: 'bottom-right'
+          });
+          this.$router.push({path: `/publication/${res.id}`});
+        })
     }
   }
 }

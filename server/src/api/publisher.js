@@ -57,7 +57,10 @@ router.patch('/:id', upload.single('logo'), async (req, res) => {
   try {
     const id = req.params.id
     const infoToUpdate = JSON.parse(req.body.publisher)
-    infoToUpdate.logoUrl = req.file.path
+
+    if(req.body.logo !== 'null') {
+      infoToUpdate.logoUrl = req.file.path
+    }
     console.log(id, infoToUpdate)
     const updatedPublisher = await Publisher.update(infoToUpdate, {
       where: {

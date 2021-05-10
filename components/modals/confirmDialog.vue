@@ -1,11 +1,11 @@
 <template>
   <el-dialog
-    title="Tips"
-    :visible.sync="dialogVisible"
+    :title="title"
+    :visible.sync="opened"
     width="30%">
     <span><slot/></span>
     <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">Отменить</el-button>
+    <el-button @click="opened = false">Отменить</el-button>
     <el-button type="primary" @click="onConfirm">Подтвердить</el-button>
   </span>
   </el-dialog>
@@ -17,16 +17,18 @@ export default {
     onConfirm: {
       type: Function,
       required: true
-    }
+    },
+    title: {
+      type: String,
+      required: false
+    },
   },
   data() {
     return {
-      dialogVisible: false
+      opened: false
     }
   },
-  methods: {
-
-  }
+  methods: {}
 }
 </script>
 

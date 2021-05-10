@@ -72,7 +72,7 @@
 
 <script>
 import {mapState, mapGetters} from "vuex";
-import LoginModal from "./modals/LoginModal.vue";
+import LoginModal from "./modals/loginModal.vue";
 
 export default {
   components: {

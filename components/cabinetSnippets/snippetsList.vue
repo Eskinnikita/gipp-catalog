@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import Dialog from "@/components/modals/Dialog"
+import Dialog from "@/components/modals/confirmDialog"
 import userSnippet from "@/components/cabinetSnippets/userSnippet"
 
 export default {

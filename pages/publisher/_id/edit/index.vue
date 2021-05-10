@@ -1,30 +1,22 @@
 <template>
   <div class="pub-create">
+    <confirm-dialog ref="confirmModal" :on-confirm="updatePublisher" title="Подтверждение">
+      Вы уверены, что хотите внести изменения?
+    </confirm-dialog>
     <h3 class="pub-create__title">Редактирование издательства</h3>
-    <h4 class="pub-create__title">Логотип издательства</h4>
+    <h4 class="pub-create__title">Логотип издательства <span style="font-weight: normal">(нажмите на логотип для изменения)</span></h4>
     <div class="pub-create__cover">
       <el-upload
-        :on-change="handleChange"
+        class="avatar-uploader"
         action="#"
-        list-type="picture-card"
-        :auto-upload="false">
-        <div slot="file" slot-scope="{file}" v-if="imageUrl">
-          <img
-            class="el-upload-list__item-thumbnail"
-            :src="imageUrl" alt=""
-          >
-          <span class="el-upload-list__item-actions">
-        <span
-          v-if="!disabled"
-          class="el-upload-list__item-delete"
-          @click="handleRemove(file)"
-        >
-          <i class="el-icon-delete"></i>
-        </span>
-      </span>
-        </div>
-        <i style="margin-bottom: 15px" slot="default" class="el-icon-plus"></i>
-        <p>Нажмите или перетащите изображение для загрузки</p>
+        :show-file-list="false"
+        :on-change="handleChange"
+        :on-success="handleAvatarSuccess">
+        <img v-if="imageUrl" :src="imageUrl" alt="Логотип издателя" class="avatar">
+        <template v-else>
+          <i style="margin-bottom: 15px" slot="default" class="el-icon-plus"></i>
+          <p>Нажмите или перетащите  <br> изображение  <br> для загрузки</p>
+        </template>
       </el-upload>
       <h4 class="pub-create__title"></h4>
       <div class="pub-create__form">
@@ -44,7 +36,7 @@
             <el-input v-model="publisher.contactPhone" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item class="pub-create__controls">
-            <el-button type="primary" @click="updatePublisher">Сохранить</el-button>
+            <el-button type="primary" @click="openConfirmModal">Сохранить</el-button>
             <el-button>Назад</el-button>
           </el-form-item>
         </el-form>
@@ -55,9 +47,19 @@
 
 
 <script>
+import confirmDialog from "@/components/modals/confirmDialog"
+
 export default {
+  components: {
+    confirmDialog
+  },
   created() {
+    this.serverUrl = process.env.serverUrl
     this.publisherId = +this.$route.params.id
+    this.$store.dispatch('publisher/getPublisher', +this.publisherId)
+      .then(publisherInfo => {
+        this.parseForUpdate(publisherInfo)
+      })
   },
   data() {
     return {
@@ -72,34 +74,61 @@ export default {
       },
       rules: {
         contactMail: [
-          { type: 'email', message: 'Пожалуйста, проверьте введенную почту', trigger: ['blur', 'change'] }
+          {type: 'email', message: 'Пожалуйста, проверьте введенную почту', trigger: ['blur', 'change']}
         ],
       }
     }
   },
   methods: {
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw);
+    },
     handleChange(file, fileList) {
+      console.log(file)
       this.imageFile = file.raw
     },
     handleRemove(file) {
       this.imageUrl = ''
     },
-    updatePublisher() {
+    openConfirmModal() {
       this.$refs["publisherForm"].validate((valid) => {
         if (valid) {
-          const formData = new FormData();
-          formData.append('publisher', JSON.stringify(this.publisher))
-          formData.append('logo', this.imageFile)
-          this.$store.dispatch('publisher/updatePublisher', {id: this.publisherId, formData: formData})
-            // .then(() => {
-            //   this.$router.push({path: `/publisher/${this.publisherId}`});
-            // })
+          this.$refs.confirmModal.opened = true
         } else {
           console.log('error submit!!');
           return false;
         }
       });
+    },
+    updatePublisher() {
+      const formData = new FormData();
+      formData.append('publisher', JSON.stringify(this.publisher))
+      formData.append('logo', this.imageFile)
+      this.$store.dispatch('publisher/updatePublisher', {id: this.publisherId, formData: formData})
+        .then(() => {
+          this.$notify({
+            title: 'Данные обновлены',
+            message: 'Изменения успешно сохранены!',
+            type: 'success',
+            position: 'bottom-right'
+          });
+          this.$refs.confirmModal.opened = false
+          // this.$router.push({path: `/publisher/${this.publisherId}`});
+        })
+    },
+    parseForUpdate(publisherInfo) {
+      const keys = ['description', 'contactMail', 'contactPhone']
+      for (let k in publisherInfo) {
+        if (keys.indexOf(k) !== -1 && publisherInfo.hasOwnProperty(k)) {
+          this.publisher[k] = publisherInfo[k]
+        }
+      }
+      if (publisherInfo.logoUrl) {
+        this.imageUrl = this.serverUrl + '/' + publisherInfo.logoUrl
+      }
     }
+  },
+  computed: {
   }
 }
 </script>
@@ -116,4 +145,5 @@ export default {
     margin-top: 40px;
   }
 }
+
 </style>

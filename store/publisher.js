@@ -19,6 +19,7 @@ export const actions = {
       if(res) {
         commit('SET_PUBLISHER', res)
       }
+      return res
     } catch (e) {
       console.log(e)
     }
