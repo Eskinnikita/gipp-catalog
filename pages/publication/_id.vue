@@ -25,12 +25,14 @@
     </div>
     <div class="profile-page__right left__item">
       <h2 class="profile-page__title">{{ publication.title }}</h2>
-      <el-button class="profile-page__publisher-name" type="text">{{ publication.publisher.name }}</el-button>
+      <nuxt-link :to="`/publisher/${publication.publisher.id}`">
+        <el-button class="profile-page__publisher-name" type="text">{{ publication.publisher.name }}</el-button>
+      </nuxt-link>
       <div class="profile-page__content">
         <p class="profile-page__desc" v-if="publication.desc">
           {{ publication.desc }}
         </p>
-        <div class="profile-page__recommends recommends">
+        <div class="profile-page__recommends recommends" v-if="publication.publisher.Publications.length">
           <h4 class="profile-page__subtitle">Еще от <b>{{publication.publisher.name}}</b></h4>
           <div class="recommends__container" :style="{ 'justify-content': publication.publisher.Publications.length === 2 ? 'flex-start' : 'space-between'}">
             <rec-publications v-for="(recPub, index) in publication.publisher.Publications" :rec-pub="recPub" :key="index"/>
@@ -38,6 +40,9 @@
         </div>
         <div class="profile-page__reviews">
           <h4 class="profile-page__subtitle">Отзывы</h4>
+          <div class="comments__container">
+            <comment-snippet class="profile-page__comment" v-for="item in 4"/>
+          </div>
         </div>
       </div>
     </div>
@@ -47,11 +52,13 @@
 <script>
 import infoBlock from "@/components/profile/infoBlock"
 import recPublications from "@/components/profile/snippets/recPublications"
+import commentSnippet from "@/components/snippets/commentSnippet"
 export default {
   layout: 'transparent',
   components: {
     infoBlock,
-    recPublications
+    recPublications,
+    commentSnippet
   },
   created() {
     this.serverUrl = process.env.serverUrl
@@ -154,6 +161,11 @@ export default {
     height: 200px;
   }
 
+  &__comment {
+    margin-bottom: 20px;
+    max-width: 70%;
+  }
+
   &__controls {
     display: flex;
     flex-direction: row;
@@ -231,7 +243,13 @@ export default {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+  }
+}
+
+.comments {
+  &__container {
+
   }
 }
 

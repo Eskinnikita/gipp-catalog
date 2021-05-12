@@ -65,7 +65,6 @@ router.get('/:id', async (req, res) => {
           key: 'publications',
           required: false,
           attributes: ['id', 'coverLink', 'title',  'count', 'period', 'age', 'updatedAt'],
-          limit: 3,
           where: {
             id: {
               [Op.ne]: id
