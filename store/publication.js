@@ -34,6 +34,25 @@ export const actions = {
     } catch (e) {
       console.log(e)
     }
+  },
+  async getPublicationForUpdate({commit}, id) {
+    try {
+      let res = null
+      res = await this.$axios.$get(`/publication/update/${id}`)
+      if(res) {
+        commit('SET_PUBLICATION', res)
+      }
+      return res
+    } catch (e) {
+      console.log(e)
+    }
+  },
+  async updatePublication({commit}, data) {
+    try {
+      await this.$axios.$patch(`/publication/${data.id}`, data.formData)
+    } catch (e) {
+      console.log(e)
+    }
   }
 }
 

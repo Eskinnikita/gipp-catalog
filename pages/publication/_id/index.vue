@@ -41,7 +41,7 @@
         <div class="profile-page__reviews">
           <h4 class="profile-page__subtitle">Отзывы</h4>
           <div class="comments__container">
-            <comment-snippet class="profile-page__comment" v-for="item in 4"/>
+            <comment-snippet class="profile-page__comment" v-for="(item, index) in 4" :key="index"/>
           </div>
         </div>
       </div>
@@ -219,7 +219,7 @@ export default {
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: url("../../assets/logo.svg");
+      background-image: url("../../../assets/logo.svg");
       filter: opacity(40%);
     }
   }
