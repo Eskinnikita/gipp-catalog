@@ -4,6 +4,7 @@ const passport = require('passport')
 const { Op } = require("sequelize");
 const Publication = require('../models/publication')
 const Publisher = require('../models/publisher')
+const PubTag = require('../models/pubTag')
 
 const router = express.Router()
 
@@ -35,14 +36,18 @@ const upload = multer({
 router.post('/create', upload.single('cover'), async (req, res) => {
   try {
     const parsedPublication = JSON.parse(req.body.publication)
-    parsedPublication.coverLink = req.file.path
-    console.log(parsedPublication)
-    const newPublication = await Publication.create(parsedPublication)
+    if(req.file) {
+      parsedPublication.coverLink = req.file.path
+    }
+    const newPublication = await Publication.create(
+      parsedPublication
+    )
       .catch(e => {
         res.status(409).json({message: e})
       })
     res.status(200).json(newPublication)
   } catch (e) {
+    console.log(e)
     res.status(500).json({message: e})
   }
 })
@@ -51,7 +56,12 @@ router.get('/:id', async (req, res) => {
   try {
     const id = req.params.id
     const publication = await Publication.findOne({
-      where: {id}
+      where: {id},
+      include: [
+        {
+          model: PubTag
+        }
+      ]
     }).catch(e => {
       res.status(404).json({message: e})
     })
@@ -104,7 +114,7 @@ router.patch('/:id', upload.single('cover'), async (req, res) => {
     const id = req.params.id
     const infoToUpdate = JSON.parse(req.body.publication)
 
-    if(req.body.cover !== 'null') {
+    if(req.file) {
       infoToUpdate.coverLink = req.file.path
     }
 
@@ -120,6 +130,7 @@ router.patch('/:id', upload.single('cover'), async (req, res) => {
     res.status(500).json({message: e})
   }
 })
+
 
 
 module.exports = router

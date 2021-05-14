@@ -1,5 +1,7 @@
 export const state = () => ({
-  publication: {}
+  publication: {},
+  tags: [],
+  publications: []
 })
 
 export const mutations = {
@@ -8,10 +10,28 @@ export const mutations = {
   },
   SET_EMPTY_PUBLICATION(state) {
     state.publication = {}
+  },
+  SET_TAGS(state, tags) {
+    state.tags = tags
+  },
+  SET_ALL_PUBS(state, publications) {
+    state.publications = publications
   }
 }
 
 export const actions = {
+  async getTags({commit}) {
+    try {
+      let res = null
+      res = await this.$axios.$get(`/tags/pub/all`)
+      if(res) {
+        commit('SET_TAGS', res)
+      }
+      return res
+    } catch (e) {
+      console.log(e)
+    }
+  },
   async createPublication({commit}, formData) {
     try {
       let res = null
@@ -53,7 +73,19 @@ export const actions = {
     } catch (e) {
       console.log(e)
     }
-  }
+  },
+  async getAllPublications({commit}, id) {
+    try {
+      let res = null
+      res = await this.$axios.$get(`/catalog/all`)
+      if(res) {
+        commit('SET_ALL_PUBS', res)
+      }
+      return res
+    } catch (e) {
+      console.log(e)
+    }
+  },
 }
 
 export const getters = {

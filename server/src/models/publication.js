@@ -1,4 +1,5 @@
 const { DataTypes } = require("sequelize");
+const PubTag = require("../models/pubTag")
 const sequelize = require("../database");
 
 const Publication = sequelize.define("Publication", {
@@ -41,5 +42,8 @@ const Publication = sequelize.define("Publication", {
     type: DataTypes.INTEGER
   }
 });
+
+Publication.belongsToMany(PubTag, { through: 'PublicationTags' });
+PubTag.belongsToMany(Publication, { through: 'PublicationTags' });
 
 module.exports = Publication;

@@ -32,6 +32,9 @@
         <p class="profile-page__desc" v-if="publication.desc">
           {{ publication.desc }}
         </p>
+        <div class="profile-page__tags-container">
+<!--          <el-tag :type="randomType()" v-for="item in publication.publisher.Publications" :key="item">{{ item.title }}</el-tag>-->
+        </div>
         <div class="profile-page__recommends recommends" v-if="publication.publisher.Publications.length">
           <h4 class="profile-page__subtitle">Еще от <b>{{publication.publisher.name}}</b></h4>
           <div class="recommends__container" :style="{ 'justify-content': publication.publisher.Publications.length === 2 ? 'flex-start' : 'space-between'}">
@@ -76,7 +79,10 @@ export default {
     }
   },
   methods: {
-
+    randomType() {
+      const types = ["success", "info", "warning", "danger"]
+      return types[Math.floor(Math.random() * types.length)]
+    }
   },
   computed: {
     info() {
@@ -228,6 +234,13 @@ export default {
     padding: 5px;
     background-color: #fff;
   }
+
+  &__tags-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 30px;
+  }
 }
 
 .left {
@@ -245,6 +258,10 @@ export default {
     width: 100%;
     margin-bottom: 30px;
   }
+}
+
+.el-tag {
+  margin-right: 10px;
 }
 
 .comments {

@@ -49,7 +49,8 @@
               <span class="right-menu__text">Кабинет</span>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item v-if="+auth.user.role === 4" @click.native="goTo('/cabinet')">Личный кабинет</el-dropdown-item>
+              <el-dropdown-item v-if="+auth.user.role === 4" @click.native="goTo('/cabinet')">Личный кабинет
+              </el-dropdown-item>
               <el-dropdown-item v-if="+auth.user.role !== 4" @click.native="goToProfile">Профиль</el-dropdown-item>
               <el-dropdown-item @click.native="logout">Выйти</el-dropdown-item>
             </el-dropdown-menu>
@@ -127,7 +128,7 @@ export default {
     goToProfile() {
       const userRole = this.auth.user.role
       const userId = this.auth.user.id
-      if(userRole === 3) {
+      if (userRole === 3) {
         this.$router.push({path: `/publisher/${userId}`});
       }
     }

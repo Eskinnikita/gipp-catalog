@@ -89,16 +89,17 @@
           <el-form-item label="Подписной индекс">
             <el-input v-model="publication.subindex" autocomplete="off"></el-input>
           </el-form-item>
-<!--          <el-form-item label="Выберите один или несколько тегов"><br/>-->
-<!--            <el-select v-model="publication.tags" multiple placeholder="Теги">-->
-<!--              <el-option-->
-<!--                v-for="item in age"-->
-<!--                :key="item.value"-->
-<!--                :label="item.label"-->
-<!--                :value="item.value">-->
-<!--              </el-option>-->
-<!--            </el-select>-->
-<!--          </el-form-item>-->
+          <el-form-item label="Выберите один или несколько тегов"><br/>
+            <el-select v-model="publication.PubTags" multiple placeholder="Теги">
+              <el-option
+                filterable
+                v-for="(item, index) in tags"
+                :key="index"
+                :label="item.tag"
+                :value="item.tag">
+              </el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item class="pub-create__controls">
             <el-button type="primary" @click="openConfirmModal">Создать</el-button>
             <el-button>Назад</el-button>
@@ -115,8 +116,16 @@ export default {
   components: {
     confirmDialog
   },
+  created() {
+    this.$store.dispatch('publication/getTags').then(res => {
+      if(res) {
+        this.tags = res
+      }
+    })
+  },
   data() {
     return {
+      tags: null,
       imageFile: null,
       disabled: false,
       imageUrl: '',
@@ -130,7 +139,8 @@ export default {
         count: 1,
         period: 'неделю',
         strips: null,
-        weight: null
+        weight: null,
+        PubTags: []
       },
       rules: {
         title: [
@@ -200,7 +210,16 @@ export default {
     handleChange(file, fileList) {
       this.imageFile = file.raw
     },
+    parseTags() {
+      const tagsArr = []
+      this.publication.PubTags.forEach(el => {
+        tagsArr.push({'tag': el})
+      })
+      this.publication.PubTags = tagsArr
+    },
     createPublication() {
+      this.parseTags()
+      console.log(this.publication)
       this.publication.weight = +this.publication.weight
       this.publication.strips = +this.publication.strips
       const formData = new FormData();
@@ -214,7 +233,7 @@ export default {
             type: 'success',
             position: 'bottom-right'
           });
-          this.$router.push({path: `/publication/${res.id}`});
+          // this.$router.push({path: `/publication/${res.id}`});
         })
     }
   }
