@@ -7,6 +7,7 @@ const publicationsApi = require("./publications")
 const publisherApi = require("./publisher")
 const tagsApi = require("./pubTags")
 const catalogApi = require("./catalog")
+const adminApi = require('./admin')
 
 router.use(authApi)
 router.use(usersApi)
@@ -14,5 +15,7 @@ router.use('/publication', publicationsApi)
 router.use('/publisher', publisherApi)
 router.use('/tags', tagsApi)
 router.use('/catalog', catalogApi)
+router.use('/admin', adminApi)
+
 
 module.exports = router;

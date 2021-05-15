@@ -1,10 +1,13 @@
 export const state = () => ({
-  users: []
+  adminPanelListItems: null
 })
 
 export const mutations = {
-  SET_USERS(state, users) {
-    state.users = users
+  SET_ITEMS(state, items) {
+    state.adminPanelListItems = items
+  },
+  SET_EMPTY_ITEMS(state) {
+    state.adminPanelListItems = null
   },
   REMOVE_USER(state, id) {
     const userIndex = state.users.find(el => {
@@ -15,12 +18,25 @@ export const mutations = {
 }
 
 export const actions = {
-  async getUsers({commit}, role) {
+  async getUsers({commit}, data) {
     try {
+      commit('SET_EMPTY_ITEMS')
       let res = null
-      res = await this.$axios.$get(`/users/all/${role}`)
+      res = await this.$axios.$post(data.route, data.params)
       if (res) {
-        commit('SET_USERS', res)
+        commit('SET_ITEMS', res)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  },
+  async getPubs({commit}, data) {
+    try {
+      commit('SET_EMPTY_ITEMS')
+      let res = null
+      res = await this.$axios.$post(data.route, data.params)
+      if (res) {
+        commit('SET_ITEMS', res)
       }
     } catch (e) {
       console.log(e)
