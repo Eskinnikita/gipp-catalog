@@ -40,16 +40,18 @@
           <el-dropdown trigger="click" class="right-menu__avatar right-menu__item">
             <span class="right-menu__item">
               <el-avatar
-                v-if="user.logoUrl || user.avatarUrl"
+                v-if="avatarUrl"
                 size="small"
                 fit="cover"
-                :src="logoUrl"
+                :src="avatarUrl"
                 alt="Аватар пользователя"
               ></el-avatar>
+              <el-avatar v-else size="small" icon="el-icon-user-solid"></el-avatar>
               <span class="right-menu__text">Кабинет</span>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item v-if="+auth.user.role === 4" @click.native="goTo('/cabinet')">Личный кабинет</el-dropdown-item>
+              <el-dropdown-item v-if="+auth.user.role === 4" @click.native="goTo('/cabinet')">Личный кабинет
+              </el-dropdown-item>
               <el-dropdown-item v-if="+auth.user.role !== 4" @click.native="goToProfile">Профиль</el-dropdown-item>
               <el-dropdown-item @click.native="logout">Выйти</el-dropdown-item>
             </el-dropdown-menu>
@@ -107,7 +109,7 @@ export default {
     handleSelect(key, keyPath) {
       if (+key === 1) {
         this.activeIndex = "1";
-        this.$router.push({path: "/catalog"});
+        this.$router.push({path: "/catalog", query: { page: '1' }});
       } else {
         this.activeIndex = "2";
         this.$router.push({path: "/news"});
@@ -127,7 +129,7 @@ export default {
     goToProfile() {
       const userRole = this.auth.user.role
       const userId = this.auth.user.id
-      if(userRole === 3) {
+      if (userRole === 3) {
         this.$router.push({path: `/publisher/${userId}`});
       }
     }
@@ -140,8 +142,21 @@ export default {
     user() {
       return this.$store.state.auth.user
     },
-    logoUrl() {
-      return this.serverUrl + '/' + this.user.logoUrl
+    avatarUrl() {
+      let photo
+      const role = this.user.role
+      if(role === 1 || role === 4) {
+        photo = this.user.avatarUrl
+      } else if(role === 2 || role === 3) {
+        console.log(this.user)
+        photo = this.user.logoUrl
+      }
+      console.log(photo)
+      if(photo === null) {
+        return false
+      } else {
+        return this.serverUrl + '/' + photo
+      }
     },
   },
   watch: {

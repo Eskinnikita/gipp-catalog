@@ -1,5 +1,6 @@
 <template>
   <div class="profile-page" v-if="pageReady">
+    <review-modal ref="reviewModal"/>
     <div class="profile-page__left left">
       <div class="profile-page__image-container left__item">
         <img
@@ -25,19 +26,30 @@
     </div>
     <div class="profile-page__right left__item">
       <h2 class="profile-page__title">{{ publication.title }}</h2>
-      <el-button class="profile-page__publisher-name" type="text">{{ publication.publisher.name }}</el-button>
+      <nuxt-link :to="`/publisher/${publication.publisher.id}`">
+        <el-button class="profile-page__publisher-name" type="text">{{ publication.publisher.name }}</el-button>
+      </nuxt-link>
       <div class="profile-page__content">
         <p class="profile-page__desc" v-if="publication.desc">
           {{ publication.desc }}
         </p>
-        <div class="profile-page__recommends recommends">
+        <div class="profile-page__tags-container" v-if="publication.publisher.tags && publication.publisher.tags.length">
+<!--          <el-tag :type="randomType()" v-for="item in publication.publisher.Publications" :key="item">{{ item.title }}</el-tag>-->
+        </div>
+        <div class="profile-page__recommends recommends" v-if="publication.publisher.Publications.length">
           <h4 class="profile-page__subtitle">Еще от <b>{{publication.publisher.name}}</b></h4>
           <div class="recommends__container" :style="{ 'justify-content': publication.publisher.Publications.length === 2 ? 'flex-start' : 'space-between'}">
             <rec-publications v-for="(recPub, index) in publication.publisher.Publications" :rec-pub="recPub" :key="index"/>
           </div>
         </div>
-        <div class="profile-page__reviews">
-          <h4 class="profile-page__subtitle">Отзывы</h4>
+        <div class="profile-page__reviews reviews">
+          <div class="reviews__header">
+            <h4 class="profile-page__subtitle">Отзывы</h4>
+            <el-button type="primary" @click="$refs.reviewModal.openModal()">Оставить отзыв</el-button>
+          </div>
+          <div class="reviews__container">
+            <comment-snippet class="profile-page__comment" v-for="(item, index) in 4" :key="index"/>
+          </div>
         </div>
       </div>
     </div>
@@ -47,11 +59,15 @@
 <script>
 import infoBlock from "@/components/profile/infoBlock"
 import recPublications from "@/components/profile/snippets/recPublications"
+import commentSnippet from "@/components/snippets/commentSnippet"
+import reviewModal from "@/components/modals/reviewModal"
 export default {
   layout: 'transparent',
   components: {
     infoBlock,
-    recPublications
+    recPublications,
+    commentSnippet,
+    reviewModal
   },
   created() {
     this.serverUrl = process.env.serverUrl
@@ -69,7 +85,10 @@ export default {
     }
   },
   methods: {
-
+    randomType() {
+      const types = ["success", "info", "warning", "danger"]
+      return types[Math.floor(Math.random() * types.length)]
+    }
   },
   computed: {
     info() {
@@ -154,6 +173,11 @@ export default {
     height: 200px;
   }
 
+  &__comment {
+    margin-bottom: 20px;
+    max-width: 70%;
+  }
+
   &__controls {
     display: flex;
     flex-direction: row;
@@ -207,7 +231,7 @@ export default {
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: url("../../assets/logo.svg");
+      background-image: url("../../../assets/logo.svg");
       filter: opacity(40%);
     }
   }
@@ -215,6 +239,13 @@ export default {
   &__image-container {
     padding: 5px;
     background-color: #fff;
+  }
+
+  &__tags-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 30px;
   }
 }
 
@@ -231,7 +262,22 @@ export default {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+  }
+}
+
+.el-tag {
+  margin-right: 10px;
+}
+
+.reviews {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  &__container {
+
   }
 }
 

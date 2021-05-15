@@ -1,7 +1,7 @@
 <template>
   <div class="pub-create">
-    <confirm-dialog ref="confirmModal" :on-confirm="createPublication" title="Подтверждение">
-      Вы уверены, что хотите добавить издание?
+    <confirm-dialog ref="confirmModal" :on-confirm="updatePublication" title="Подтверждение">
+      Вы уверены, что хотите внести изменения?
     </confirm-dialog>
     <h3 class="pub-create__title">Создание издания</h3>
     <h4 class="pub-create__title">Обложка <span style="font-weight: normal">(нажмите на обложку для изменения)</span></h4>
@@ -89,19 +89,18 @@
           <el-form-item label="Подписной индекс">
             <el-input v-model="publication.subindex" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="Выберите один или несколько тегов"><br/>
-            <el-select v-model="publication.PubTags" multiple placeholder="Теги">
-              <el-option
-                filterable
-                v-for="(item, index) in tags"
-                :key="index"
-                :label="item.tag"
-                :value="item.tag">
-              </el-option>
-            </el-select>
-          </el-form-item>
+          <!--          <el-form-item label="Выберите один или несколько тегов"><br/>-->
+          <!--            <el-select v-model="publication.tags" multiple placeholder="Теги">-->
+          <!--              <el-option-->
+          <!--                v-for="item in age"-->
+          <!--                :key="item.value"-->
+          <!--                :label="item.label"-->
+          <!--                :value="item.value">-->
+          <!--              </el-option>-->
+          <!--            </el-select>-->
+          <!--          </el-form-item>-->
           <el-form-item class="pub-create__controls">
-            <el-button type="primary" @click="openConfirmModal">Создать</el-button>
+            <el-button type="primary" @click="openConfirmModal">Сохранить</el-button>
             <el-button>Назад</el-button>
           </el-form-item>
         </el-form>
@@ -117,15 +116,19 @@ export default {
     confirmDialog
   },
   created() {
-    this.$store.dispatch('publication/getTags').then(res => {
-      if(res) {
-        this.tags = res
+    this.publicationId = this.$route.params.id
+    this.serverUrl = process.env.serverUrl
+    this.$store.dispatch('publication/getPublicationForUpdate', this.publicationId)
+    .then(res => {
+      this.publication = JSON.parse(JSON.stringify(res))
+      if(res.coverLink) {
+        this.imageUrl = this.serverUrl + '/' + res.coverLink
       }
     })
   },
   data() {
     return {
-      tags: null,
+      publicationId: null,
       imageFile: null,
       disabled: false,
       imageUrl: '',
@@ -139,8 +142,7 @@ export default {
         count: 1,
         period: 'неделю',
         strips: null,
-        weight: null,
-        PubTags: []
+        weight: null
       },
       rules: {
         title: [
@@ -210,30 +212,22 @@ export default {
     handleChange(file, fileList) {
       this.imageFile = file.raw
     },
-    parseTags() {
-      const tagsArr = []
-      this.publication.PubTags.forEach(el => {
-        tagsArr.push({'tag': el})
-      })
-      this.publication.PubTags = tagsArr
-    },
-    createPublication() {
-      this.parseTags()
-      console.log(this.publication)
+    updatePublication() {
       this.publication.weight = +this.publication.weight
       this.publication.strips = +this.publication.strips
       const formData = new FormData();
       formData.append('publication', JSON.stringify(this.publication))
       formData.append('cover', this.imageFile)
-      this.$store.dispatch('publication/createPublication', formData)
-        .then(res => {
+      this.$store.dispatch('publication/updatePublication', {id: this.publicationId, formData: formData})
+        .then(() => {
+          this.$refs.confirmModal.opened = false
           this.$notify({
             title: 'Успешное добавление',
-            message: 'Издание успешно добавлено!',
+            message: 'Информация об издании успешно обновлена!',
             type: 'success',
             position: 'bottom-right'
           });
-          // this.$router.push({path: `/publication/${res.id}`});
+          this.$router.push({path: `/publication/${this.publicationId}`});
         })
     }
   }

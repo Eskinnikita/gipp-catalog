@@ -1,12 +1,12 @@
 <template>
-    <div class="cover-snippet" @click="goTo">
-      <img class="cover-snippet__image"
-           :src="coverUrl"
-           alt="">
-      <div class="cover-snippet__info">
-        <h5 class="cover-snippet__title">{{ publication.title }}</h5>
-      </div>
+  <div class="cover-snippet" @click="goTo">
+    <img class="cover-snippet__image"
+         :src="coverUrl"
+         alt="">
+    <div class="cover-snippet__info">
+      <h5 class="cover-snippet__title">{{ publication.title }}</h5>
     </div>
+  </div>
 </template>
 
 <script>
@@ -36,7 +36,9 @@ export default {
   },
   computed: {
     coverUrl() {
-      return this.imageUrl + '/' + this.publication.coverLink
+      if (this.publication.coverLink) {
+        return this.imageUrl + '/' + this.publication.coverLink
+      }
     }
   }
 }
@@ -47,12 +49,14 @@ export default {
   cursor: pointer;
   transition: transform 0.3s;
   max-width: 150px;
+
   &__image {
     height: 200px;
     width: 100%;
     object-fit: cover;
     margin-bottom: 3px;
     border-radius: 4px;
+    background-color: #409EFF;
   }
 
   &__info {

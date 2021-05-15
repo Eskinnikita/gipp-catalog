@@ -25,6 +25,7 @@ export default {
     '@/plugins/element-ui',
     '@/plugins/persistedstate.js',
     '@/plugins/axios.js',
+    {src: '@/plugins/star-rating.js', ssr: false},
     { src: '@/plugins/nuxt-quill-plugin.js', ssr: false }
   ],
 

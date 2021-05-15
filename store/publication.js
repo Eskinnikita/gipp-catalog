@@ -1,5 +1,7 @@
 export const state = () => ({
-  publication: {}
+  publication: {},
+  tags: [],
+  publications: []
 })
 
 export const mutations = {
@@ -8,10 +10,31 @@ export const mutations = {
   },
   SET_EMPTY_PUBLICATION(state) {
     state.publication = {}
+  },
+  SET_TAGS(state, tags) {
+    state.tags = tags
+  },
+  SET_ALL_PUBS(state, publications) {
+    state.publications = publications
+  },
+  SET_EMPTY_PUBS(state) {
+    state.publications = []
   }
 }
 
 export const actions = {
+  async getTags({commit}) {
+    try {
+      let res = null
+      res = await this.$axios.$get(`/tags/pub/all`)
+      if(res) {
+        commit('SET_TAGS', res)
+      }
+      return res
+    } catch (e) {
+      console.log(e)
+    }
+  },
   async createPublication({commit}, formData) {
     try {
       let res = null
@@ -34,7 +57,39 @@ export const actions = {
     } catch (e) {
       console.log(e)
     }
-  }
+  },
+  async getPublicationForUpdate({commit}, id) {
+    try {
+      let res = null
+      res = await this.$axios.$get(`/publication/update/${id}`)
+      if(res) {
+        commit('SET_PUBLICATION', res)
+      }
+      return res
+    } catch (e) {
+      console.log(e)
+    }
+  },
+  async updatePublication({commit}, data) {
+    try {
+      await this.$axios.$patch(`/publication/${data.id}`, data.formData)
+    } catch (e) {
+      console.log(e)
+    }
+  },
+  async getAllPublications({commit}, params) {
+    try {
+      commit('SET_EMPTY_PUBS')
+      let res = null
+      res = await this.$axios.$post(`/catalog/all`, params)
+      if(res) {
+        commit('SET_ALL_PUBS', res)
+      }
+      return res
+    } catch (e) {
+      console.log(e)
+    }
+  },
 }
 
 export const getters = {

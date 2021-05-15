@@ -6,7 +6,6 @@ const passport = require('passport')
 const generator = require('generate-password');
 const transporter = require('../utils/nodemailerClient')
 
-
 const router = express.Router()
 
 router.get('/users/all/:role', passport.authenticate('jwt', {session: false}), async (req, res) => {
@@ -76,6 +75,8 @@ router.post('/users/confirm', passport.authenticate('jwt', {session: false}), as
     }).catch(e => {
       console.log(e)
     })
+
+    console.log(info)
 
     res.status(200).json(request)
   } catch (e) {

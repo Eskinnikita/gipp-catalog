@@ -3,7 +3,7 @@ const sequelize = require("../database");
 
 const PubTag = sequelize.define("PubTag", {
   tag: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false
   }
 });
