@@ -1,18 +1,30 @@
 <template>
   <div class="catalog">
     <div class="catalog__filters">
-      <catalog-filter/>
+      <catalog-filter ref="filters"/>
     </div>
-    <div
-      class="catalog__publications-container"
-      :style="{'justify-content': publications.length > 3 ? 'space-between' : 'flex-start'}"
-    >
-      <cover-snippet
-        v-for="(publication, index) in publications "
-        :key="index"
-        :publication="publication"
-        route="/publication"
-      />
+    <div class="catalog__content">
+      <div
+        class="catalog__publications-container"
+        :style="{'justify-content': publications.length > 3 ? 'space-between' : 'flex-start'}"
+      >
+        <cover-snippet
+          v-for="(publication, index) in publications.rows"
+          :key="index"
+          :publication="publication"
+          route="/publication"
+        />
+      </div>
+      <div class="catalog__pagination">
+        <el-pagination
+          @current-change="handleCurrentChange"
+          :page-size="2"
+          :pager-count="7"
+          :current-page="+params.page"
+          layout="pager"
+          :total="publications.count">
+        </el-pagination>
+      </div>
     </div>
   </div>
 </template>
@@ -28,12 +40,77 @@ export default {
     catalogFilter
   },
   created() {
-    this.$store.dispatch('publication/getAllPublications')
+    if (this.$route.query.page) {
+      this.params.page = this.$route.query.page
+    }
+    if (this.$route.query.types) {
+      this.params.types = this.$route.query.types
+    }
+    if (this.$route.query.age) {
+      this.params.age = this.$route.query.age
+    }
+    this.$store.dispatch('publication/getAllPublications', this.params)
+  },
+  mounted() {
+    this.setQueryValues(['types', 'age'])
+    this.$watch(
+      "$refs.filters.parameters.types",
+      (new_value, old_value) => {
+        this.params.types = new_value
+      },
+    );
+    this.$watch(
+      "$refs.filters.parameters.age",
+      (new_value, old_value) => {
+        this.params.age = new_value
+      },
+    );
+  },
+  data() {
+    return {
+      params: {
+        page: '1',
+        types: [],
+        age: []
+      }
+    }
+  },
+  methods: {
+    handleCurrentChange(val) {
+      this.params.page = `${val}`
+    },
+    applyFilters() {
+      this.$router.push({path: '/catalog', query: this.params})
+      this.$store.dispatch('publication/getAllPublications', this.params)
+    },
+    setQueryValues(keys) {
+      keys.forEach(key => {
+        if (this.$route.query[key]) {
+          if(Array.isArray(this.$route.query[key])) {
+            this.$refs.filters.parameters[key] = this.$route.query[key]
+          } else {
+            this.$refs.filters.parameters[key] = [this.$route.query[key]]
+          }
+        }
+      })
+    }
   },
   computed: {
     publications() {
       return this.$store.state.publication.publications
     }
+  },
+  watch: {
+    params: {
+      handler(val) {
+        console.log(val)
+        this.applyFilters()
+      },
+      deep: true
+    },
+    // '$route.params'() {
+    //   this.$store.dispatch('publication/getAllPublications', this.params)
+    // }
   }
 }
 </script>
@@ -44,7 +121,13 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  min-height: 100vh;
+
+  &__content {
+    width: 100%;
+    background-color: #fff;
+    border-radius: 4px;
+    padding: 30px 30px;
+  }
 
   &__publications-container {
     width: 100%;
@@ -52,10 +135,13 @@ export default {
     grid-template-columns: repeat(auto-fill, 150px);
     grid-gap: 2rem;
     justify-content: space-between;
-    background-color: #fff;
-    border-radius: 4px;
-    padding: 30px 30px;
-    min-height: 100vh;
+    margin-bottom: 20px;
+    min-height: calc(100vh - 240px);
+  }
+
+  &__pagination {
+    display: flex;
+    justify-content: center;
   }
 }
 

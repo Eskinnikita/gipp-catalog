@@ -108,7 +108,7 @@ export default {
     handleSelect(key, keyPath) {
       if (+key === 1) {
         this.activeIndex = "1";
-        this.$router.push({path: "/catalog"});
+        this.$router.push({path: "/catalog", query: { page: '1' }});
       } else {
         this.activeIndex = "2";
         this.$router.push({path: "/news"});

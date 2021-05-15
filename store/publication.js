@@ -16,6 +16,9 @@ export const mutations = {
   },
   SET_ALL_PUBS(state, publications) {
     state.publications = publications
+  },
+  SET_EMPTY_PUBS(state) {
+    state.publications = []
   }
 }
 
@@ -74,10 +77,11 @@ export const actions = {
       console.log(e)
     }
   },
-  async getAllPublications({commit}, id) {
+  async getAllPublications({commit}, params) {
     try {
+      commit('SET_EMPTY_PUBS')
       let res = null
-      res = await this.$axios.$get(`/catalog/all`)
+      res = await this.$axios.$post(`/catalog/all`, params)
       if(res) {
         commit('SET_ALL_PUBS', res)
       }

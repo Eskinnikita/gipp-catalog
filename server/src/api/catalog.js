@@ -3,9 +3,22 @@ const Publication = require('../models/publication')
 
 const router = express.Router()
 
-router.get('/all', async (req, res) => {
+router.post('/all', async (req, res) => {
   try {
-    const allPublications = await Publication.findAll().catch(
+    const {page, age, types} = req.body
+    const limit = 2
+    const options = {
+      where: {},
+      limit: limit,
+      offset: (+page - 1) * limit,
+    }
+    if (types.length) {
+      options.where.type = types
+    }
+    if (age.length) {
+      options.where.age = age
+    }
+    const allPublications = await Publication.findAndCountAll(options).catch(
       e => {
         console.log("Error", e)
       }
