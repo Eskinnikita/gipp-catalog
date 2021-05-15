@@ -76,6 +76,8 @@ router.post('/users/confirm', passport.authenticate('jwt', {session: false}), as
       console.log(e)
     })
 
+    console.log(info)
+
     res.status(200).json(request)
   } catch (e) {
     res.status(500).json({message: e})

@@ -40,12 +40,13 @@
           <el-dropdown trigger="click" class="right-menu__avatar right-menu__item">
             <span class="right-menu__item">
               <el-avatar
-                v-if="user.logoUrl || user.avatarUrl"
+                v-if="avatarUrl"
                 size="small"
                 fit="cover"
-                :src="logoUrl"
+                :src="avatarUrl"
                 alt="Аватар пользователя"
               ></el-avatar>
+              <el-avatar v-else size="small" icon="el-icon-user-solid"></el-avatar>
               <span class="right-menu__text">Кабинет</span>
             </span>
             <el-dropdown-menu slot="dropdown">
@@ -141,8 +142,21 @@ export default {
     user() {
       return this.$store.state.auth.user
     },
-    logoUrl() {
-      return this.serverUrl + '/' + this.user.logoUrl
+    avatarUrl() {
+      let photo
+      const role = this.user.role
+      if(role === 1 || role === 4) {
+        photo = this.user.avatarUrl
+      } else if(role === 2 || role === 3) {
+        console.log(this.user)
+        photo = this.user.logoUrl
+      }
+      console.log(photo)
+      if(photo === null) {
+        return false
+      } else {
+        return this.serverUrl + '/' + photo
+      }
     },
   },
   watch: {

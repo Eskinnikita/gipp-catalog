@@ -4,6 +4,7 @@
       <catalog-filter ref="filters"/>
     </div>
     <div class="catalog__content">
+      <h3 class="catalog__title">Каталог</h3>
       <div
         class="catalog__publications-container"
         :style="{'justify-content': publications.length > 3 ? 'space-between' : 'flex-start'}"
@@ -18,7 +19,6 @@
       <div class="catalog__pagination">
         <el-pagination
           @current-change="handleCurrentChange"
-          :page-size="2"
           :pager-count="7"
           :current-page="+params.page"
           layout="pager"
@@ -122,11 +122,16 @@ export default {
   flex-direction: row;
   justify-content: space-between;
 
+  &__title {
+    margin-bottom: 10px;
+    font-weight: normal;
+  }
+
   &__content {
     width: 100%;
     background-color: #fff;
     border-radius: 4px;
-    padding: 30px 30px;
+    padding: 20px 30px 30px 30px;
   }
 
   &__publications-container {
@@ -137,6 +142,7 @@ export default {
     justify-content: space-between;
     margin-bottom: 20px;
     min-height: calc(100vh - 240px);
+    height: auto;
   }
 
   &__pagination {

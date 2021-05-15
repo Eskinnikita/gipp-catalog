@@ -1,5 +1,6 @@
 <template>
   <div class="profile-page" v-if="pageReady">
+    <review-modal ref="reviewModal"/>
     <div class="profile-page__left left">
       <div class="profile-page__image-container left__item">
         <img
@@ -32,7 +33,7 @@
         <p class="profile-page__desc" v-if="publication.desc">
           {{ publication.desc }}
         </p>
-        <div class="profile-page__tags-container">
+        <div class="profile-page__tags-container" v-if="publication.publisher.tags && publication.publisher.tags.length">
 <!--          <el-tag :type="randomType()" v-for="item in publication.publisher.Publications" :key="item">{{ item.title }}</el-tag>-->
         </div>
         <div class="profile-page__recommends recommends" v-if="publication.publisher.Publications.length">
@@ -41,9 +42,12 @@
             <rec-publications v-for="(recPub, index) in publication.publisher.Publications" :rec-pub="recPub" :key="index"/>
           </div>
         </div>
-        <div class="profile-page__reviews">
-          <h4 class="profile-page__subtitle">Отзывы</h4>
-          <div class="comments__container">
+        <div class="profile-page__reviews reviews">
+          <div class="reviews__header">
+            <h4 class="profile-page__subtitle">Отзывы</h4>
+            <el-button type="primary" @click="$refs.reviewModal.openModal()">Оставить отзыв</el-button>
+          </div>
+          <div class="reviews__container">
             <comment-snippet class="profile-page__comment" v-for="(item, index) in 4" :key="index"/>
           </div>
         </div>
@@ -56,12 +60,14 @@
 import infoBlock from "@/components/profile/infoBlock"
 import recPublications from "@/components/profile/snippets/recPublications"
 import commentSnippet from "@/components/snippets/commentSnippet"
+import reviewModal from "@/components/modals/reviewModal"
 export default {
   layout: 'transparent',
   components: {
     infoBlock,
     recPublications,
-    commentSnippet
+    commentSnippet,
+    reviewModal
   },
   created() {
     this.serverUrl = process.env.serverUrl
@@ -264,7 +270,12 @@ export default {
   margin-right: 10px;
 }
 
-.comments {
+.reviews {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
   &__container {
 
   }

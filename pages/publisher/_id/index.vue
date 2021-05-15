@@ -6,8 +6,8 @@
           v-if="publisher && publisher.logoUrl"
           :src="logoUrl"
           class="profile-page__image" alt="profile image"/>
-      </div>
-      <div class="profile-page__image-placeholder left__item" v-if="publisher && !publisher.logoUrl && publisher.logoUrl !== undefined">
+        <div class="profile-page__image-placeholder left__item" v-if="publisher && !publisher.logoUrl && publisher.logoUrl !== undefined">
+        </div>
       </div>
       <div class="profile-page__controls left__item">
         <el-button type="primary">Подписаться</el-button>

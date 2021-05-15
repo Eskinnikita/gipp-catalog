@@ -7,10 +7,10 @@ export const mutations = {
     state.users = users
   },
   REMOVE_USER(state, id) {
-    const userIndex = state.users.findIndex(el => {
+    const userIndex = state.users.find(el => {
       return el.id === id
     })
-    state.users.splice(userIndex, 1)
+    userIndex.approved = true
   }
 }
 
@@ -19,7 +19,7 @@ export const actions = {
     try {
       let res = null
       res = await this.$axios.$get(`/users/all/${role}`)
-      if(res) {
+      if (res) {
         commit('SET_USERS', res)
       }
     } catch (e) {
@@ -30,7 +30,7 @@ export const actions = {
     try {
       let res = null
       res = await this.$axios.$post('/users/confirm', data)
-      if(res) {
+      if (res) {
         console.log(res)
         commit('REMOVE_USER', data)
       }
@@ -42,7 +42,7 @@ export const actions = {
     try {
       let res = null
       res = await this.$axios.$post('/users/deny', data)
-      if(res) {
+      if (res) {
         console.log(res)
         commit('REMOVE_USER', data.id)
       }
@@ -52,5 +52,4 @@ export const actions = {
   },
 }
 
-export const getters = {
-}
+export const getters = {}

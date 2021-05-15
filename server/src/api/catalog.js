@@ -6,7 +6,7 @@ const router = express.Router()
 router.post('/all', async (req, res) => {
   try {
     const {page, age, types} = req.body
-    const limit = 2
+    const limit = 16
     const options = {
       where: {},
       limit: limit,
