@@ -9,11 +9,20 @@ export const mutations = {
   SET_EMPTY_ITEMS(state) {
     state.adminPanelListItems = null
   },
-  REMOVE_USER(state, id) {
-    const userIndex = state.users.find(el => {
-      return el.id === id
+  REMOVE_USER(state, data) {
+    const userIndex = state.adminPanelListItems.notApproved.findIndex(el => {
+      return el.id === data.id
     })
-    userIndex.approved = true
+    state.adminPanelListItems.notApproved.splice(userIndex, 1)
+  },
+  REPLACE_SNIPPET(state, data) {
+    const userIndex = state.adminPanelListItems.notApproved.findIndex(el => {
+      return el.id === data.id
+    })
+    const user = state.adminPanelListItems.notApproved[userIndex]
+    state.adminPanelListItems.notApproved.splice(userIndex, 1)
+    user.approved = true
+    state.adminPanelListItems.approved.rows.unshift(user)
   }
 }
 
@@ -44,11 +53,11 @@ export const actions = {
   },
   async confirmRequest({commit}, data) {
     try {
+      commit('REPLACE_SNIPPET', data)
       let res = null
       res = await this.$axios.$post('/users/confirm', data)
       if (res) {
-        console.log(res)
-        commit('REMOVE_USER', data)
+        commit('REPLACE_SNIPPET', data)
       }
     } catch (e) {
       console.log(e)
@@ -60,7 +69,7 @@ export const actions = {
       res = await this.$axios.$post('/users/deny', data)
       if (res) {
         console.log(res)
-        commit('REMOVE_USER', data.id)
+        commit('REMOVE_USER', data)
       }
     } catch (e) {
       console.log(e)

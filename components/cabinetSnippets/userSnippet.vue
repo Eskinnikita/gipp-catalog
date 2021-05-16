@@ -37,10 +37,11 @@ export default {
   },
   methods: {
     openConfirmModal(){
-      this.$emit('openDialog', this.userInfo)
+      console.log('open conf')
+      this.$emit('openConfirmDialog', this.userInfo)
     },
     openDenyModal(){
-      console.log('dfdf')
+      console.log('open deny')
       this.$emit('openDenyDialog', this.userInfo)
     },
   },
