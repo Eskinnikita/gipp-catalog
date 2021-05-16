@@ -45,7 +45,7 @@
         <div class="profile-page__reviews reviews">
           <div class="reviews__header">
             <h4 class="profile-page__subtitle">Отзывы</h4>
-            <el-button type="primary" @click="$refs.reviewModal.openModal()">Оставить отзыв</el-button>
+            <el-button v-if="!isUserAdmin" type="primary" @click="$refs.reviewModal.openModal()">Оставить отзыв</el-button>
           </div>
           <div class="reviews__container">
             <comment-snippet class="profile-page__comment" v-for="(item, index) in 4" :key="index"/>

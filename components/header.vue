@@ -50,7 +50,7 @@
               <span class="right-menu__text">Кабинет</span>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item v-if="+auth.user.role === 4" @click.native="goTo('/cabinet')">Личный кабинет
+              <el-dropdown-item v-if="+auth.user.role === 4" @click.native="goToCabinet">Личный кабинет
               </el-dropdown-item>
               <el-dropdown-item v-if="+auth.user.role !== 4" @click.native="goToProfile">Профиль</el-dropdown-item>
               <el-dropdown-item @click.native="logout">Выйти</el-dropdown-item>
@@ -123,8 +123,8 @@ export default {
         this.$router.push({path: "/"});
       })
     },
-    goTo(dest) {
-      this.$router.push({path: dest});
+    goToCabinet() {
+      this.$router.push({path: '/cabinet', query: {tab: '1', page: '1'}});
     },
     goToProfile() {
       const userRole = this.auth.user.role
@@ -146,12 +146,10 @@ export default {
       let photo
       const role = this.user.role
       if(role === 1 || role === 4) {
-        photo = this.user.avatarUrl
+        return false
       } else if(role === 2 || role === 3) {
-        console.log(this.user)
         photo = this.user.logoUrl
       }
-      console.log(photo)
       if(photo === null) {
         return false
       } else {

@@ -109,4 +109,10 @@ textarea {
 .el-tabs__item {
   color: #606266 !important;
 }
+
+.el-notification__content {
+  p {
+    text-align: left;
+  }
+}
 </style>
