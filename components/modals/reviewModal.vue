@@ -52,10 +52,19 @@ export default {
     sendReview() {
       this.form.reviewerId = this.$store.state.auth.user.id
       this.form.reviewerRole = this.$store.state.auth.user.role
+      this.form.publicationId = this.$store.state.publication.publication.id
       this.form.approved = false
       this.$refs["reviewForm"].validate((valid) => {
         if (valid) {
-          console.log(this.form)
+          this.$store.dispatch('publication/sendReview', this.form).then(() => {
+            this.$notify({
+              title: 'Спасибо за отзыв!',
+              message: 'Ваш отзыв отправлен на модерацию',
+              type: 'success',
+              position: 'bottom-right'
+            });
+            this.dialogFormVisible = false
+          })
         } else {
           console.log('error submit!!');
           return false;

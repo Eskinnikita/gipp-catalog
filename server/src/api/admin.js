@@ -3,6 +3,7 @@ const sequelize = require('sequelize')
 const Publication = require('../models/publication')
 const User = require('../models/user')
 const Organ = require('../models/organization')
+const Review = require('../models/review')
 const Publisher = require('../models/Publisher')
 
 const router = express.Router()
@@ -81,6 +82,34 @@ router.post('/users/users/all', async (req, res) => {
       }
     )
     res.status(200).json(users)
+  } catch (err) {
+    res.status(500).json({message: err})
+  }
+})
+
+router.post('/reviews/all', async (req, res) => {
+  try {
+    const {page} = req.body
+    const limit = 10
+    const options = {
+      where: {
+        approved: false
+      },
+      limit: limit,
+      offset: (+page - 1) * limit,
+      include: [
+        {model: Publisher, attributes: ['id', 'name', 'logoUrl', 'role']},
+        {model: User, attributes: ['id','name', 'role']}
+      ]
+    }
+
+    const reviews = await Review.findAndCountAll(options).catch(
+      e => {
+        console.log("Error", e)
+      }
+    )
+
+    res.status(200).json(reviews)
   } catch (err) {
     res.status(500).json({message: err})
   }

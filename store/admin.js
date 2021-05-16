@@ -51,6 +51,27 @@ export const actions = {
       console.log(e)
     }
   },
+  async getReviews({commit}, data) {
+    try {
+      commit('SET_EMPTY_ITEMS')
+      let res = null
+      res = await this.$axios.$post(data.route, data.params)
+      if (res) {
+        console.log(res)
+        const roles = ['User', 'Publisher', 'Organ']
+        res.rows.forEach(el => {
+          roles.forEach(role => {
+            if(el.hasOwnProperty(role) && el[role].role === el.reviewerRole) {
+              el.author = el[role]
+            }
+          })
+        })
+        commit('SET_ITEMS', res)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  },
   async confirmRequest({commit}, data) {
     try {
       commit('REPLACE_SNIPPET', data)

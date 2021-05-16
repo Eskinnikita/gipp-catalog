@@ -90,6 +90,17 @@ export const actions = {
       console.log(e)
     }
   },
+  async sendReview({}, data) {
+    try {
+      let res = null
+      res = await this.$axios.$post('/reviews', data)
+      if(res) {
+        return res
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
 }
 
 export const getters = {

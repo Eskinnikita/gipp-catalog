@@ -148,6 +148,16 @@ export default {
             }
           }
         }
+      } else if (role === 5) {
+        return {
+          dispatch: 'admin/getReviews',
+          data: {
+            route: '/admin/reviews/all',
+            params: {
+              page: this.params.page
+            }
+          }
+        }
       }
     }
   },
@@ -167,9 +177,6 @@ export default {
       },
       deep: true
     },
-    // search() {
-    //   this.$router.push({path: '/cabinet', query: {tab: this.params.activeTab, page: this.params.page, search: this.params.search}});
-    // }
   },
   beforeDestroy() {
     this.$store.commit('admin/SET_EMPTY_ITEMS')

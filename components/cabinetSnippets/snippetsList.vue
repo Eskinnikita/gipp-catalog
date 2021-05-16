@@ -52,6 +52,20 @@
         <p v-if="!items.rows.length">Список пуст</p>
       </div>
     </template>
+    <template v-if="role === 5">
+      <div class="snippet-list__users">
+        <h3 class="snippet-list__title">Комментарии на рассмотрение</h3>
+        <template v-if="items.rows.length">
+          <comment-snippet
+            class="snippet-list__review-block"
+            v-for="(item, index) in items.rows"
+            :key="index"
+            :comment-info="item"
+          />
+        </template>
+        <p v-if="!items.rows.length">Список пуст</p>
+      </div>
+    </template>
         <!-- ДИАЛОГ ПОДТВЕЖДЕНИЯ ЗАЯВКИ -->
         <el-dialog
           title="Подтверждение заявки"
@@ -88,10 +102,12 @@
 
 <script>
 import userSnippet from "@/components/cabinetSnippets/userSnippet"
+import commentSnippet from "@/components/snippets/commentSnippet"
 
 export default {
   components: {
-    userSnippet
+    userSnippet,
+    commentSnippet
   },
   created() {
     if (this.$route.query.search) {
@@ -195,6 +211,11 @@ export default {
 
   &__title {
     margin-bottom: 15px;
+  }
+
+  &__review-block {
+    margin-top: 25px;
+    width: 100%;
   }
 }
 </style>
