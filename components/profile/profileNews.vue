@@ -1,12 +1,14 @@
 <template>
   <div class="profile-news">
-    <h2>НОВОСТИ</h2>
+
+    />
   </div>
 </template>
 
 <script>
 export default {
-
+  components: {
+  }
 }
 </script>
 

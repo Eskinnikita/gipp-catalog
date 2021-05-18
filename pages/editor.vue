@@ -8,7 +8,7 @@
         <el-input v-model="news.title"></el-input>
       </el-form-item>
       <p class="article-editor__author">
-        Автор: {{user.name}}
+        Автор: {{ user.name }}
       </p>
       <no-ssr>
         <quill-editor
@@ -19,7 +19,8 @@
         ></quill-editor>
       </no-ssr>
       <div class="article-editor__controls">
-        <el-button @click="log" type="primary">Опубликовать</el-button>
+        <el-button type="primary" @click="logArticle">Посмотреть</el-button>
+        <el-button type="primary" @click="logArticle">Опубликовать</el-button>
       </div>
     </el-form>
   </div>
@@ -27,9 +28,9 @@
 
 <script>
 import {mapState} from 'vuex'
+
 export default {
-  components: {
-  },
+  components: {},
   created() {
 
   },
@@ -44,16 +45,16 @@ export default {
         modules: {
           toolbar: [
             ['bold', 'italic', 'underline', 'strike'],
-            ['blockquote', { list: 'ordered' }, { list: 'bullet' }],
-            ['link', 'image', 'video']
+            ['blockquote', {list: 'ordered'}, {list: 'bullet'}],
+            ['link', 'image', 'video'],
           ]
         }
       }
     }
   },
   methods: {
-    log() {
-      console.log(this.news.text)
+    logArticle() {
+      console.log(this.news)
     }
   },
   computed: {
@@ -65,21 +66,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .title {
-    text-align: center;
+.title {
+  text-align: center;
+}
+
+.article-editor {
+  &__author {
+    margin-bottom: 20px;
   }
 
-  .article-editor {
-    &__author {
-      margin-bottom: 20px;
-    }
-
-    &__editor {
-      color: #000;
-    }
-
-    &__controls {
-      margin-top: 20px;
-    }
+  &__editor {
+    color: #000;
   }
+
+  &__controls {
+    margin-top: 20px;
+  }
+}
+
+
 </style>

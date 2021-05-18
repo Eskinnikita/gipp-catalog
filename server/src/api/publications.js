@@ -7,6 +7,7 @@ const Publisher = require('../models/publisher')
 const User = require('../models/user')
 const PubTag = require('../models/pubTag')
 const Review = require('../models/review')
+const Organ = require('../models/organization')
 
 const router = express.Router()
 
@@ -64,9 +65,18 @@ router.get('/:id', async (req, res) => {
         {
           model: Review,
           include: [
-            {model: Publisher, attributes: ['id', 'name', 'logoUrl', 'role']},
-            {model: User, attributes: ['id', 'name', 'role']},
-            {model: Publication, attributes: ['id', 'title']}
+            {
+              model: Publisher,
+              attributes: ['id', 'name', 'logoUrl', 'role']
+            },
+            {
+              model: User,
+              attributes: ['id', 'name', 'role']
+            },
+            {
+              model: Organ,
+              attributes: ['id', 'name', 'role']
+            }
           ]
         }
       ]

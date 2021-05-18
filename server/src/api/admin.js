@@ -98,9 +98,18 @@ router.post('/reviews/all', async (req, res) => {
       limit: limit,
       offset: (+page - 1) * limit,
       include: [
-        {model: Publisher, attributes: ['id', 'name', 'logoUrl', 'role']},
-        {model: User, attributes: ['id', 'name', 'role']},
-        {model: Publication, attributes: ['id', 'title']}
+        {
+          model: Publisher, attributes: ['id', 'name', 'logoUrl', 'role'],
+        },
+        {
+          model: User, attributes: ['id', 'name', 'logoUrl', 'role'],
+        },
+        {
+          model: Organ, attributes: ['id', 'name', 'logoUrl', 'role'],
+        },
+        {
+          model: Publication, attributes: ['id', 'title']
+        }
       ]
     }
 

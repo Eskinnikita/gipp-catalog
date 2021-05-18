@@ -115,4 +115,8 @@ textarea {
     text-align: left;
   }
 }
+
+.ql-container{
+  min-height: 300px !important;
+}
 </style>

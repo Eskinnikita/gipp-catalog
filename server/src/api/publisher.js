@@ -2,6 +2,9 @@ const express = require('express')
 const sequelize = require('sequelize')
 const Publisher = require('../models/publisher')
 const Publication = require('../models/publication')
+const User = require('../models/user')
+const Organ = require('../models/organization')
+const Review = require('../models/review')
 const multer = require('multer')
 
 const router = express.Router()
@@ -34,6 +37,9 @@ const upload = multer({
 router.get('/:id', async (req, res) => {
   try {
     const id = req.params.id
+    Publisher.hasMany(Review, {
+      foreignKey: 'reviewerId'
+    })
     const publisher = await Publisher.findOne({
       where: {id},
       attributes: { exclude: ['password', 'approved'] },
@@ -44,6 +50,23 @@ router.get('/:id', async (req, res) => {
           required: false,
           attributes: ['id', 'coverLink', 'title', 'updatedAt'],
         },
+        {
+          model: Review,
+          include: [
+            {
+              model: Publisher,
+              attributes: ['id', 'name', 'logoUrl', 'role']
+            },
+            {
+              model: User,
+              attributes: ['id', 'name', 'role']
+            },
+            {
+              model: Organ,
+              attributes: ['id', 'name', 'role']
+            }
+          ]
+        }
       ],
       order: [
         [Publication, 'updatedAt', 'DESC']

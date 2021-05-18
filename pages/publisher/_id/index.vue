@@ -50,8 +50,8 @@
         <div class="profile-page__tab-content">
           <publisher-catalog :publications="publisher.Publications"
                              v-if="activeTab === '1' && publisher.Publications"/>
-          <profile-news v-if="activeTab === '2'"/>
-          <profile-comments v-if="activeTab === '3'"/>
+          <profile-news  v-if="activeTab === '2'"/>
+          <profile-comments :reviews="publisher.Reviews" v-if="activeTab === '3' && publisher.Reviews"/>
         </div>
       </div>
     </div>
