@@ -57,6 +57,9 @@
         <h3 class="snippet-list__title">Комментарии на рассмотрение</h3>
         <template v-if="items.rows.length">
           <comment-snippet
+            :show-controls="true"
+            @openConfirmDialog="openConfirmDialog"
+            @openDenyDialog="openDenyDialog"
             class="snippet-list__review-block"
             v-for="(item, index) in items.rows"
             :key="index"
@@ -68,11 +71,11 @@
     </template>
         <!-- ДИАЛОГ ПОДТВЕЖДЕНИЯ ЗАЯВКИ -->
         <el-dialog
-          title="Подтверждение заявки"
+          title="Подтверждение действия"
           :visible.sync="dialogVisible"
           width="30%">
-          <span>
-            Принять заявку?
+          <span v-if="dataOnConfirm">
+            {{dataOnConfirm.message}}
           </span>
           <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">Отменить</el-button>
@@ -81,13 +84,13 @@
         </el-dialog>
         <!-- ДИАЛОГ ОТКЛОНЕНИЯ ЗАЯВКИ -->
         <el-dialog
-          title="Подтверждение заявки"
+          title="Отклонение действия"
           :visible.sync="denyDialogVisible"
           width="30%">
-          <span>
-            Отклонить заявку?
+          <span v-if="dataOnConfirm">
+             {{dataOnDeny.message}}
           </span>
-          <el-form>
+          <el-form v-if="dataOnConfirm.modalId === 1">
             <el-form-item label="Причина отклонения">
               <el-input v-model="denyComment" autocomplete="off"></el-input>
             </el-form-item>
@@ -120,8 +123,8 @@ export default {
       timer: null,
       dialogVisible: false,
       denyDialogVisible: false,
-      userOnConfirm: null,
-      userOnDeny: null,
+      dataOnConfirm: {},
+      dataOnDeny: {},
       denyComment: ''
     }
   },
@@ -136,6 +139,14 @@ export default {
     }
   },
   methods: {
+    sendNotification(title, message) {
+      this.$notify({
+        title: title,
+        message: message,
+        type: 'success',
+        position: 'bottom-right'
+      });
+    },
     sendSearchString() {
       if (this.timer) {
         clearTimeout(this.timer);
@@ -146,32 +157,53 @@ export default {
       }, 800);
     },
     openConfirmDialog(data) {
-      console.log('open conf par')
-      this.userOnConfirm = data
+      this.dataOnConfirm = data
       this.dialogVisible = true
+      console.log('called')
     },
     openDenyDialog(data) {
-      console.log('open deny par')
-      this.userOnConfirm = data
+      this.dataOnDeny = data
       this.denyDialogVisible = true
     },
     confirmRequest() {
-      this.$store.dispatch('admin/confirmRequest', {
-        id: this.userOnConfirm.id,
-        role: this.userOnConfirm.role
-      }).then(() => {
-        this.dialogVisible = false
-      })
+      console.log('called 2')
+      if(this.dataOnConfirm.modalId === 1) {
+        this.$store.dispatch('admin/confirmRequest', {
+          id: this.dataOnConfirm.id,
+          role: this.dataOnConfirm.role
+        }).then(() => {
+          this.sendNotification('Пользователь одобрен!', 'Уведомление выслано пользователю на почту')
+          this.dialogVisible = false
+        })
+      } else if(this.dataOnConfirm.modalId === 2) {
+        this.$store.dispatch('admin/confirmReview', {
+          id: this.dataOnConfirm.id
+        }).then(() => {
+          this.dialogVisible = false
+          this.sendNotification('Отзыв опебликован!', 'Отзыв появился на странице издания')
+        })
+      }
     },
     denyRequest() {
-      this.$store.dispatch('admin/denyRequest', {
-        id: this.userOnConfirm.id,
-        role: this.userOnConfirm.role,
-        comment: this.denyComment
-      }).then(() => {
-        this.denyComment = ''
-        this.denyDialogVisible = false
-      })
+      if(this.dataOnDeny.modalId === 1) {
+        this.$store.dispatch('admin/denyRequest', {
+          id: this.dataOnDeny.id,
+          role: this.dataOnDeny.role,
+          comment: this.denyComment
+        }).then(() => {
+          this.denyComment = ''
+          this.denyDialogVisible = false
+          this.sendNotification('Заявка отклонена!', 'Уведомление выслано пользователю на почту')
+        })
+      } else if(this.dataOnDeny.modalId === 2) {
+        this.$store.dispatch('admin/denyReview', {
+          id: this.dataOnConfirm.id,
+          role: this.dataOnConfirm.role
+        }).then(() => {
+          this.dialogVisible = false
+          this.sendNotification('Отзыв отклонен!', 'Отказ в публикации отзыва')
+        })
+      }
     },
   },
   computed: {

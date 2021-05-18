@@ -37,12 +37,16 @@ export default {
   },
   methods: {
     openConfirmModal(){
-      console.log('open conf')
-      this.$emit('openConfirmDialog', this.userInfo)
+      const modalData = this.userInfo
+      modalData.modalId = 1
+      modalData.message = 'Принять заявку?'
+      this.$emit('openConfirmDialog', modalData)
     },
     openDenyModal(){
-      console.log('open deny')
-      this.$emit('openDenyDialog', this.userInfo)
+      const modalData = this.userInfo
+      modalData.modalId = 1
+      modalData.message = 'Отклонить заявку?'
+      this.$emit('openDenyDialog', modalData)
     },
   },
   computed: {

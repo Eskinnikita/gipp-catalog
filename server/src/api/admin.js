@@ -40,7 +40,7 @@ router.post('/users/pubs/all', async (req, res) => {
       offset: (+page - 1) * limit,
     }
 
-    if(search && search !== '') {
+    if (search && search !== '') {
       options.where.name = sequelize.where(sequelize.fn('LOWER', sequelize.col('name')), 'LIKE', '%' + search + '%')
     }
 
@@ -49,7 +49,7 @@ router.post('/users/pubs/all', async (req, res) => {
         console.log("Error", e)
       }
     )
-    const notApprovedUsers = await Model.findAll({where:{approved: false}}).catch(
+    const notApprovedUsers = await Model.findAll({where: {approved: false}}).catch(
       e => {
         console.log("Error", e)
       }
@@ -72,7 +72,7 @@ router.post('/users/users/all', async (req, res) => {
       limit: limit,
       offset: (+page - 1) * limit,
     }
-    if(search && search !== '') {
+    if (search && search !== '') {
       options.where.name = sequelize.where(sequelize.fn('LOWER', sequelize.col('name')), 'LIKE', '%' + search + '%')
     }
 
@@ -99,7 +99,8 @@ router.post('/reviews/all', async (req, res) => {
       offset: (+page - 1) * limit,
       include: [
         {model: Publisher, attributes: ['id', 'name', 'logoUrl', 'role']},
-        {model: User, attributes: ['id','name', 'role']}
+        {model: User, attributes: ['id', 'name', 'role']},
+        {model: Publication, attributes: ['id', 'title']}
       ]
     }
 
@@ -110,6 +111,20 @@ router.post('/reviews/all', async (req, res) => {
     )
 
     res.status(200).json(reviews)
+  } catch (err) {
+    res.status(500).json({message: err})
+  }
+})
+
+router.post('/reviews/confirm', async (req, res) => {
+  try {
+    const {id} = req.body
+    const updatedReview = await Review.update({approved: true}, {
+      where: {
+        id
+      }
+    })
+    res.status(200).json(updatedReview)
   } catch (err) {
     res.status(500).json({message: err})
   }

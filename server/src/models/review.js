@@ -3,6 +3,7 @@ const sequelize = require("../database");
 const Publisher = require("../models/publisher")
 const User = require("../models/user")
 const Organ = require("../models/organization")
+const Publication = require("../models/publication")
 
 const Review = sequelize.define("Review", {
   reviewerId: {
@@ -30,5 +31,6 @@ const Review = sequelize.define("Review", {
 Review.belongsTo(Publisher, {foreignKey: 'reviewerId'})
 Review.belongsTo(Organ, {foreignKey: 'reviewerId'})
 Review.belongsTo(User, {foreignKey: 'reviewerId'})
+Review.belongsTo(Publication, {foreignKey: 'publicationId'})
 
 module.exports = Review;

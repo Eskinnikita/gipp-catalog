@@ -1,20 +1,29 @@
 <template>
   <div v-if="commentInfo" class="comment-snippet">
-    <div class="comment-snippet__avatar">
-      <el-avatar
-        v-if="avatarUrl"
-        size="large"
-        fit="cover"
-        :src="avatarUrl"
-        alt="Аватар пользователя"
-      ></el-avatar>
-      <el-avatar v-else size="large" icon="el-icon-user-solid"></el-avatar>
+    <div class="comment-snippet__content-container">
+      <div class="comment-snippet__avatar">
+        <el-avatar
+          v-if="avatarUrl"
+          size="large"
+          fit="cover"
+          :src="avatarUrl"
+          alt="Аватар пользователя"
+        ></el-avatar>
+        <el-avatar v-else size="large" icon="el-icon-user-solid"></el-avatar>
+      </div>
+      <div class="comment-snippet__info">
+        <nuxt-link v-if="showControls" :to="`/publication/${commentInfo.Publication.id}`">
+          <el-button type="text"  class="comment-snippet__name">Отзыв к «{{commentInfo.Publication.title}}»</el-button>
+        </nuxt-link>
+        <h4 class="comment-snippet__name">{{commentInfo.author.name}}</h4>
+        <p class="comment-snippet__text">{{commentInfo.text}}
+        </p>
+        <span class="comment-snippet__time">27 минут назад</span>
+      </div>
     </div>
-    <div class="comment-snippet__info">
-      <h4 class="comment-snippet__name">{{commentInfo.author.name}}</h4>
-      <p class="comment-snippet__text">{{commentInfo.text}}
-      </p>
-      <span class="comment-snippet__time">27 минут назад</span>
+    <div v-if="showControls" class="comment-snippet__controls">
+      <el-button plain type="success" @click="openConfirmModal">Опубликовать</el-button>
+      <el-button plain type="danger" @click="openDenyModal">Отклонить</el-button>
     </div>
   </div>
 </template>
@@ -25,6 +34,10 @@ export default {
     commentInfo: {
       type: Object,
       required: true
+    },
+    showControls: {
+      type: Boolean,
+      required: true
     }
   },
   created() {
@@ -33,6 +46,21 @@ export default {
   data() {
     return {
       serverUrl: ''
+    }
+  },
+  methods: {
+    openConfirmModal(){
+      const modalData = this.commentInfo
+      modalData.modalId = 2
+      modalData.message = 'Принять заявку?'
+      this.$emit('openConfirmDialog', modalData)
+    },
+    openDenyModal(){
+      const modalData = this.commentInfo
+      modalData.modalId = 2
+      modalData.message = 'Отклонить заявку?'
+      this.commentInfo.modalId = 2
+      this.$emit('openDenyDialog', modalData)
     }
   },
   computed: {
@@ -56,13 +84,16 @@ export default {
 
 <style lang="scss" scoped>
 .comment-snippet {
+  width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
-  width: 100%;
+  justify-content: space-between;
 
-  :last-child {
-    margin-bottom: 10px;
+  &__content-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 100%;
   }
 
   &__name {
@@ -88,6 +119,12 @@ export default {
 
   &__avatar {
     width: 40px;
+  }
+
+  &__controls {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
   }
 }
 </style>

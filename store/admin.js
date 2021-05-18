@@ -15,6 +15,12 @@ export const mutations = {
     })
     state.adminPanelListItems.notApproved.splice(userIndex, 1)
   },
+  REMOVE_ITEM(state, data) {
+    const itemIndex = state.adminPanelListItems.rows.findIndex(el => {
+      return el.id === data.id
+    })
+    state.adminPanelListItems.rows.splice(itemIndex, 1)
+  },
   REPLACE_SNIPPET(state, data) {
     const userIndex = state.adminPanelListItems.notApproved.findIndex(el => {
       return el.id === data.id
@@ -91,6 +97,17 @@ export const actions = {
       if (res) {
         console.log(res)
         commit('REMOVE_USER', data)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  },
+  async confirmReview({commit}, data) {
+    try {
+      let res = null
+      res = await this.$axios.$post('/admin/reviews/confirm', data)
+      if (res) {
+        commit('REMOVE_ITEM', data)
       }
     } catch (e) {
       console.log(e)
