@@ -6,6 +6,14 @@ export const state = () => ({
 
 export const mutations = {
   SET_PUBLICATION(state, publication) {
+    const roles = ['User', 'Publisher', 'Organ']
+    publication.Reviews.forEach(el => {
+      roles.forEach(role => {
+        if(el.hasOwnProperty(role) && el[role].role === el.reviewerRole) {
+          el.author = el[role]
+        }
+      })
+    })
     state.publication = publication
   },
   SET_EMPTY_PUBLICATION(state) {

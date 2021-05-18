@@ -1,10 +1,12 @@
 const express = require('express')
 const multer = require('multer')
 const passport = require('passport')
-const { Op } = require("sequelize");
+const {Op} = require("sequelize");
 const Publication = require('../models/publication')
 const Publisher = require('../models/publisher')
+const User = require('../models/user')
 const PubTag = require('../models/pubTag')
+const Review = require('../models/review')
 
 const router = express.Router()
 
@@ -36,7 +38,7 @@ const upload = multer({
 router.post('/create', upload.single('cover'), async (req, res) => {
   try {
     const parsedPublication = JSON.parse(req.body.publication)
-    if(req.file) {
+    if (req.file) {
       parsedPublication.coverLink = req.file.path
     }
     const newPublication = await Publication.create(
@@ -54,12 +56,18 @@ router.post('/create', upload.single('cover'), async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
+    Publication.hasMany(Review)
     const id = req.params.id
     const publication = await Publication.findOne({
       where: {id},
       include: [
         {
-          model: PubTag
+          model: Review,
+          include: [
+            {model: Publisher, attributes: ['id', 'name', 'logoUrl', 'role']},
+            {model: User, attributes: ['id', 'name', 'role']},
+            {model: Publication, attributes: ['id', 'title']}
+          ]
         }
       ]
     }).catch(e => {
@@ -74,7 +82,7 @@ router.get('/:id', async (req, res) => {
           model: Publication,
           key: 'publications',
           required: false,
-          attributes: ['id', 'coverLink', 'title',  'count', 'period', 'age', 'updatedAt'],
+          attributes: ['id', 'coverLink', 'title', 'count', 'period', 'age', 'updatedAt'],
           where: {
             id: {
               [Op.ne]: id
@@ -88,7 +96,7 @@ router.get('/:id', async (req, res) => {
     }).catch(e => {
       res.status(404).json({message: e})
     })
-
+    console.log(publicationCopy)
     res.status(200).json(publicationCopy)
   } catch (e) {
     res.status(500).json({message: e})
@@ -114,7 +122,7 @@ router.patch('/:id', upload.single('cover'), async (req, res) => {
     const id = req.params.id
     const infoToUpdate = JSON.parse(req.body.publication)
 
-    if(req.file) {
+    if (req.file) {
       infoToUpdate.coverLink = req.file.path
     }
 
@@ -130,7 +138,6 @@ router.patch('/:id', upload.single('cover'), async (req, res) => {
     res.status(500).json({message: e})
   }
 })
-
 
 
 module.exports = router

@@ -48,7 +48,17 @@
             <el-button v-if="!couldReview" type="primary" @click="$refs.reviewModal.openModal()">Оставить отзыв</el-button>
           </div>
           <div class="reviews__container">
-            <comment-snippet class="profile-page__comment" v-for="(item, index) in 4" :key="index"/>
+            <template v-if="publication.Reviews.length">
+              <comment-snippet
+                class="profile-page__comment"
+                v-for="(item, index) in publication.Reviews"
+                :comment-info="item"
+                :show-controls="false"
+                :key="index"/>
+            </template>
+            <div>
+               Никто еще не оставил отзыв. Станьте первым!
+            </div>
           </div>
         </div>
       </div>

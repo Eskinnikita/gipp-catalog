@@ -43,7 +43,7 @@ const Publication = sequelize.define("Publication", {
   }
 });
 
-Publication.belongsToMany(PubTag, { through: 'PublicationTags' });
+// Publication.hasMany(PubTag, { through: 'PublicationTags' });
 PubTag.belongsToMany(Publication, { through: 'PublicationTags' });
 
 module.exports = Publication;
