@@ -50,6 +50,7 @@
           <div class="reviews__container">
             <template v-if="publication.Reviews.length">
               <comment-snippet
+                :approved="true"
                 class="profile-page__comment"
                 v-for="(item, index) in publication.Reviews"
                 :comment-info="item"

@@ -57,6 +57,7 @@
         <h3 class="snippet-list__title">Комментарии на рассмотрение</h3>
         <template v-if="items.rows.length">
           <comment-snippet
+            :approved="false"
             :show-controls="true"
             @openConfirmDialog="openConfirmDialog"
             @openDenyDialog="openDenyDialog"

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="commentInfo && commentInfo.approved" class="comment-snippet">
+  <div v-if="commentInfo && commentInfo.approved === approved" class="comment-snippet">
     <div class="comment-snippet__content-container">
       <div class="comment-snippet__avatar">
         <el-avatar
@@ -38,10 +38,15 @@ export default {
     showControls: {
       type: Boolean,
       required: true
+    },
+    approved: {
+      type: Boolean,
+      required: true
     }
   },
   created() {
     this.serverUrl = process.env.serverUrl
+    console.log(this.commentInfo)
   },
   data() {
     return {
