@@ -1,5 +1,5 @@
 <template>
-  <div v-if="commentInfo" class="comment-snippet">
+  <div v-if="commentInfo && commentInfo.approved" class="comment-snippet">
     <div class="comment-snippet__content-container">
       <div class="comment-snippet__avatar">
         <el-avatar
@@ -93,6 +93,7 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
+    align-items: center;
     width: 100%;
   }
 

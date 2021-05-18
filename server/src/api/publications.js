@@ -94,11 +94,12 @@ router.get('/:id', async (req, res) => {
         [Publication, 'updatedAt', 'DESC']
       ]
     }).catch(e => {
+      console.log(e)
       res.status(404).json({message: e})
     })
-    console.log(publicationCopy)
     res.status(200).json(publicationCopy)
   } catch (e) {
+    console.log(e)
     res.status(500).json({message: e})
   }
 })

@@ -67,8 +67,10 @@ export const actions = {
         const roles = ['User', 'Publisher', 'Organ']
         res.rows.forEach(el => {
           roles.forEach(role => {
-            if(el.hasOwnProperty(role) && el[role].role === el.reviewerRole) {
-              el.author = el[role]
+            if(el[role] !== null) {
+              if(el.hasOwnProperty(role) && el[role] && el[role].role === el.reviewerRole) {
+                el.author = el[role]
+              }
             }
           })
         })

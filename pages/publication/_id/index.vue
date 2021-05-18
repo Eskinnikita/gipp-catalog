@@ -56,7 +56,7 @@
                 :show-controls="false"
                 :key="index"/>
             </template>
-            <div>
+            <div v-if="!approvedReviews.length">
                Никто еще не оставил отзыв. Станьте первым!
             </div>
           </div>
@@ -151,6 +151,11 @@ export default {
       } else {
         return false
       }
+    },
+    approvedReviews() {
+      return this.publication.Reviews.filter(el => {
+        return el.approved
+      })
     }
   },
   beforeDestroy() {
