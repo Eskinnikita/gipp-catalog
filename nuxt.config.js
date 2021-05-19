@@ -26,7 +26,9 @@ export default {
     '@/plugins/persistedstate.js',
     '@/plugins/axios.js',
     {src: '@/plugins/star-rating.js', ssr: false},
-    { src: '@/plugins/nuxt-quill-plugin.js', ssr: false }
+    { src: '@/plugins/nuxt-quill-plugin.js', ssr: false },
+    { src: '@/plugins/vue-social-sharing.js', ssr: false },
+    { src: '@/plugins/font-awesome.js', ssr: false }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

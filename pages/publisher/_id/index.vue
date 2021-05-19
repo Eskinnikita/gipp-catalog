@@ -10,8 +10,7 @@
         </div>
       </div>
       <div class="profile-page__controls left__item">
-        <el-button type="primary">Подписаться</el-button>
-        <el-button type="primary" plain icon="el-icon-share"></el-button>
+        <social-sharing :meta-info="socialInfo"/>
       </div>
       <div class="left__item" v-if="isUserAdmin">
         <nuxt-link :to="`${publisherId}/edit`">
@@ -63,6 +62,7 @@ import infoBlock from "@/components/profile/infoBlock"
 import publisherCatalog from "@/components/profile/publisherCatalog"
 import profileNews from "@/components/profile/profileNews"
 import profileComments from "@/components/profile/profileComments"
+import socialSharing from "@/components/social/socialSharing"
 
 export default {
   layout: 'transparent',
@@ -70,7 +70,8 @@ export default {
     infoBlock,
     publisherCatalog,
     profileNews,
-    profileComments
+    profileComments,
+    socialSharing
   },
   created() {
     this.serverUrl = process.env.serverUrl
@@ -118,6 +119,12 @@ export default {
         return (this.publisherId === this.user.id && (+this.user.role === 3)) || +this.user.role === 4
       } else {
         return false
+      }
+    },
+    socialInfo() {
+      return {
+        title: this.publisher.name,
+        desc: this.publisher.description
       }
     }
   },

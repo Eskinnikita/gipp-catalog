@@ -15,7 +15,7 @@
         <a :href="publication.subsLink" target="_blank">
           <el-button type="primary">Подписаться</el-button>
         </a>
-        <el-button type="primary" plain icon="el-icon-share"></el-button>
+        <social-sharing :meta-info="socialInfo"/>
       </div>
       <div class="left__item" v-if="isUserAdmin">
         <nuxt-link :to="`${publicationId}/edit`">
@@ -72,13 +72,15 @@ import infoBlock from "@/components/profile/infoBlock"
 import recPublications from "@/components/profile/snippets/recPublications"
 import commentSnippet from "@/components/snippets/commentSnippet"
 import reviewModal from "@/components/modals/reviewModal"
+import socialSharing from "@/components/social/socialSharing"
 export default {
   layout: 'transparent',
   components: {
     infoBlock,
     recPublications,
     commentSnippet,
-    reviewModal
+    reviewModal,
+    socialSharing
   },
   created() {
     this.serverUrl = process.env.serverUrl
@@ -157,6 +159,12 @@ export default {
       return this.publication.Reviews.filter(el => {
         return el.approved
       })
+    },
+    socialInfo() {
+      return {
+        title: this.publication.title,
+        desc: this.publication.desc
+      }
     }
   },
   beforeDestroy() {
