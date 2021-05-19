@@ -7,7 +7,7 @@ export const state = () => ({
 export const mutations = {
   SET_PUBLICATION(state, publication) {
     const roles = ['User', 'Publisher', 'Organ']
-    if(publication.Reviews.length) {
+    if(publication.hasOwnProperty('Reviews') && publication.Reviews.length) {
       publication.Reviews.forEach(el => {
         roles.forEach(role => {
           if(el.hasOwnProperty(role) && el[role] && el[role].role === el.reviewerRole) {

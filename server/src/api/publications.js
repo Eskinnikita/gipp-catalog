@@ -122,6 +122,7 @@ router.get('/update/:id', async (req, res) => {
     }).catch(e => {
       res.status(404).json({message: e})
     })
+    console.log(publication)
     res.status(200).json(publication)
   } catch (e) {
     res.status(500).json({message: e})

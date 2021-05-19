@@ -4,7 +4,10 @@
       <catalog-filter ref="filters"/>
     </div>
     <div class="catalog__content">
-      <h3 class="catalog__title">Каталог</h3>
+      <div class="catalog__header catalog-header">
+        <h3 class="catalog__title">Каталог</h3>
+        <el-input class="catalog-header__search" type="text" placeholder="Поиск" prefix-icon="el-icon-search" v-model="params.search"/>
+      </div>
       <div
         class="catalog__publications-container"
         :style="{'justify-content': publications.length > 3 ? 'space-between' : 'flex-start'}"
@@ -49,6 +52,9 @@ export default {
     if (this.$route.query.age) {
       this.params.age = this.$route.query.age
     }
+    if (this.$route.query.search) {
+      this.params.search = this.$route.query.search
+    }
     this.$store.dispatch('publication/getAllPublications', this.params)
   },
   mounted() {
@@ -69,6 +75,7 @@ export default {
   data() {
     return {
       params: {
+        search: '',
         page: '1',
         types: [],
         age: []
@@ -80,6 +87,9 @@ export default {
       this.params.page = `${val}`
     },
     applyFilters() {
+      if(this.params.search) {
+        this.params.search = this.params.search.toLocaleLowerCase()
+      }
       this.$router.push({path: '/catalog', query: this.params})
       this.$store.dispatch('publication/getAllPublications', this.params)
     },
@@ -148,6 +158,20 @@ export default {
   &__pagination {
     display: flex;
     justify-content: center;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+}
+
+.catalog-header {
+  &__search {
+    max-width: 40%;
+    min-width: 20%;
   }
 }
 

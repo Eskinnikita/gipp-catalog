@@ -102,10 +102,10 @@ router.post('/reviews/all', async (req, res) => {
           model: Publisher, attributes: ['id', 'name', 'logoUrl', 'role'],
         },
         {
-          model: User, attributes: ['id', 'name', 'logoUrl', 'role'],
+          model: User, attributes: ['id', 'name', 'role'],
         },
         {
-          model: Organ, attributes: ['id', 'name', 'logoUrl', 'role'],
+          model: Organ, attributes: ['id', 'name',  'role'],
         },
         {
           model: Publication, attributes: ['id', 'title']

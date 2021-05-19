@@ -1,11 +1,12 @@
 const express = require('express')
+const sequelize = require('sequelize')
 const Publication = require('../models/publication')
 
 const router = express.Router()
 
 router.post('/all', async (req, res) => {
   try {
-    const {page, age, types} = req.body
+    const {page, age, types, search} = req.body
     const limit = 16
     const options = {
       where: {},
@@ -17,6 +18,9 @@ router.post('/all', async (req, res) => {
     }
     if (age.length) {
       options.where.age = age
+    }
+    if (search && search !== '') {
+      options.where.name = sequelize.where(sequelize.fn('LOWER', sequelize.col('title')), 'LIKE', '%' + search + '%')
     }
     const allPublications = await Publication.findAndCountAll(options).catch(
       e => {

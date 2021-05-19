@@ -59,11 +59,11 @@ export const actions = {
   },
   async getReviews({commit}, data) {
     try {
+      console.log(data)
       commit('SET_EMPTY_ITEMS')
       let res = null
       res = await this.$axios.$post(data.route, data.params)
       if (res) {
-        console.log(res)
         const roles = ['User', 'Publisher', 'Organ']
         res.rows.forEach(el => {
           roles.forEach(role => {
