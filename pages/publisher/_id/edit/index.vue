@@ -128,6 +128,9 @@ export default {
     }
   },
   computed: {
+    coverUrl() {
+      return this.serverUrl + '/' + this.recPub.coverLink
+    }
   }
 }
 </script>

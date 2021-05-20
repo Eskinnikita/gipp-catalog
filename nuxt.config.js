@@ -36,13 +36,18 @@ export default {
   components: true,
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: [],
+  buildModules: [
+    '@nuxtjs/moment'
+  ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
   ],
+  moment: {
+    locales: ['ru']
+  },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
