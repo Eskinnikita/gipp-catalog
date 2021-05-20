@@ -6,7 +6,7 @@
     <div class="catalog__content">
       <div class="catalog__header catalog-header">
         <h3 class="catalog__title">Каталог</h3>
-        <el-input class="catalog-header__search" type="text" placeholder="Поиск" prefix-icon="el-icon-search" v-model="params.search"/>
+        <el-input class="catalog-header__search" type="text" placeholder="Поиск" prefix-icon="el-icon-search" v-model="search"/>
       </div>
       <div
         class="catalog__publications-container"
@@ -53,6 +53,7 @@ export default {
       this.params.age = this.$route.query.age
     }
     if (this.$route.query.search) {
+      this.search = this.$route.query.search
       this.params.search = this.$route.query.search
     }
     this.$store.dispatch('publication/getAllPublications', this.params)
@@ -74,6 +75,7 @@ export default {
   },
   data() {
     return {
+      search: '',
       params: {
         search: '',
         page: '1',
@@ -103,7 +105,16 @@ export default {
           }
         }
       })
-    }
+    },
+    sendSearchString() {
+      if (this.timer) {
+        clearTimeout(this.timer);
+        this.timer = null;
+      }
+      this.timer = setTimeout(() => {
+        this.params.search = this.search
+      }, 800);
+    },
   },
   computed: {
     publications() {
@@ -118,6 +129,9 @@ export default {
       },
       deep: true
     },
+    search() {
+      this.sendSearchString()
+    }
     // '$route.params'() {
     //   this.$store.dispatch('publication/getAllPublications', this.params)
     // }

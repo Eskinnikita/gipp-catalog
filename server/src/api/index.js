@@ -9,6 +9,7 @@ const tagsApi = require("./pubTags")
 const catalogApi = require("./catalog")
 const adminApi = require('./admin')
 const reviewsApi = require('./reviews')
+const filesApi = require('./files')
 
 router.use(authApi)
 router.use(usersApi)
@@ -18,5 +19,6 @@ router.use('/tags', tagsApi)
 router.use('/catalog', catalogApi)
 router.use('/admin', adminApi)
 router.use('/reviews', reviewsApi)
+router.use('/files', filesApi)
 
 module.exports = router;

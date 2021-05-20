@@ -6,12 +6,12 @@ export default {
       lang: 'en'
     },
     meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' }
+      {charset: 'utf-8'},
+      {name: 'viewport', content: 'width=device-width, initial-scale=1'},
+      {hid: 'description', name: 'description', content: ''}
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      {rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'}
     ]
   },
 
@@ -26,17 +26,17 @@ export default {
     '@/plugins/persistedstate.js',
     '@/plugins/axios.js',
     {src: '@/plugins/star-rating.js', ssr: false},
-    { src: '@/plugins/nuxt-quill-plugin.js', ssr: false },
-    { src: '@/plugins/vue-social-sharing.js', ssr: false },
-    { src: '@/plugins/font-awesome.js', ssr: false }
+    {src: '@/plugins/nuxt-quill-plugin.js', ssr: false},
+    {src: '@/plugins/vue-social-sharing.js', ssr: false},
+    {src: '@/plugins/font-awesome.js', ssr: false},
+    {src: '@/plugins/vue-editor.js', ssr: false},
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: [
-  ],
+  buildModules: [],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
@@ -54,6 +54,6 @@ export default {
 
   env: {
     production: false,
-    serverUrl: process.env.production ?  '' : 'http://localhost:8082'
+    serverUrl: process.env.production ? '' : 'http://localhost:8082'
   }
 }
