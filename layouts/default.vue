@@ -14,6 +14,8 @@ export default {};
 </script>
 
 <style lang="scss">
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap');
+
 html {
   font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -22,6 +24,7 @@ html {
   background-color: #ebeef5;
   color: #000;
 }
+
 
 *,
 *::before,
