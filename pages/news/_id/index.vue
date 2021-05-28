@@ -26,6 +26,9 @@ export default {
     article() {
       return this.$store.state.article.article
     }
+  },
+  beforeDestroy() {
+    this.$store.commit('article/SET_EMPTY_ARTICLE')
   }
 }
 </script>

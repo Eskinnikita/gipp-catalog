@@ -87,4 +87,60 @@ router.get('/:id', async (req, res) => {
   }
 })
 
+router.post('/all', async (req, res) => {
+  try {
+    // const {page, age, types, search} = req.body
+    const limit = 10
+    const page = 1
+    const options = {
+      where: {},
+      attributes: { exclude: ['blocks'] },
+      limit: limit,
+      offset: (+page - 1) * limit,
+      include: [
+        {
+          model: Publisher, attributes: ['id', 'name', 'logoUrl', 'role'],
+        },
+        {
+          model: User, attributes: ['id', 'name', 'role'],
+        },
+        {
+          model: Organ, attributes: ['id', 'name',  'role'],
+        }
+      ]
+    }
+    // if (types.length) {
+    //   options.where.type = types
+    // }
+    // if (age.length) {
+    //   options.where.age = age
+    // }
+    // if (search && search !== '') {
+    //   options.where.name = sequelize.where(sequelize.fn('LOWER', sequelize.col('title')), 'LIKE', '%' + search + '%')
+    // }
+    const allArticles = await Article.findAndCountAll(options).catch(
+      e => {
+        console.log("Error", e)
+      }
+    )
+    const allArticlesCopy = JSON.parse(JSON.stringify(allArticles))
+    const roles = ['User', 'Publisher', 'Organ']
+    allArticlesCopy.rows.forEach(el => {
+      roles.forEach(role => {
+        if(el[role] !== null) {
+          if(el.hasOwnProperty(role) && el[role] && el[role].role === el.authorRole) {
+            el.author = el[role]
+            delete el[role]
+          }
+          delete el[role]
+        }
+      })
+    })
+    res.status(200).json(allArticlesCopy)
+  } catch (err) {
+    res.status(500).json({message: err})
+  }
+})
+
+
 module.exports = router

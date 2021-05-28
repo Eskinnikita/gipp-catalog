@@ -132,9 +132,6 @@ export default {
     search() {
       this.sendSearchString()
     }
-    // '$route.params'() {
-    //   this.$store.dispatch('publication/getAllPublications', this.params)
-    // }
   }
 }
 </script>
@@ -145,7 +142,6 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-
   &__title {
     margin-bottom: 10px;
     font-weight: normal;

@@ -1,10 +1,10 @@
 <template>
   <nuxt-link class="rec-publication" :to="`/publication/${recPub.id}`">
-    <img class="rec-publication__cover" :src="coverUrl" alt="Обложка">
-    <div class="rec-publication__info">
-      <div class="rec-publication__info-item rec-publication__info-item_title">{{ recPub.title }}</div>
-      <div class="rec-publication__info-item">{{ recPub.count }} в {{ recPub.period }}</div>
-      <div class="rec-publication__info-item">{{ recPub.age }}</div>
+    <img class="rec-publication__cover" :src="coverUrl" :alt="recPub.title">
+    <div class="rec-publication__info info">
+      <div class="info__item info__item_title">{{ recPub.title }}</div>
+      <div class="info__item">{{ recPub.count }} в {{ recPub.period }}</div>
+      <div class="info__item">{{ recPub.age }}</div>
     </div>
   </nuxt-link>
 </template>
@@ -55,20 +55,20 @@ export default {
   &__cover {
     height: 100%;
   }
+}
 
-  &__info {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 10px 10px 10px 15px;
-  }
+.info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 10px 10px 15px;
 
   &__info-item {
     color: #606266;
+
     &_title {
       font-size: 14px;
     }
   }
-
 }
 </style>

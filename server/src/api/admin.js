@@ -63,9 +63,7 @@ router.post('/users/pubs/all', async (req, res) => {
 
 router.post('/users/users/all', async (req, res) => {
   try {
-    console.log(req.body)
     const {page, search} = req.body
-
     const limit = 10
     const options = {
       where: {},

@@ -25,7 +25,6 @@ router.post('/login', async (req, res) => {
         console.log("Error", e)
       }
     )
-
   // const userWithEmail = await User.findOne({where: {email}}).catch(
   //   e => {
   //     console.log("Error: ", e)
