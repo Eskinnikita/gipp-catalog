@@ -5,13 +5,14 @@
     </h1>
     <div class="article__meta" v-if="article.author">
       <span>
-        {{ $moment(article.updatedAt).format(" h:mm, D MMMM YYYY") }} • {{ article.author.name }}
+        {{ $moment(article.updatedAt).format(" h:mm, D MMMM YYYY") }}
+        • <nuxt-link :to="`/${authorRole}/${article.author.id}`">{{ article.author.name }}</nuxt-link>
       </span>
     </div>
     <img
-      v-if="article.mainImageUrl"
+      v-if="mainImageUrl"
       class="article__image_main"
-      :src="getImageUrl(article.mainImageUrl)"
+      :src="mainImageUrl"
       :alt="article.title">
     <template v-if="article.blocks && article.blocks.blocks.length">
       <div v-for="(block, index) in article.blocks.blocks" :key="index">
@@ -49,7 +50,11 @@
 export default {
   props: {
     article: {
-      type: Object
+      type: Object,
+      required: true
+    },
+    preview: {
+      type: Boolean
     }
   },
   head() {
@@ -76,22 +81,44 @@ export default {
   },
   created() {
     this.serverUrl = process.env.serverUrl
+    this.initArticle()
+  },
+  mounted() {
   },
   data() {
     return {
-      serverUrl: ''
+      serverUrl: '',
+      mainImageUrl: ''
     }
   },
   methods: {
-    getImageUrl(url) {
-      return this.serverUrl + '/' + url
+    initArticle() {
+      if (this.preview) {
+        this.parseArticleToPreview()
+      } else {
+        this.mainImageUrl = this.serverUrl + '/' + this.article.mainImageUrl
+      }
+    },
+    parseArticleToPreview() {
+      this.article.blocks = {}
+      this.article.blocks.blocks = this.article.editorContent.blocks
+      this.mainImageUrl = this.article.mainImage
     }
   },
   computed: {
-    authorRoute() {
-      if (this.article.author) {
-
-      }
+    authorRole() {
+      return this.article.authorRole === 3 ? 'publisher' : 'organization'
+    },
+    user() {
+      return this.$store.state.auth.user
+    }
+  },
+  watch: {
+    article: {
+      handler(val) {
+        this.initArticle()
+      },
+      deep: true
     }
   }
 }
@@ -102,6 +129,7 @@ export default {
   width: 100%;
   max-width: 650px;
   margin: 0 auto;
+  color: #303133;
 
   &__title {
     color: #000;

@@ -122,4 +122,8 @@ textarea {
 .ql-container{
   min-height: 300px !important;
 }
+
+.codex-editor__redactor {
+  padding-bottom: 150px !important;
+}
 </style>

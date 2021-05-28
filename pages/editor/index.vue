@@ -1,7 +1,7 @@
 <template>
   <div class="article-editor">
     <confirm-dialog ref="confirmModal" :on-confirm="saveArticle" title="Подтверждение">
-      Вы уверены, что хотите опубликовать новость?
+      {{ confirmMessage }}
     </confirm-dialog>
     <div class="article-editor__header">
       <div class="article-editor__editor-header">
@@ -46,10 +46,13 @@
     </div>
     <div class="article-editor__controls">
       <el-button type="primary" @click="openPreview">Посмотреть</el-button>
-      <el-button type="primary" @click="openConfirmDialog">Опубликовать</el-button>
+      <el-button type="primary" v-if="!articleOnUpdate"
+                 @click="openConfirmDialog('Вы уверены, что хотите опубликовать новость?')">Опубликовать
+      </el-button>
+      <el-button type="primary" v-else @click="openConfirmDialog('Сохранить изменения?')">Сохранить</el-button>
     </div>
-    <el-dialog title="Статья" :visible.sync="dialogVisible">
-      <article-view :article="article"/>
+    <el-dialog width="70%" title="Статья" :visible.sync="dialogVisible">
+      <article-view :article="article" :preview="true"/>
     </el-dialog>
   </div>
 </template>
@@ -78,6 +81,13 @@ export default {
     confirmDialog
   },
   created() {
+    if (this.$route.params.id) {
+      this.$store.dispatch('article/getArticle', this.$route.params.id)
+        .then(res => {
+          this.articleOnUpdate = res
+          this.parseArticleToUpdate(res)
+        })
+    }
     this.serverUrl = process.env.serverUrl
   },
   mounted() {
@@ -92,6 +102,8 @@ export default {
           {required: true, message: 'Пожалуйста, введите заголовок', trigger: 'blur'}
         ]
       },
+      articleOnUpdate: {},
+      confirmMessage: '',
       article: {
         authorId: null,
         authorRole: null,
@@ -196,22 +208,46 @@ export default {
     }
   },
   methods: {
+    parseArticleToUpdate(data) {
+      const articleToUpdate = data
+      this.article.mainImage = this.serverUrl + '/' + articleToUpdate.mainImageUrl
+      this.article.authorRole = articleToUpdate.authorRole
+      this.article.authorId = articleToUpdate.authorId
+      this.article.title = articleToUpdate.title
+      this.article.editorContent = articleToUpdate.blocks
+    },
     saveArticle() {
       const articleData = {
         title: this.article.title,
         authorId: this.article.authorId,
         authorRole: this.article.authorRole,
-        mainImageUrl: '',
+        mainImageUrl: this.articleOnUpdate ? this.articleOnUpdate.mainImageUrl : '',
         blocks: this.article.editorContent
       }
       const formData = new FormData();
       formData.append('mainImage', this.article.mainImageFile)
       formData.append('data', JSON.stringify(articleData))
-      this.$store.dispatch('article/saveArticle', formData)
+      if(this.articleOnUpdate) {
+        this.$store.dispatch('article/updateArticle', {data: formData, id: this.articleOnUpdate.id})
+        .then(() => {this.goToArticle(this.articleOnUpdate.id, 'Данные успешно обновлены!')})
+      } else {
+        this.$store.dispatch('article/saveArticle', formData)
+          .then(res => {this.goToArticle(res.id, 'Статья успешно опубликована!')})
+      }
     },
-    openConfirmDialog() {
+    goToArticle(id, message) {
+      this.$notify({
+        title: 'Успех!',
+        message: message,
+        type: 'success',
+        position: 'bottom-right'
+      });
+      this.$router.push({path: `/news/${id}`})
+    },
+    openConfirmDialog(message) {
       this.$refs["articleForm"].validate((valid) => {
         if (valid) {
+          this.confirmMessage = message
           this.$refs.confirmModal.opened = true
         } else {
           console.log('error submit!!');
@@ -245,18 +281,26 @@ export default {
         })
     },
     onInitialized(editor) {
+      this.renderEditor(this.article.editorContent)
+    },
+    renderEditor(data) {
       const check = setInterval(() => {
-        if (this.$refs.editor._data.state.editor.configuration) {
-          this.$refs.editor._data.state.editor.render(this.article.editorContent)
-          clearInterval(check)
+        if (this.$refs.editor && this.$refs.editor._data.state.editor.configuration) {
+          if (this.articleOnUpdate) {
+            this.$refs.editor._data.state.editor.render(this.articleOnUpdate.blocks)
+            clearInterval(check)
+          } else {
+            this.$refs.editor._data.state.editor.render(data)
+            clearInterval(check)
+          }
         }
       }, 100)
     }
   },
   computed: {
     ...mapState('auth', {
-        user: state => state.user
-      })
+      user: state => state.user
+    })
   }
 }
 </script>
@@ -267,9 +311,6 @@ export default {
 }
 
 .article-editor {
-  &__author {
-
-  }
 
   &__editor {
     color: #000;

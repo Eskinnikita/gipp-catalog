@@ -94,7 +94,8 @@ router.post('/all', async (req, res) => {
     const page = 1
     const options = {
       where: {},
-      attributes: { exclude: ['blocks'] },
+      attributes: {exclude: ['blocks']},
+      order: [['updatedAt', 'DESC']],
       limit: limit,
       offset: (+page - 1) * limit,
       include: [
@@ -105,7 +106,7 @@ router.post('/all', async (req, res) => {
           model: User, attributes: ['id', 'name', 'role'],
         },
         {
-          model: Organ, attributes: ['id', 'name',  'role'],
+          model: Organ, attributes: ['id', 'name', 'role'],
         }
       ]
     }
@@ -127,8 +128,8 @@ router.post('/all', async (req, res) => {
     const roles = ['User', 'Publisher', 'Organ']
     allArticlesCopy.rows.forEach(el => {
       roles.forEach(role => {
-        if(el[role] !== null) {
-          if(el.hasOwnProperty(role) && el[role] && el[role].role === el.authorRole) {
+        if (el[role] !== null) {
+          if (el.hasOwnProperty(role) && el[role] && el[role].role === el.authorRole) {
             el.author = el[role]
             delete el[role]
           }
@@ -139,6 +140,27 @@ router.post('/all', async (req, res) => {
     res.status(200).json(allArticlesCopy)
   } catch (err) {
     res.status(500).json({message: err})
+  }
+})
+
+router.patch('/:id', upload.single('mainImage'), async (req, res) => {
+  try {
+    const id = req.params.id
+    const parsedData = JSON.parse(req.body.data)
+    if (req.file) {
+      parsedData.mainImageUrl = req.file.path
+    }
+    const updatedArticle = await Article.update(parsedData, {
+      where: {
+        id
+      }
+    })
+      .catch(e => {
+        res.status(404).json({message: e})
+      })
+    res.status(201).json(updatedArticle)
+  } catch (e) {
+    res.status(500).json({message: e})
   }
 })
 

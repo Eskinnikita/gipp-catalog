@@ -1,6 +1,7 @@
 export const state = () => ({
   article: {},
-  articles: []
+  articles: [],
+  articleOnUpdate: {}
 })
 
 export const mutations = {
@@ -12,6 +13,9 @@ export const mutations = {
   },
   SET_ARTICLES(state, articles) {
     state.articles = articles
+  },
+  async SET_ARTICLE_ON_UPDATE(state, article) {
+    state.articleOnUpdate = article
   }
 }
 
@@ -22,9 +26,16 @@ export const actions = {
       res = await this.$axios.$get(`/articles/${id}`)
       if (res) {
         commit('SET_ARTICLE', res)
+        return res
       }
     } catch (e) {
       console.log(e)
+      this.$notify({
+        title: 'Успех!',
+        message: e.message,
+        type: 'error',
+        position: 'bottom-right'
+      });
     }
   },
   async getAllArticles({commit}, params) {
@@ -45,6 +56,18 @@ export const actions = {
       res = await this.$axios.$post(`/articles`, data)
       if (res) {
         commit('SET_ARTICLE', res)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  },
+  async updateArticle({commit}, data) {
+    try {
+      let res = null
+      res = await this.$axios.$patch(`/articles/${data.id}`, data.data)
+      console.log(res)
+      if (res) {
+        return res
       }
     } catch (e) {
       console.log(e)
