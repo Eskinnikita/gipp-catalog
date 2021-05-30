@@ -27,6 +27,7 @@ router.post('/all', async (req, res) => {
         console.log("Error", e)
       }
     )
+    allPublications.limit = limit
     res.status(200).json(allPublications)
   } catch (err) {
     res.status(500).json({message: err})

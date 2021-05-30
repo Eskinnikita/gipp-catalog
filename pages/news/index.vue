@@ -13,7 +13,12 @@
         class="news__publications-container"
       >
         <template v-if="articles.rows && articles.rows.length">
-          <article-snippet v-for="(article, index) in articles.rows" :key="index" :article="article"/>
+          <article-snippet
+            v-for="(article, index) in articles.rows"
+            :key="index"
+            :article="article"
+            :show-author="true"
+          />
         </template>
       </div>
       <div class="news__pagination">

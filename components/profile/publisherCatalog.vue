@@ -27,6 +27,9 @@ export default {
       type: Array,
       required: true
     }
+  },
+  beforeDestroy() {
+    this.$store.commit('SET_EMPTY_TAB_CONTENT')
   }
 }
 </script>

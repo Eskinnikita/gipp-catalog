@@ -22,9 +22,9 @@
       <div class="catalog__pagination">
         <el-pagination
           @current-change="handleCurrentChange"
-          :pager-count="7"
           :current-page="+params.page"
           layout="pager"
+          :page-size="publications.limit"
           :total="publications.count">
         </el-pagination>
       </div>

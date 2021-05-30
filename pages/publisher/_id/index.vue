@@ -6,7 +6,8 @@
           v-if="publisher && publisher.logoUrl"
           :src="logoUrl"
           class="profile-page__image" alt="profile image"/>
-        <div class="profile-page__image-placeholder left__item" v-if="publisher && !publisher.logoUrl && publisher.logoUrl !== undefined">
+        <div class="profile-page__image-placeholder left__item"
+             v-if="publisher && !publisher.logoUrl && publisher.logoUrl !== undefined">
         </div>
       </div>
       <div class="profile-page__controls left__item">
@@ -25,8 +26,8 @@
         {{ publisher.description }}
       </p>
       <div class="profile-page__content">
-        <el-tabs v-model="activeTab">
-          <el-tab-pane label="Каталог" name="1">
+        <el-tabs v-model="params.tab" @tab-click="handleTabChange">
+          <el-tab-pane label="Каталог" name="catalog">
             <div class="profile-page__tab-title-container">
               <h3 class="profile-page__tab-title">Наши издания</h3>
               <nuxt-link v-if="isUserAdmin" to="/publication/create">
@@ -34,7 +35,7 @@
               </nuxt-link>
             </div>
           </el-tab-pane>
-          <el-tab-pane label="Новости" name="2">
+          <el-tab-pane label="Новости" name="news">
             <div class="profile-page__tab-title-container">
               <h3 class="profile-page__tab-title">Наши Новости</h3>
               <nuxt-link v-if="isUserAdmin" to="/editor">
@@ -42,15 +43,29 @@
               </nuxt-link>
             </div>
           </el-tab-pane>
-          <el-tab-pane label="Комментарии" name="3">
+          <el-tab-pane label="Комментарии" name="comments">
             <h3 class="profile-page__tab-title">Наши комментарии</h3>
           </el-tab-pane>
         </el-tabs>
         <div class="profile-page__tab-content">
-          <publisher-catalog :publications="publisher.Publications"
-                             v-if="activeTab === '1' && publisher.Publications"/>
-          <profile-news  v-if="activeTab === '2'"/>
-          <profile-comments :reviews="publisher.Reviews" v-if="activeTab === '3' && publisher.Reviews"/>
+          <publisher-catalog
+            v-if="params.tab === 'catalog'"
+            :publications="tabContent.rows"
+          />
+          <profile-news
+            v-if="params.tab === 'news'"
+            :articles="tabContent.rows"
+          />
+          <!--          <profile-comments :reviews="publisher.Reviews" v-if="params.tab === 'comments' && publisher.Reviews"/>-->
+          <div class="profile-page__pagination">
+            <el-pagination
+              @current-change="handleCurrentChange"
+              :current-page="+params.page"
+              layout="pager"
+              :page-size="tabContent.limit"
+              :total="tabContent.count">
+            </el-pagination>
+          </div>
         </div>
       </div>
     </div>
@@ -74,18 +89,49 @@ export default {
     socialSharing
   },
   created() {
+    const obj = this.$route.query
     this.serverUrl = process.env.serverUrl
     this.publisherId = +this.$route.params.id
+    this.params.id = +this.$route.params.id
+    if (obj && Object.keys(obj).length === 0 && obj.constructor === Object) {
+      this.$router.push({path: `/publisher/${this.publisherId}`, query: {tab: 'catalog', page: '1'}});
+    } else {
+      if (this.$route.query.tab) {
+        this.params.tab = this.$route.query.tab
+      }
+      if (this.$route.query.page) {
+        this.params.page = +this.$route.query.page
+      }
+    }
     this.$store.dispatch('publisher/getPublisher', +this.publisherId).then(() => {
       this.pageReady = true
     })
+    this.getTabContent()
   },
   data() {
     return {
       pageReady: false,
       serverUrl: null,
       publisherId: null,
-      activeTab: '1'
+      params: {
+        tab: 'catalog',
+        page: 1,
+        role: 3,
+        id: null
+      }
+    }
+  },
+  methods: {
+    handleCurrentChange(val) {
+      this.params.page = `${val}`
+    },
+    handleTabChange(tab, event) {
+      this.params.page = 1
+      this.$router.push({query: {tab: tab.name, page: '1'}});
+    },
+    getTabContent() {
+      this.$router.push({query: {tab: this.params.tab, page: `${this.params.page}`}});
+      this.$store.dispatch('profile/getTabContent', this.params)
     }
   },
   computed: {
@@ -111,6 +157,9 @@ export default {
     publisher() {
       return this.$store.state.publisher.publisher
     },
+    tabContent() {
+      return this.$store.state.profile.tabContent
+    },
     user() {
       return this.$store.state.auth.user
     },
@@ -128,6 +177,14 @@ export default {
       }
     }
   },
+  watch: {
+    params: {
+      handler(val) {
+        this.getTabContent()
+      },
+      deep: true
+    },
+  },
   beforeDestroy() {
     this.$store.commit('publisher/SET_EMPTY_PUBLISHER')
   }
@@ -140,6 +197,10 @@ export default {
   flex-direction: row;
   justify-content: space-between;
   min-height: 100vh;
+
+  &__pagination {
+    margin-top: 30px;
+  }
 
   &__left {
     max-width: 190px;
@@ -218,6 +279,7 @@ export default {
     padding: 15px;
     background-color: #fff;
   }
+
 }
 
 .left {

@@ -46,7 +46,6 @@ export default {
   },
   created() {
     this.serverUrl = process.env.serverUrl
-    console.log(this.commentInfo)
   },
   data() {
     return {

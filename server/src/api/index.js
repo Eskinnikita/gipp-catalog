@@ -11,6 +11,7 @@ const adminApi = require('./admin')
 const reviewsApi = require('./reviews')
 const filesApi = require('./files')
 const articlesApi = require('./articles')
+const profileApi = require('./profile')
 
 router.use(authApi)
 router.use(usersApi)
@@ -22,5 +23,6 @@ router.use('/admin', adminApi)
 router.use('/reviews', reviewsApi)
 router.use('/files', filesApi)
 router.use('/articles', articlesApi)
+router.use('/profile', profileApi)
 
 module.exports = router;

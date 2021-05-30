@@ -42,35 +42,7 @@ router.get('/:id', async (req, res) => {
     })
     const publisher = await Publisher.findOne({
       where: {id},
-      attributes: { exclude: ['password', 'approved'] },
-      include: [
-        {
-          model: Publication,
-          key: 'publications',
-          required: false,
-          attributes: ['id', 'coverLink', 'title', 'updatedAt'],
-        },
-        {
-          model: Review,
-          include: [
-            {
-              model: Publisher,
-              attributes: ['id', 'name', 'logoUrl', 'role']
-            },
-            {
-              model: User,
-              attributes: ['id', 'name', 'role']
-            },
-            {
-              model: Organ,
-              attributes: ['id', 'name', 'role']
-            }
-          ]
-        }
-      ],
-      order: [
-        [Publication, 'updatedAt', 'DESC']
-      ]
+      attributes: { exclude: ['password', 'approved'] }
     }).catch(e => {
       res.status(404).json({message: e})
     })

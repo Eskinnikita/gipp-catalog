@@ -1,6 +1,6 @@
 <template>
   <div class="article-snippet">
-    <div class="article-snippet__avatar">
+    <div class="article-snippet__avatar" v-if="showAuthor">
       <el-avatar
         class="article-snippet__avatar-image"
         size="large"
@@ -10,7 +10,7 @@
     </div>
     <div class="article-snippet__content">
       <div class="article-snippet__author-header">
-        <nuxt-link :to="`${authorRole}/${article.author.id}`">
+        <nuxt-link :to="`${authorRole}/${article.author.id}`" v-if="showAuthor">
           <span class="article-snippet__author-name">{{ article.author.name }}</span>
         </nuxt-link>
         <span>{{ $moment(article.updatedAt).fromNow(true) }} назад</span>
@@ -22,7 +22,7 @@
         <img class="article-info__main-image" :src="`${serverUrl}/${article.mainImageUrl}`" alt="">
         <div class="article-info__read">
           <nuxt-link :to="`/news/${article.id}`">
-            <el-button type="text">Читать далее</el-button>
+            <el-button type="text">Читать статью</el-button>
           </nuxt-link>
         </div>
       </div>
@@ -35,6 +35,10 @@ export default {
   props: {
     article: {
       type: Object,
+      required: true
+    },
+    showAuthor: {
+      type: Boolean,
       required: true
     }
   },
@@ -69,7 +73,7 @@ export default {
     content: "";
     width: 100%;
     height: 1px;
-    border-bottom: 1px solid #8c939d;
+    background-color: lightgray;
     position: absolute;
     bottom: 0;
     left: 0;
@@ -79,20 +83,25 @@ export default {
     margin-right: 10px;
   }
 
+  &__avatar-image {
+    border: 1px solid lightgray;
+  }
+
   &__author-header {
     margin-bottom: 10px;
     font-size: 14px;
   }
 
   &__author-name {
-    font-size: 16px;
+    font-size: 14px;
     margin-right: 10px;
   }
 }
 
 .article-info {
   &__title {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    font-size: 20px;
   }
 
   &__main-image {

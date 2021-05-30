@@ -351,5 +351,9 @@ export default {
   padding: 0;
 }
 
+.el-dialog {
+  margin-top: 5vh !important;
+}
+
 
 </style>

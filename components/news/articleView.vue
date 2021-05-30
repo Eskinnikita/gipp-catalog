@@ -57,28 +57,6 @@ export default {
       type: Boolean
     }
   },
-  head() {
-    return {
-      title: this.article.title,
-      meta: [
-        {charset: 'utf-8'},
-        {name: 'viewport', content: 'width=device-width, initial-scale=1'},
-        {
-          hid: 'description',
-          name: 'description',
-          content: 'Увлечения современной молодежи, проживающей в городе Москва весьма разнообразны. ' +
-            'Проводимые опросы показывают, что большинство респондентов помимо посещения учебных заведений ' +
-            'и работы регулярно уделяют время различным хобби.'
-        },
-        {
-          hid: 'keywords',
-          name: 'keywords',
-          content: 'ГИПП, Гильдия Издателей, Детские СМИ, Детские журналы'
-        }
-      ],
-      link: [{rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'}]
-    }
-  },
   created() {
     this.serverUrl = process.env.serverUrl
     this.initArticle()
