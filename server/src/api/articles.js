@@ -58,7 +58,7 @@ router.post('/', upload.single('mainImage'), async (req, res) => {
     if (req.file) {
       parsedData.mainImageUrl = req.file.path
     }
-    const article = Article.create(parsedData)
+    const article = await Article.create(parsedData)
       .catch(e => {
         res.status(404).json({message: e})
       })

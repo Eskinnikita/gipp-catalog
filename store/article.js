@@ -56,6 +56,7 @@ export const actions = {
       res = await this.$axios.$post(`/articles`, data)
       if (res) {
         commit('SET_ARTICLE', res)
+        return res
       }
     } catch (e) {
       console.log(e)

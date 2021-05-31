@@ -233,7 +233,7 @@ export default {
             type: 'success',
             position: 'bottom-right'
           });
-          // this.$router.push({path: `/publication/${res.id}`});
+          this.$router.push({path: `/publication/${res.id}`});
         })
     }
   }

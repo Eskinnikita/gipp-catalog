@@ -19,7 +19,7 @@
         <nuxt-link :to="`/news/${article.id}`">
           <h2 class="article-info__title">{{ article.title }}</h2>
         </nuxt-link>
-        <img class="article-info__main-image" :src="`${serverUrl}/${article.mainImageUrl}`" alt="">
+        <img v-if="article.mainImageUrl" class="article-info__main-image" :src="`${serverUrl}/${article.mainImageUrl}`" alt="">
         <div class="article-info__read">
           <nuxt-link :to="`/news/${article.id}`">
             <el-button type="text">Читать статью</el-button>
@@ -52,7 +52,11 @@ export default {
   },
   computed: {
     logoUrl() {
-      return this.serverUrl + '/' + this.article.author.logoUrl
+      if(this.article.author.logoUrl) {
+        return this.serverUrl + '/' + this.article.author.logoUrl
+      } else {
+        return ''
+      }
     },
     authorRole() {
       return this.article.authorRole === 3 ? 'publisher' : 'organization'

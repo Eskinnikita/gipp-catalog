@@ -59,6 +59,7 @@
           <!--          <profile-comments :reviews="publisher.Reviews" v-if="params.tab === 'comments' && publisher.Reviews"/>-->
           <div class="profile-page__pagination">
             <el-pagination
+              v-if="tabContent.rows && tabContent.rows.length"
               @current-change="handleCurrentChange"
               :current-page="+params.page"
               layout="pager"

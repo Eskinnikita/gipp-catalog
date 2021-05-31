@@ -10,7 +10,7 @@
       </span>
     </div>
     <img
-      v-if="mainImageUrl"
+      v-if="article.mainImageUrl"
       class="article__image_main"
       :src="mainImageUrl"
       :alt="article.title">

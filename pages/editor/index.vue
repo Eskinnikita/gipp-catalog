@@ -246,6 +246,7 @@ export default {
       } else {
         this.$store.dispatch('article/saveArticle', formData)
           .then(res => {
+            console.log('RESSSSS', res)
             this.goToArticle(res.id, 'Статья успешно опубликована!')
           })
       }
