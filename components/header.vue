@@ -16,13 +16,7 @@
           <el-menu-item index="1">Каталог</el-menu-item>
           <el-menu-item index="2">Новости</el-menu-item>
         </el-menu>
-        <el-input
-          class="navbar__search"
-          placeholder="Поиск"
-          prefix-icon="el-icon-search"
-          v-model="search"
-        >
-        </el-input>
+        <global-search  class="navbar__search"/>
       </div>
       <div class="header__item header__right-menu right-menu">
         <template v-if="isAuthenticated">
@@ -76,10 +70,12 @@
 <script>
 import {mapState, mapGetters} from "vuex";
 import LoginModal from "./modals/loginModal.vue";
+import globalSearch from "@/components/customInputs/globalSearch"
 
 export default {
   components: {
-    LoginModal
+    LoginModal,
+    globalSearch
   },
   data() {
     return {
@@ -245,7 +241,6 @@ export default {
 
   &__search {
     max-width: 460px;
-    width: 100%;
   }
 
   &__nav {

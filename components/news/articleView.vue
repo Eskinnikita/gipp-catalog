@@ -144,7 +144,9 @@ export default {
     width: 100%;
 
     img {
+      width: 100%;
       margin-bottom: 5px;
+      object-fit: cover;
     }
 
     &_main {

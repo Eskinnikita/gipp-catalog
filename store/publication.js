@@ -1,7 +1,8 @@
 export const state = () => ({
   publication: {},
   tags: [],
-  publications: []
+  publications: [],
+  globalSearch: {}
 })
 
 export const mutations = {
@@ -29,7 +30,13 @@ export const mutations = {
   },
   SET_EMPTY_PUBS(state) {
     state.publications = []
-  }
+  },
+  SET_GLOBAL_SEARCH(state, search) {
+    state.globalSearch = search
+  },
+  SET_EMPTY_GLOBAL_SEARCH(state) {
+    state.globalSearch = {}
+  },
 }
 
 export const actions = {
@@ -110,7 +117,19 @@ export const actions = {
     } catch (e) {
       console.log(e)
     }
-  }
+  },
+  async searchPublicationsGlobal({commit}, data) {
+    try {
+      let res = null
+      res = await this.$axios.$post(`/catalog/search`, data)
+      if(res) {
+        commit('SET_GLOBAL_SEARCH', res)
+      }
+      return res
+    } catch (e) {
+      console.log(e)
+    }
+  },
 }
 
 export const getters = {

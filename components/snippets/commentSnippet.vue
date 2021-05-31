@@ -13,12 +13,12 @@
       </div>
       <div class="comment-snippet__info">
         <nuxt-link v-if="showControls" :to="`/publication/${commentInfo.Publication.id}`">
-          <el-button type="text"  class="comment-snippet__name">Отзыв к «{{commentInfo.Publication.title}}»</el-button>
+          <el-button type="text" class="comment-snippet__name">Отзыв к «{{ commentInfo.Publication.title }}»</el-button>
         </nuxt-link>
-        <h4 class="comment-snippet__name">{{commentInfo.author.name}}</h4>
-        <p class="comment-snippet__text">{{commentInfo.text}}
+        <h4 class="comment-snippet__name">{{ commentInfo.author.name }}</h4>
+        <p class="comment-snippet__text">{{ commentInfo.text }}
         </p>
-        <span class="comment-snippet__time">27 минут назад</span>
+        <span class="comment-snippet__time"> {{ $moment(commentInfo.updatedAt).fromNow(true) }} назад</span>
       </div>
     </div>
     <div v-if="showControls" class="comment-snippet__controls">
@@ -53,13 +53,13 @@ export default {
     }
   },
   methods: {
-    openConfirmModal(){
+    openConfirmModal() {
       const modalData = this.commentInfo
       modalData.modalId = 2
       modalData.message = 'Принять заявку?'
       this.$emit('openConfirmDialog', modalData)
     },
-    openDenyModal(){
+    openDenyModal() {
       const modalData = this.commentInfo
       modalData.modalId = 2
       modalData.message = 'Отклонить заявку?'
@@ -71,12 +71,12 @@ export default {
     avatarUrl() {
       let photo
       const role = this.commentInfo.reviewerRole
-      if(role === 1 || role === 4) {
+      if (role === 1 || role === 4) {
         return false
-      } else if(role === 2 || role === 3) {
+      } else if (role === 2 || role === 3) {
         photo = this.commentInfo.author.logoUrl
       }
-      if(photo === null) {
+      if (photo === null) {
         return false
       } else {
         return this.serverUrl + '/' + photo

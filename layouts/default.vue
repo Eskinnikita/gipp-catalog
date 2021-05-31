@@ -126,4 +126,8 @@ textarea {
 .codex-editor__redactor {
   padding-bottom: 150px !important;
 }
+
+.el-divider {
+  margin: 15px 0 !important;
+}
 </style>

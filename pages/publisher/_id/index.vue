@@ -49,11 +49,11 @@
         </el-tabs>
         <div class="profile-page__tab-content">
           <publisher-catalog
-            v-if="params.tab === 'catalog'"
+            v-if="params.tab === 'catalog' && tabContent.rows"
             :publications="tabContent.rows"
           />
           <profile-news
-            v-if="params.tab === 'news'"
+            v-if="params.tab === 'news' && tabContent.rows"
             :articles="tabContent.rows"
           />
           <!--          <profile-comments :reviews="publisher.Reviews" v-if="params.tab === 'comments' && publisher.Reviews"/>-->
