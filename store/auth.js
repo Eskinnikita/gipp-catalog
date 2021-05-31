@@ -55,5 +55,8 @@ export const actions = {
 
 export const getters = {
   isAuthenticated: state => !!state.user,
-  isAdmin: state => state.user.role === 4
+  isAdmin: state => state.user.role === 4,
+  isUser: state => state.user.role === 1,
+  isOrgan: state => state.user.role === 2,
+  isPublisher: state => state.user.role === 2,
 }

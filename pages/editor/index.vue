@@ -80,6 +80,13 @@ export default {
     articleView,
     confirmDialog
   },
+  // beforeResolve(to, from, next) {
+  //   if (true) {
+  //     next('/')
+  //   } else {
+  //     next();
+  //   }
+  // },
   created() {
     if (this.$route.params.id) {
       this.$store.dispatch('article/getArticle', this.$route.params.id)
@@ -102,7 +109,7 @@ export default {
           {required: true, message: 'Пожалуйста, введите заголовок', trigger: 'blur'}
         ]
       },
-      articleOnUpdate: {},
+      articleOnUpdate: null,
       confirmMessage: '',
       article: {
         authorId: null,
@@ -227,12 +234,16 @@ export default {
       const formData = new FormData();
       formData.append('mainImage', this.article.mainImageFile)
       formData.append('data', JSON.stringify(articleData))
-      if(this.articleOnUpdate) {
+      if (this.articleOnUpdate) {
         this.$store.dispatch('article/updateArticle', {data: formData, id: this.articleOnUpdate.id})
-        .then(() => {this.goToArticle(this.articleOnUpdate.id, 'Данные успешно обновлены!')})
+          .then(() => {
+            this.goToArticle(this.articleOnUpdate.id, 'Данные успешно обновлены!')
+          })
       } else {
         this.$store.dispatch('article/saveArticle', formData)
-          .then(res => {this.goToArticle(res.id, 'Статья успешно опубликована!')})
+          .then(res => {
+            this.goToArticle(res.id, 'Статья успешно опубликована!')
+          })
       }
     },
     goToArticle(id, message) {

@@ -29,7 +29,7 @@ export default {
     }
   },
   beforeDestroy() {
-    this.$store.commit('SET_EMPTY_TAB_CONTENT')
+    this.$store.commit('profile/SET_EMPTY_TAB_CONTENT')
   }
 }
 </script>
