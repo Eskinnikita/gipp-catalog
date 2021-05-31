@@ -126,7 +126,11 @@ export default {
       const userRole = this.auth.user.role
       const userId = this.auth.user.id
       if (userRole === 3) {
-        this.$router.push({path: `/publisher/${userId}`});
+        this.$router.push({path: `/publisher/${userId}`, query: {tab: 'catalog', page: '1'}});
+      } else if(userRole === 1) {
+        this.$router.push({path: `/user/${userId}`, query: {tab: 'comments', page: '1'}});
+      } else if(userRole === 2) {
+        this.$router.push({path: `/organization/${userId}`, query: {tab: 'news', page: '1'}});
       }
     }
   },
@@ -139,17 +143,10 @@ export default {
       return this.$store.state.auth.user
     },
     avatarUrl() {
-      let photo
-      const role = this.user.role
-      if(role === 1 || role === 4) {
-        return false
-      } else if(role === 2 || role === 3) {
-        photo = this.user.logoUrl
-      }
-      if(photo === null) {
+      if(this.user.role === 4 || !this.user.logoUrl) {
         return false
       } else {
-        return this.serverUrl + '/' + photo
+        return this.serverUrl + '/' + this.user.logoUrl
       }
     },
   },

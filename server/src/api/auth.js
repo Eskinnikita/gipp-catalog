@@ -11,7 +11,8 @@ router.post('/login', async (req, res) => {
   let userWithEmail
   await Promise.all([
     User.findOne({where: {email}}),
-    Publisher.findOne({where: {email}})
+    Publisher.findOne({where: {email: email, approved: true}}),
+    Organ.findOne({where: {email: email, approved: true}})
   ])
     .then((data) => {
       for(let i = 0; i < data.length; i++) {

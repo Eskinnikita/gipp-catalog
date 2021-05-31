@@ -8,7 +8,7 @@ const transporter = require('../utils/nodemailerClient')
 
 const router = express.Router()
 
-router.post('/users/confirm', passport.authenticate('jwt', {session: false}), async (req, res) => {
+router.post('/confirm', passport.authenticate('jwt', {session: false}), async (req, res) => {
   try {
     const {role, id} = req.body
     let Model
@@ -55,7 +55,7 @@ router.post('/users/confirm', passport.authenticate('jwt', {session: false}), as
   }
 })
 
-router.post('/users/deny', passport.authenticate('jwt', {session: false}), async (req, res) => {
+router.post('/deny', passport.authenticate('jwt', {session: false}), async (req, res) => {
   try {
     const {role, id, comment} = req.body
     let Model
@@ -93,7 +93,14 @@ router.post('/users/deny', passport.authenticate('jwt', {session: false}), async
   }
 })
 
-
-
+router.get('/:id', async (req, res) => {
+  try {
+    const id = req.params.id
+    const user = await User.findOne({where: {id}})
+    res.status(200).json(user)
+  } catch (e) {
+    res.status(500).json({message: e})
+  }
+})
 
 module.exports = router

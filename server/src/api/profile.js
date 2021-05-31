@@ -34,33 +34,5 @@ router.post('/tab-content', async (req, res) => {
   }
 })
 
-// include: [
-//   {
-//     model: Publication,
-//     key: 'publications',
-//     required: false,
-//     attributes: ['id', 'coverLink', 'title', 'updatedAt'],
-//   },
-//   {
-//     model: Review,
-//     include: [
-//       {
-//         model: Publisher,
-//         attributes: ['id', 'name', 'logoUrl', 'role']
-//       },
-//       {
-//         model: User,
-//         attributes: ['id', 'name', 'role']
-//       },
-//       {
-//         model: Organ,
-//         attributes: ['id', 'name', 'role']
-//       }
-//     ]
-//   }
-// ],
-//   order: [
-//   [Publication, 'updatedAt', 'DESC']
-// ]
 
 module.exports = router

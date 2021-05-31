@@ -31,7 +31,6 @@ export default {
     }
   },
   created() {
-    console.log(this.metaInfo)
     this.url = `${window.location.href}`
   },
   data() {

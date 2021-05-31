@@ -1,5 +1,6 @@
 export const state = () => ({
-  tabContent: []
+  tabContent: [],
+  profile: {}
 })
 
 export const mutations = {
@@ -8,6 +9,9 @@ export const mutations = {
   },
   SET_EMPTY_TAB_CONTENT(state) {
     state.tabContent = []
+  },
+  SET_PROFILE(state, profile) {
+    state.profile = profile
   }
 }
 
@@ -24,7 +28,27 @@ export const actions = {
     catch(e) {
       console.log(e.message)
     }
-  }
+  },
+  async getProfile({commit}, data) {
+    try {
+      let res = null
+      let route = ''
+      if(data.role === 2) {
+        route = 'organs'
+      } else {
+        route = 'users'
+      }
+      res = await this.$axios.$get(`/${route}/${data.id}`)
+      console.log(res)
+      if(res) {
+        commit('SET_PROFILE', res)
+      }
+      return res
+    }
+    catch(e) {
+      console.log(e.message)
+    }
+  },
 }
 
 export const modules = {

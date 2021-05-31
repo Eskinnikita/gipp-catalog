@@ -10,6 +10,9 @@ const User = sequelize.define("User", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  logoUrl: {
+    type: DataTypes.STRING,
+  },
   password: {
     type: DataTypes.STRING,
     allowNull: false,

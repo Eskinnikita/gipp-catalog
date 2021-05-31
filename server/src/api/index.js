@@ -12,9 +12,10 @@ const reviewsApi = require('./reviews')
 const filesApi = require('./files')
 const articlesApi = require('./articles')
 const profileApi = require('./profile')
+const organizationsApi = require('./organizations')
 
 router.use(authApi)
-router.use(usersApi)
+router.use('/users', usersApi)
 router.use('/publication', publicationsApi)
 router.use('/publisher', publisherApi)
 router.use('/tags', tagsApi)
@@ -24,5 +25,6 @@ router.use('/reviews', reviewsApi)
 router.use('/files', filesApi)
 router.use('/articles', articlesApi)
 router.use('/profile', profileApi)
+router.use('/organs', organizationsApi)
 
 module.exports = router;

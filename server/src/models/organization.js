@@ -10,6 +10,12 @@ const Organ = sequelize.define("Organ", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  logoUrl: {
+    type: DataTypes.STRING,
+  },
+  description: {
+    type: DataTypes.TEXT,
+  },
   phone: {
     type: DataTypes.STRING,
     allowNull: false,
