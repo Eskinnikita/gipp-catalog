@@ -59,4 +59,5 @@ export const getters = {
   isUser: state => state.user.role === 1,
   isOrgan: state => state.user.role === 2,
   isPublisher: state => state.user.role === 2,
+  notUser: state =>  state.user.role === 2 ||  state.user.role === 3 ||  state.user.role === 4
 }

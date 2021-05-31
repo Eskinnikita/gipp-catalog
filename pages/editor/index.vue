@@ -6,7 +6,7 @@
     <div class="article-editor__header">
       <div class="article-editor__editor-header">
         <h2 class="title">Редактор статьи</h2>
-        <p class="article-editor__author">
+        <p class="article-editor__author" v-if="user">
           Автор: {{ user.name }}
         </p>
       </div>
@@ -80,13 +80,15 @@ export default {
     articleView,
     confirmDialog
   },
-  // beforeResolve(to, from, next) {
-  //   if (true) {
-  //     next('/')
-  //   } else {
-  //     next();
-  //   }
-  // },
+  beforeResolve(to, from, next) {
+    if (this.$store.getters['auth/notUser'] && this.$store.getters['auth/isAuthenticated']) {
+      console.log('ssss')
+      next('/')
+    } else {
+      console.log('mmm')
+      next();
+    }
+  },
   created() {
     if (this.$route.params.id) {
       this.$store.dispatch('article/getArticle', this.$route.params.id)
@@ -98,8 +100,10 @@ export default {
     this.serverUrl = process.env.serverUrl
   },
   mounted() {
-    this.article.authorId = this.user.id
-    this.article.authorRole = this.user.role
+    if(this.user) {
+      this.article.authorId = this.user.id
+      this.article.authorRole = this.user.role
+    }
   },
   data() {
     const self = this;

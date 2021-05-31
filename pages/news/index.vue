@@ -22,13 +22,14 @@
         </template>
       </div>
       <div class="news__pagination">
-        <!--        <el-pagination-->
-        <!--          @current-change="handleCurrentChange"-->
-        <!--          :pager-count="7"-->
-        <!--          :current-page="+params.page"-->
-        <!--          layout="pager"-->
-        <!--          :total="publications.count">-->
-        <!--        </el-pagination>-->
+        <el-pagination
+          @current-change="handleCurrentChange"
+          :current-page="+params.page"
+          layout="pager"
+          :page-size="articles.limit"
+          :total="articles.count"
+        >
+        </el-pagination>
       </div>
     </div>
   </div>
@@ -45,16 +46,62 @@ export default {
     articleSnippet
   },
   created() {
+    const obj = this.$route.query
+    if (obj && Object.keys(obj).length === 0 && obj.constructor === Object) {
+      this.$router.push({path: `/news`, query: {page: '1'}});
+    } else {
+      if (this.$route.query.page) {
+        this.params.page = this.$route.query.page
+      }
+      if (this.$route.query.search) {
+        this.search = this.$route.query.search
+        this.params.search = this.$route.query.search
+      }
+    }
     this.$store.dispatch('article/getAllArticles', this.params)
   },
   data() {
     return {
-      search: ''
+      search: '',
+      params: {
+        page: '1',
+        search: ''
+      }
     }
+  },
+  methods: {
+    handleCurrentChange(val) {
+      this.params.page = `${val}`
+    },
+    applyFilters() {
+      this.$router.push({path: '/news', query: this.params})
+      this.$store.dispatch('article/getAllArticles', this.params)
+    },
+    sendSearchString() {
+      if (this.timer) {
+        clearTimeout(this.timer);
+        this.timer = null;
+      }
+      this.timer = setTimeout(() => {
+        this.params.search = this.search.trim().toLowerCase()
+      }, 800);
+    },
   },
   computed: {
     articles() {
       return this.$store.state.article.articles
+    }
+  },
+  watch: {
+    params: {
+      handler(val) {
+        console.log(val)
+        this.applyFilters()
+      },
+      deep: true
+    },
+    search() {
+      this.sendSearchString()
     }
   }
 }

@@ -41,7 +41,7 @@ export const actions = {
   async getAllArticles({commit}, params) {
     try {
       let res = null
-      res = await this.$axios.$post(`/articles/all`)
+      res = await this.$axios.$post(`/articles/all`, params)
       if (res) {
         commit('SET_ARTICLES', res)
       }

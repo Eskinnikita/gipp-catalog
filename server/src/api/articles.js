@@ -4,6 +4,7 @@ const Article = require('../models/article')
 const User = require('../models/user')
 const Organ = require('../models/organization')
 const Publisher = require('../models/publisher')
+const sequelize = require('sequelize')
 
 const router = express.Router()
 
@@ -89,9 +90,8 @@ router.get('/:id', async (req, res) => {
 
 router.post('/all', async (req, res) => {
   try {
-    // const {page, age, types, search} = req.body
+    const {page, search} = req.body
     const limit = 10
-    const page = 1
     const options = {
       where: {},
       attributes: {exclude: ['blocks']},
@@ -110,15 +110,9 @@ router.post('/all', async (req, res) => {
         }
       ]
     }
-    // if (types.length) {
-    //   options.where.type = types
-    // }
-    // if (age.length) {
-    //   options.where.age = age
-    // }
-    // if (search && search !== '') {
-    //   options.where.name = sequelize.where(sequelize.fn('LOWER', sequelize.col('title')), 'LIKE', '%' + search + '%')
-    // }
+    if (search && search !== '') {
+      options.where.title = sequelize.where(sequelize.fn('LOWER', sequelize.col('title')), 'LIKE', '%' + search + '%')
+    }
     const allArticles = await Article.findAndCountAll(options).catch(
       e => {
         console.log("Error", e)
@@ -137,6 +131,7 @@ router.post('/all', async (req, res) => {
         }
       })
     })
+    allArticlesCopy.limit = limit
     res.status(200).json(allArticlesCopy)
   } catch (err) {
     res.status(500).json({message: err})
