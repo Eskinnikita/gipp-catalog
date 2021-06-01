@@ -6,7 +6,7 @@
     <div
       class="favourites__publications-container"
     >
-      <template v-if="favourites.publications.length">
+      <template v-if="favourites.publications && favourites.publications.length">
         <cover-snippet
           v-for="(publication, index) in favourites.publications"
           :key="index"

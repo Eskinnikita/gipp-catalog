@@ -10,16 +10,25 @@
 </template>
 
 <script>
-export default {};
+export default {
+  created() {
+    console.log('TRANS RELOADED')
+  }
+};
 </script>
 
 <style lang="scss">
+:root{
+  --main-color: #ebeef5 !important;
+  --accent-color: #1e88e5 !important;
+}
+
 html {
   font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
   Roboto, "Helvetica Neue", Arial, sans-serif;
   font-size: 16px;
   word-spacing: 1px;
-  background-color: #ebeef5;
+  background-color: var(--main-color) !important;
   color: #303133;
 }
 
@@ -57,4 +66,25 @@ a {
   margin: 10px 0 20px;
   padding: 0 15px;
 }
+
+//CUSTOM
+
+.accent-element {
+  background: var(--accent-color) !important;
+  border: 1px solid var(--accent-color) !important;
+  color: #fff !important;
+}
+
+.el-tabs__active-bar {
+  background-color: var(--accent-color) !important;
+}
+
+.el-pager li{
+  color: var(--accent-color) !important;
+}
+
+.el-button--text {
+  color: var(--accent-color) !important;
+}
+
 </style>

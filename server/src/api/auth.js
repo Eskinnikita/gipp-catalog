@@ -2,7 +2,9 @@ const express = require('express')
 const User = require('../models/user')
 const Publisher = require('../models/publisher')
 const Organ = require('../models/organization')
+const PublisherConfig = require('../models/publisherConfig')
 const jwt = require('jsonwebtoken')
+
 
 const router = express.Router()
 
@@ -119,6 +121,14 @@ router.post('/request', async (req, res) => {
       res.status(500).json({error: "Ошибка регистрации"});
     }
   )
+
+  if(+role === 3) {
+    await PublisherConfig.create({
+      publisherId: createdRequest.id,
+      mainColor: "#ebeef5",
+      accentColor: "#409EFF"
+    })
+  }
 
   res.status(201).json(createdRequest)
 })

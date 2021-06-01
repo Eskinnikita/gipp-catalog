@@ -130,4 +130,14 @@ textarea {
 .el-divider {
   margin: 15px 0 !important;
 }
+
+.vc-compact {
+  width: 100% !important;
+  box-shadow: none !important;
+}
+
+.vc-compact-color-item {
+  width: 30px !important;
+  height: 30px !important;
+}
 </style>

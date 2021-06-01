@@ -9,6 +9,7 @@ const PubTag = require('../models/pubTag')
 const Review = require('../models/review')
 const Organ = require('../models/organization')
 const UserPublications = require('../models/userPublications')
+const PublisherConfig = require('../models/publisherConfig')
 
 
 const router = express.Router()
@@ -61,6 +62,7 @@ router.post('/', async (req, res) => {
   try {
     const {publicationId, userId} = req.body
     Publication.hasMany(Review)
+    Publisher.hasOne(PublisherConfig)
     const publication = await Publication.findOne({
       where: {id: +publicationId},
       include: [
@@ -91,6 +93,9 @@ router.post('/', async (req, res) => {
       attributes: ['id', 'name'],
       include: [
         {
+          model: PublisherConfig
+        },
+        {
           model: Publication,
           key: 'publications',
           required: false,
@@ -100,7 +105,7 @@ router.post('/', async (req, res) => {
               [Op.ne]: publicationId
             }
           }
-        },
+        }
       ],
       order: [
         [Publication, 'updatedAt', 'DESC']
@@ -110,6 +115,10 @@ router.post('/', async (req, res) => {
       res.status(404).json({message: e})
     })
     const isFavourite = await UserPublications.findOne({where: req.body})
+      .catch(e => {
+        console.log(e)
+        res.status(404).json({message: e})
+      })
     publicationCopy.favourite = !!isFavourite
     res.status(200).json(publicationCopy)
   } catch (e) {

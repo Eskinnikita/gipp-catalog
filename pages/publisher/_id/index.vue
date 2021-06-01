@@ -15,7 +15,7 @@
       </div>
       <div class="left__item" v-if="isUserAdmin">
         <nuxt-link :to="`${publisherId}/edit`">
-          <el-button style="width: 100%" type="primary">Редактировать</el-button>
+          <el-button class="accent-element" style="width: 100%" type="primary">Редактировать</el-button>
         </nuxt-link>
       </div>
       <info-block :info-items="info"/>
@@ -31,7 +31,7 @@
             <div class="profile-page__tab-title-container">
               <h3 class="profile-page__tab-title">Наши издания</h3>
               <nuxt-link v-if="isUserAdmin" to="/publication/create">
-                <el-button icon="el-icon-edit" type="primary">Добавить</el-button>
+                <el-button class="accent-element" icon="el-icon-edit" type="primary">Добавить</el-button>
               </nuxt-link>
             </div>
           </el-tab-pane>
@@ -39,7 +39,7 @@
             <div class="profile-page__tab-title-container">
               <h3 class="profile-page__tab-title">Наши Новости</h3>
               <nuxt-link v-if="isUserAdmin" to="/editor">
-                <el-button icon="el-icon-edit" type="primary">Добавить</el-button>
+                <el-button class="accent-element" icon="el-icon-edit" type="primary">Добавить</el-button>
               </nuxt-link>
             </div>
           </el-tab-pane>
@@ -104,7 +104,10 @@ export default {
         this.params.page = +this.$route.query.page
       }
     }
-    this.$store.dispatch('publisher/getPublisher', +this.publisherId).then(() => {
+    this.$store.dispatch('publisher/getPublisher', +this.publisherId).then(publisher => {
+      let root = document.documentElement;
+      root.style.setProperty('--main-color', publisher.PublisherConfig.mainColor, 'important');
+      root.style.setProperty('--accent-color', publisher.PublisherConfig.accentColor, 'important');
       this.pageReady = true
     })
     this.getTabContent()
@@ -187,6 +190,9 @@ export default {
     },
   },
   beforeDestroy() {
+    let root = document.documentElement;
+    root.style.setProperty('--main-color', "#ebeef5", 'important');
+    root.style.setProperty('--accent-color', "#409EFF", 'important');
     this.$store.commit('publisher/SET_EMPTY_PUBLISHER')
   }
 }

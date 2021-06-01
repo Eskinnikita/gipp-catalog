@@ -93,7 +93,8 @@ export default {
   }
 
   &__info {
-    color: #409EFF;
+    //color: #409EFF;
+    color: #303133;
   }
 
   &__title {

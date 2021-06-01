@@ -35,6 +35,13 @@
           <el-form-item label="Телефон для связи">
             <el-input v-model="publisher.contactPhone" autocomplete="off"></el-input>
           </el-form-item>
+          <h4 class="pub-create__title">Цветовая схема</h4>
+          <el-form-item style="margin-bottom: 0" label="Акцентный цвет">
+          </el-form-item>
+          <swatches-picker v-model="colors.accentColor" :palette="colorPalette[0].accentPalette"/>
+          <el-form-item style="margin-bottom: 0" label="Основной цвет">
+          </el-form-item>
+          <swatches-picker v-model="colors.mainColor" :palette="colorPalette[0].mainPalette"/>
           <el-form-item class="pub-create__controls">
             <el-button type="primary" @click="openConfirmModal">Сохранить</el-button>
             <el-button>Назад</el-button>
@@ -48,12 +55,13 @@
 
 <script>
 import confirmDialog from "@/components/modals/confirmDialog"
-
+import palette from '@/assets/jsons/palette.json'
 export default {
   components: {
     confirmDialog
   },
   created() {
+    console.log(this.colorPalette)
     this.serverUrl = process.env.serverUrl
     this.publisherId = +this.$route.params.id
     this.$store.dispatch('publisher/getPublisher', +this.publisherId)
@@ -63,6 +71,11 @@ export default {
   },
   data() {
     return {
+      colorPalette: palette,
+      colors: {
+        mainColor: '',
+        accentColor: ''
+      },
       publisherId: null,
       imageFile: null,
       disabled: false,
@@ -101,9 +114,15 @@ export default {
       });
     },
     updatePublisher() {
+      const colorConfig = {
+        publisherId: this.publisherId,
+        mainColor: this.colors.mainColor.hex,
+        accentColor: this.colors.accentColor.hex
+      }
       const formData = new FormData();
       formData.append('publisher', JSON.stringify(this.publisher))
       formData.append('logo', this.imageFile)
+      formData.append('config', JSON.stringify(colorConfig))
       this.$store.dispatch('publisher/updatePublisher', {id: this.publisherId, formData: formData})
         .then(() => {
           this.$notify({
@@ -125,6 +144,9 @@ export default {
       if (publisherInfo.logoUrl) {
         this.imageUrl = this.serverUrl + '/' + publisherInfo.logoUrl
       }
+      this.colors.mainColor = publisherInfo.PublisherConfig.mainColor
+      this.colors.accentColor = publisherInfo.PublisherConfig.accentColor
+
     }
   },
   computed: {

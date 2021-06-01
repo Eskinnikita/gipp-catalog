@@ -49,4 +49,5 @@ Publisher.hasMany(Publication, {
   foreignKey: 'publisherId'
 })
 
+
 module.exports = Publisher;

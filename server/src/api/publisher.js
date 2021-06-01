@@ -5,6 +5,7 @@ const Publication = require('../models/publication')
 const User = require('../models/user')
 const Organ = require('../models/organization')
 const Review = require('../models/review')
+const PublisherConfig = require('../models/publisherConfig')
 const multer = require('multer')
 
 const router = express.Router()
@@ -40,9 +41,13 @@ router.get('/:id', async (req, res) => {
     Publisher.hasMany(Review, {
       foreignKey: 'reviewerId'
     })
+    Publisher.hasOne(PublisherConfig)
     const publisher = await Publisher.findOne({
       where: {id},
-      attributes: { exclude: ['password', 'approved'] }
+      attributes: { exclude: ['password', 'approved'] },
+      include: {
+        model: PublisherConfig
+      }
     }).catch(e => {
       res.status(404).json({message: e})
     })
@@ -56,6 +61,7 @@ router.patch('/:id', upload.single('logo'), async (req, res) => {
   try {
     const id = req.params.id
     const infoToUpdate = JSON.parse(req.body.publisher)
+    const config = JSON.parse(req.body.config)
 
     if(req.body.logo !== 'null') {
       infoToUpdate.logoUrl = req.file.path
@@ -67,6 +73,12 @@ router.patch('/:id', upload.single('logo'), async (req, res) => {
       }
     }).catch(e => {
       res.status(409).json({message: e})
+    })
+    console.log(config)
+    await PublisherConfig.update(config, {
+      where: {
+        publisherId: id
+      }
     })
     res.status(200).json(updatedPublisher)
   } catch (e) {

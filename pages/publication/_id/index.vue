@@ -14,11 +14,11 @@
       <div class="profile-page__controls controls">
         <div class="left__item" v-if="isUserAdmin">
           <nuxt-link :to="`${publicationId}/edit`">
-            <el-button style="width: 100%" type="primary">Редактировать</el-button>
+            <el-button class="accent-element" style="width: 100%" type="primary">Редактировать</el-button>
           </nuxt-link>
         </div>
         <a class="left__item" :href="publication.subsLink" target="_blank">
-          <el-button style="width: 100%" type="primary">Подписаться</el-button>
+          <el-button class="accent-element" style="width: 100%" type="primary">Подписаться</el-button>
         </a>
         <div class="controls__bottom left__item">
           <social-sharing :meta-info="socialInfo"/>
@@ -36,19 +36,23 @@
         <p class="profile-page__desc" v-if="publication.desc">
           {{ publication.desc }}
         </p>
-        <div class="profile-page__tags-container" v-if="publication.publisher.tags && publication.publisher.tags.length">
-<!--          <el-tag :type="randomType()" v-for="item in publication.publisher.Publications" :key="item">{{ item.title }}</el-tag>-->
+        <div class="profile-page__tags-container"
+             v-if="publication.publisher.tags && publication.publisher.tags.length">
+          <!--          <el-tag :type="randomType()" v-for="item in publication.publisher.Publications" :key="item">{{ item.title }}</el-tag>-->
         </div>
         <div class="profile-page__recommends recommends" v-if="publication.publisher.Publications.length">
-          <h4 class="profile-page__subtitle">Еще от <b>{{publication.publisher.name}}</b></h4>
-          <div class="recommends__container" :style="{ 'justify-content': publication.publisher.Publications.length === 2 ? 'flex-start' : 'space-between'}">
-            <rec-publications v-for="(recPub, index) in publication.publisher.Publications" :rec-pub="recPub" :key="index"/>
+          <h4 class="profile-page__subtitle">Еще от <b>{{ publication.publisher.name }}</b></h4>
+          <div class="recommends__container"
+               :style="{ 'justify-content': publication.publisher.Publications.length === 2 ? 'flex-start' : 'space-between'}">
+            <rec-publications v-for="(recPub, index) in publication.publisher.Publications" :rec-pub="recPub"
+                              :key="index"/>
           </div>
         </div>
         <div class="profile-page__reviews reviews">
           <div class="reviews__header">
             <h4 class="profile-page__subtitle">Отзывы</h4>
-            <el-button v-if="!couldReview" type="primary" @click="$refs.reviewModal.openModal()">Оставить отзыв</el-button>
+            <el-button v-if="!couldReview" type="primary" @click="$refs.reviewModal.openModal()">Оставить отзыв
+            </el-button>
           </div>
           <div class="reviews__container">
             <template v-if="publication.Reviews.length">
@@ -61,7 +65,7 @@
                 :key="index"/>
             </template>
             <div v-if="!approvedReviews.length">
-               Никто еще не оставил отзыв. Станьте первым!
+              Никто еще не оставил отзыв. Станьте первым!
             </div>
           </div>
         </div>
@@ -77,6 +81,7 @@ import commentSnippet from "@/components/snippets/commentSnippet"
 import reviewModal from "@/components/modals/reviewModal"
 import socialSharing from "@/components/social/socialSharing"
 import favouriteButton from "@/components/profile/favouriteButton"
+
 export default {
   layout: 'transparent',
   components: {
@@ -92,8 +97,11 @@ export default {
     this.publicationId = +this.$route.params.id
     this.$store.dispatch('publication/getPublication', {
       publicationId: this.publicationId,
-      userId: this.user.id
+      userId: this.user ? this.user.id : null
     }).then(() => {
+      let root = document.documentElement;
+      root.style.setProperty('--main-color', this.publication.publisher.PublisherConfig.mainColor, 'important');
+      root.style.setProperty('--accent-color', this.publication.publisher.PublisherConfig.accentColor, 'important');
       this.pageReady = true
     })
   },
@@ -184,6 +192,9 @@ export default {
     }
   },
   beforeDestroy() {
+    let root = document.documentElement;
+    root.style.setProperty('--main-color', "#ebeef5", 'important');
+    root.style.setProperty('--accent-color', "#409EFF", 'important');
     this.$store.commit('publication/SET_EMPTY_PUBLICATION')
   }
 }
@@ -321,6 +332,7 @@ export default {
     justify-content: space-between;
     align-items: center;
   }
+
   &__container {
 
   }
@@ -330,6 +342,7 @@ export default {
   &__bottom {
     display: flex;
     justify-content: space-between;
+
     * {
       flex: 1;
     }

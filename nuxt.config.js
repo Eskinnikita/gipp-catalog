@@ -30,6 +30,7 @@ export default {
     {src: '@/plugins/vue-social-sharing.js', ssr: false},
     {src: '@/plugins/font-awesome.js', ssr: false},
     {src: '@/plugins/vue-editor.js', ssr: false},
+    {src: '@/plugins/vue-color.js', ssr: false},
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
