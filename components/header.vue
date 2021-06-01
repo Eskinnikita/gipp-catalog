@@ -47,6 +47,7 @@
               <el-dropdown-item v-if="+auth.user.role === 4" @click.native="goToCabinet">Личный кабинет
               </el-dropdown-item>
               <el-dropdown-item v-if="+auth.user.role !== 4" @click.native="goToProfile">Профиль</el-dropdown-item>
+              <el-dropdown-item v-if="+auth.user.role !== 4" @click.native="goToProfileEdit">Редактировать</el-dropdown-item>
               <el-dropdown-item @click.native="logout">Выйти</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -131,6 +132,17 @@ export default {
         this.$router.push({path: `/user/${userId}`, query: {tab: 'comments', page: '1'}});
       } else if(userRole === 2) {
         this.$router.push({path: `/organization/${userId}`, query: {tab: 'news', page: '1'}});
+      }
+    },
+    goToProfileEdit() {
+      const userRole = this.auth.user.role
+      const userId = this.auth.user.id
+      if (userRole === 3) {
+        this.$router.push({path: `/publisher/${userId}/edit`});
+      } else if(userRole === 1) {
+        this.$router.push({path: `/user/${userId}/edit`});
+      } else if(userRole === 2) {
+        this.$router.push({path: `/organization/${userId}/edit`});
       }
     }
   },

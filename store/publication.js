@@ -2,7 +2,8 @@ export const state = () => ({
   publication: {},
   tags: [],
   publications: [],
-  globalSearch: {}
+  globalSearch: {},
+  favouritePublications: []
 })
 
 export const mutations = {
@@ -37,6 +38,9 @@ export const mutations = {
   SET_EMPTY_GLOBAL_SEARCH(state) {
     state.globalSearch = {}
   },
+  SET_FAVOURITES(state, favourites) {
+    state.favouritePublications = favourites
+  }
 }
 
 export const actions = {
@@ -126,6 +130,29 @@ export const actions = {
         commit('SET_GLOBAL_SEARCH', res)
       }
       return res
+    } catch (e) {
+      console.log(e)
+    }
+  },
+  async addToFavourite({commit}, data) {
+    try {
+      let res = null
+      res = await this.$axios.$post(`/favourites`, data)
+      if(res) {
+        return res
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  },
+  async getFavourites({commit}, data) {
+    try {
+      let res = null
+      res = await this.$axios.$post(`/favourites/all`, data)
+      if(res) {
+        commit('SET_FAVOURITES', res)
+        return res
+      }
     } catch (e) {
       console.log(e)
     }

@@ -17,7 +17,8 @@
           <font-awesome-icon :icon="{ prefix: 'fab', iconName: network.icon }"></font-awesome-icon> {{ network.title }}
         </ShareNetwork>
       </div>
-      <el-button slot="reference" type="primary" plain icon="el-icon-share"></el-button>
+      <el-button slot="reference" type="primary" plain icon="el-icon-share">
+      </el-button>
     </el-popover>
   </div>
 </template>

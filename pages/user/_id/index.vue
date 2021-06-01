@@ -14,7 +14,7 @@
             <social-sharing v-if="profile.role === 2" :meta-info="socialInfo"/>
           </div>
           <div class="left__item" v-if="isUserAdmin">
-            <nuxt-link :to="`${routeName}/${profileId}/edit`">
+            <nuxt-link :to="`${profileId}/edit`">
               <el-button style="width: 100%" type="primary">Редактировать</el-button>
             </nuxt-link>
           </div>

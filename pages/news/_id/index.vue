@@ -61,7 +61,11 @@ export default {
       return this.$store.state.auth.user
     },
     isUserArticleAuthor() {
-      return this.article.authorRole === this.user.role && this.article.authorId === this.user.id || this.user.role === 4
+      if(this.user) {
+        return this.article.authorRole === this.user.role && this.article.authorId === this.user.id || this.user.role === 4
+      } else {
+        return false
+      }
     }
   },
   beforeDestroy() {

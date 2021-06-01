@@ -11,16 +11,21 @@
       <div class="profile-page__image-placeholder left__item"
            v-if="publication && !publication.coverLink && publication.coverLink !== undefined">
       </div>
-      <div class="profile-page__controls left__item">
-        <a :href="publication.subsLink" target="_blank">
-          <el-button type="primary">Подписаться</el-button>
+      <div class="profile-page__controls controls">
+        <div class="left__item" v-if="isUserAdmin">
+          <nuxt-link :to="`${publicationId}/edit`">
+            <el-button style="width: 100%" type="primary">Редактировать</el-button>
+          </nuxt-link>
+        </div>
+        <a class="left__item" :href="publication.subsLink" target="_blank">
+          <el-button style="width: 100%" type="primary">Подписаться</el-button>
         </a>
-        <social-sharing :meta-info="socialInfo"/>
-      </div>
-      <div class="left__item" v-if="isUserAdmin">
-        <nuxt-link :to="`${publicationId}/edit`">
-          <el-button style="width: 100%" type="primary">Редактировать</el-button>
-        </nuxt-link>
+        <div class="controls__bottom left__item">
+          <social-sharing :meta-info="socialInfo"/>
+          <el-button type="danger" plain @click="addToFavourite">
+            Сохранить
+          </el-button>
+        </div>
       </div>
       <info-block v-if="info.length" :info-items="info"/>
     </div>
@@ -98,6 +103,13 @@ export default {
     }
   },
   methods: {
+    addToFavourite() {
+      this.$store.dispatch('publication/addToFavourite', {
+        userId: this.user.id,
+        userRole: this.user.role,
+        publicationId: this.publication.id
+      })
+    },
     randomType() {
       const types = ["success", "info", "warning", "danger"]
       return types[Math.floor(Math.random() * types.length)]
@@ -210,10 +222,7 @@ export default {
   }
 
   &__controls {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+
   }
 
   &__content {
@@ -284,6 +293,7 @@ export default {
   &__item {
     margin-bottom: 15px;
     border-radius: 4px;
+    display: block;
   }
 }
 
@@ -309,6 +319,16 @@ export default {
   }
   &__container {
 
+  }
+}
+
+.controls {
+  &__bottom {
+    display: flex;
+    justify-content: space-between;
+    * {
+      flex: 1;
+    }
   }
 }
 
