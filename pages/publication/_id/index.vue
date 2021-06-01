@@ -22,9 +22,7 @@
         </a>
         <div class="controls__bottom left__item">
           <social-sharing :meta-info="socialInfo"/>
-          <el-button type="danger" plain @click="addToFavourite">
-            Сохранить
-          </el-button>
+          <favourite-button :is-fav="publication.favourite" @click.native="addToFavourite"/>
         </div>
       </div>
       <info-block v-if="info.length" :info-items="info"/>
@@ -78,6 +76,7 @@ import recPublications from "@/components/profile/snippets/recPublications"
 import commentSnippet from "@/components/snippets/commentSnippet"
 import reviewModal from "@/components/modals/reviewModal"
 import socialSharing from "@/components/social/socialSharing"
+import favouriteButton from "@/components/profile/favouriteButton"
 export default {
   layout: 'transparent',
   components: {
@@ -85,12 +84,16 @@ export default {
     recPublications,
     commentSnippet,
     reviewModal,
-    socialSharing
+    socialSharing,
+    favouriteButton
   },
   created() {
     this.serverUrl = process.env.serverUrl
     this.publicationId = +this.$route.params.id
-    this.$store.dispatch('publication/getPublication', this.publicationId).then(() => {
+    this.$store.dispatch('publication/getPublication', {
+      publicationId: this.publicationId,
+      userId: this.user.id
+    }).then(() => {
       this.pageReady = true
     })
   },
@@ -107,7 +110,8 @@ export default {
       this.$store.dispatch('publication/addToFavourite', {
         userId: this.user.id,
         userRole: this.user.role,
-        publicationId: this.publication.id
+        publicationId: this.publication.id,
+        isFavPage: false
       })
     },
     randomType() {

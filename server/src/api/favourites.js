@@ -6,8 +6,17 @@ const router = express.Router()
 
 router.post('/', async (req, res) => {
   try {
-    const savedPublication = await UserPublication.create(req.body)
-    res.status(200).json(savedPublication)
+    const existedAssoc = await UserPublication.findOne({where: req.body})
+    const favStatus = {}
+    if (existedAssoc) {
+      await UserPublication.destroy({where: req.body})
+      favStatus.publication = existedAssoc
+      favStatus.status = 'removed'
+    } else {
+      favStatus.publication = await UserPublication.create(req.body)
+      favStatus.status = 'added'
+    }
+    res.status(200).json(favStatus)
   } catch (e) {
     res.status(500).json({message: e})
   }

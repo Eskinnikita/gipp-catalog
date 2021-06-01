@@ -6,12 +6,18 @@
     <div
       class="favourites__publications-container"
     >
-      <cover-snippet
-        v-for="(publication, index) in favourites.publications"
-        :key="index"
-        :publication="publication"
-        route="/publication"
-      />
+      <template v-if="favourites.publications.length">
+        <cover-snippet
+          v-for="(publication, index) in favourites.publications"
+          :key="index"
+          :publication="publication"
+          :is-fav="true"
+          route="/publication"
+        />
+      </template>
+      <template v-else>
+        Список пуст
+      </template>
     </div>
   </div>
 </template>

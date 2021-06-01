@@ -8,6 +8,7 @@ const User = require('../models/user')
 const PubTag = require('../models/pubTag')
 const Review = require('../models/review')
 const Organ = require('../models/organization')
+const UserPublications = require('../models/userPublications')
 
 
 const router = express.Router()
@@ -56,12 +57,12 @@ router.post('/create', upload.single('cover'), async (req, res) => {
   }
 })
 
-router.get('/:id', async (req, res) => {
+router.post('/', async (req, res) => {
   try {
+    const {publicationId, userId} = req.body
     Publication.hasMany(Review)
-    const id = req.params.id
     const publication = await Publication.findOne({
-      where: {id},
+      where: {id: +publicationId},
       include: [
         {
           model: Review,
@@ -96,7 +97,7 @@ router.get('/:id', async (req, res) => {
           attributes: ['id', 'coverLink', 'title', 'count', 'period', 'age', 'updatedAt'],
           where: {
             id: {
-              [Op.ne]: id
+              [Op.ne]: publicationId
             }
           }
         },
@@ -108,6 +109,8 @@ router.get('/:id', async (req, res) => {
       console.log(e)
       res.status(404).json({message: e})
     })
+    const isFavourite = await UserPublications.findOne({where: req.body})
+    publicationCopy.favourite = !!isFavourite
     res.status(200).json(publicationCopy)
   } catch (e) {
     console.log(e)
