@@ -74,7 +74,6 @@ router.patch('/:id', upload.single('logo'), async (req, res) => {
     }).catch(e => {
       res.status(409).json({message: e})
     })
-    console.log(config)
     await PublisherConfig.update(config, {
       where: {
         publisherId: id

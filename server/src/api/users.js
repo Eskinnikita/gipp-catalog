@@ -5,8 +5,34 @@ const Organ = require('../models/organization')
 const passport = require('passport')
 const generator = require('generate-password');
 const transporter = require('../utils/nodemailerClient')
+const multer = require('multer')
 
 const router = express.Router()
+
+const storage = multer.diskStorage({
+  destination(req, file, cb) {
+    cb(null, './uploads/usersLogos')
+  },
+  filename(req, file, cb) {
+    cb(null, new Date().toISOString() + file.originalname)
+  }
+})
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === 'image/jpg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpeg') {
+    cb(null, true)
+  } else {
+    cb(null, false)
+  }
+}
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 5
+  },
+  fileFilter: fileFilter
+})
 
 router.post('/confirm', passport.authenticate('jwt', {session: false}), async (req, res) => {
   try {
@@ -102,5 +128,26 @@ router.get('/:id', async (req, res) => {
     res.status(500).json({message: e})
   }
 })
+
+router.patch('/:id', upload.single('logo'),async (req, res) => {
+  try {
+    const id = req.params.id
+    const infoToUpdate = JSON.parse(req.body.user)
+    if(req.body.logo !== 'null') {
+      infoToUpdate.logoUrl = req.file.path
+    }
+    const updatedUser = await User.update(infoToUpdate, {
+      where: {
+        id
+      }
+    }).catch(e => {
+      res.status(409).json({message: e})
+    })
+    res.status(200).json(updatedUser)
+  } catch (e) {
+    res.status(500).json({message: e})
+  }
+})
+
 
 module.exports = router

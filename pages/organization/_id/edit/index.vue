@@ -1,15 +1,4 @@
-<template>
-  <div>
-
-  </div>
-</template>
-
 <script>
-export default {
-
-}
+import OrgEdit  from '~/pages/user/_id/edit'
+export default OrgEdit
 </script>
-
-<style scoped>
-
-</style>

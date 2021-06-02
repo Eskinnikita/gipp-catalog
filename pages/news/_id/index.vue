@@ -13,7 +13,7 @@
       </template>
       <el-divider></el-divider>
       <div class="article__comments">
-        <comment-snippet class="article__comment" v-for="(comment, index) in article.Comments" :key="index" :comment-info="comment"/>
+        <comment-snippet class="article__comment" v-for="(comment, index) in article.Comments.slice().reverse()" :key="index" :comment-info="comment"/>
       </div>
     </div>
   </div>
