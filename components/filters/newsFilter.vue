@@ -9,14 +9,6 @@
           <el-checkbox v-for="(type, index) in types" :label="type" :key="index">{{type}}</el-checkbox>
         </el-checkbox-group>
       </div>
-      <div class="filter-block">
-        <div class="filter__input-label">
-          Возраст
-        </div>
-        <el-checkbox-group v-model="parameters.age" >
-          <el-checkbox v-for="(item, index) in age" :label="item" :key="index">{{item}}</el-checkbox>
-        </el-checkbox-group>
-      </div>
       <el-button class="filter__reset" @click="resetFilters" type="text">Сбросить</el-button>
     </el-form>
   </div>
@@ -28,17 +20,14 @@ export default {
     return {
       parameters: {
         types: [],
-        age: []
       },
-      types: ['Журнал', 'Газета'],
-      age: ['0+', '6+', '12+', '16+']
+      types: ['Издательство', 'Организация'],
     }
   },
   methods: {
     resetFilters() {
       this.parameters = {
-        types: [],
-        age: []
+        types: []
       }
     }
   }

@@ -6,6 +6,9 @@
           <img src="../assets/logo.svg" alt="Логотип ГИПП"/>
         </nuxt-link>
       </div>
+      <div class="header__burger-menu">
+        <adaptive-menu/>
+      </div>
       <div class="header__navbar navbar">
         <el-menu
           @select="handleSelect"
@@ -16,7 +19,7 @@
           <el-menu-item index="1">Каталог</el-menu-item>
           <el-menu-item index="2">Новости</el-menu-item>
         </el-menu>
-        <global-search  class="navbar__search"/>
+        <global-search class="navbar__search"/>
       </div>
       <div class="header__item header__right-menu right-menu">
         <template v-if="isAuthenticated">
@@ -47,7 +50,8 @@
               <el-dropdown-item v-if="+auth.user.role === 4" @click.native="goToCabinet">Личный кабинет
               </el-dropdown-item>
               <el-dropdown-item v-if="+auth.user.role !== 4" @click.native="goToProfile">Профиль</el-dropdown-item>
-              <el-dropdown-item v-if="+auth.user.role !== 4" @click.native="goToProfileEdit">Редактировать</el-dropdown-item>
+              <el-dropdown-item v-if="+auth.user.role !== 4" @click.native="goToProfileEdit">Редактировать
+              </el-dropdown-item>
               <el-dropdown-item @click.native="logout">Выйти</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -72,11 +76,13 @@
 import {mapState, mapGetters} from "vuex";
 import LoginModal from "./modals/loginModal.vue";
 import globalSearch from "@/components/customInputs/globalSearch"
+import adaptiveMenu from "@/components/adaptiveMenu"
 
 export default {
   components: {
     LoginModal,
-    globalSearch
+    globalSearch,
+    adaptiveMenu
   },
   data() {
     return {
@@ -106,7 +112,7 @@ export default {
     handleSelect(key, keyPath) {
       if (+key === 1) {
         this.activeIndex = "1";
-        this.$router.push({path: "/catalog", query: { page: '1' }});
+        this.$router.push({path: "/catalog", query: {page: '1'}});
       } else {
         this.activeIndex = "2";
         this.$router.push({path: "/news"});
@@ -128,9 +134,9 @@ export default {
       const userId = this.auth.user.id
       if (userRole === 3) {
         this.$router.push({path: `/publisher/${userId}`, query: {tab: 'catalog', page: '1'}});
-      } else if(userRole === 1) {
+      } else if (userRole === 1) {
         this.$router.push({path: `/user/${userId}`, query: {tab: 'comments', page: '1'}});
-      } else if(userRole === 2) {
+      } else if (userRole === 2) {
         this.$router.push({path: `/organization/${userId}`, query: {tab: 'news', page: '1'}});
       }
     },
@@ -139,9 +145,9 @@ export default {
       const userId = this.auth.user.id
       if (userRole === 3) {
         this.$router.push({path: `/publisher/${userId}/edit`});
-      } else if(userRole === 1) {
+      } else if (userRole === 1) {
         this.$router.push({path: `/user/${userId}/edit`});
-      } else if(userRole === 2) {
+      } else if (userRole === 2) {
         this.$router.push({path: `/organization/${userId}/edit`});
       }
     }
@@ -155,7 +161,7 @@ export default {
       return this.$store.state.auth.user
     },
     avatarUrl() {
-      if(this.user.role === 4 || !this.user.logoUrl) {
+      if (this.user.role === 4 || !this.user.logoUrl) {
         return false
       } else {
         return this.serverUrl + '/' + this.user.logoUrl
@@ -182,6 +188,16 @@ export default {
   font-size: 12px;
   z-index: 1000;
   border-bottom: 2px solid #ebeef5;
+
+  &__burger-menu {
+    display: none;
+    .el-button {
+      font-size: 25px;
+    }
+    .el-drawer {
+      padding: 40px 15px !important;
+    }
+  }
 
   &__inner {
     display: flex;
@@ -264,5 +280,53 @@ export default {
 
 .el-menu.el-menu--horizontal {
   border-bottom: none !important;
+}
+
+@media (max-width: 575.98px) {
+  .right-menu {
+    display: none;
+  }
+
+  .navbar {
+    display: none;
+  }
+
+  .header {
+    &__inner {
+      min-width: 100%;
+    }
+
+    &__burger-menu {
+      display: block;
+
+      .el-drawer {
+        padding: 10px;
+      }
+    }
+  }
+}
+
+@media (min-width: 576px) and (max-width: 815px) {
+  .right-menu {
+    display: none;
+  }
+
+  .navbar {
+    display: none;
+  }
+
+  .header {
+    &__inner {
+      min-width: 100%;
+    }
+
+    &__burger-menu {
+      display: block;
+
+      .el-drawer {
+        padding: 10px;
+      }
+    }
+  }
 }
 </style>

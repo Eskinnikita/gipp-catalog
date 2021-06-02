@@ -1,7 +1,7 @@
 <template>
   <div class="news">
     <div class="news__filters">
-      <news-filter/>
+      <news-filter ref="filters"/>
     </div>
     <div class="news__content">
       <div class="news__header news-header">
@@ -57,15 +57,28 @@ export default {
         this.search = this.$route.query.search
         this.params.search = this.$route.query.search
       }
+      if (this.$route.query.types) {
+        this.params.types = this.$route.query.types
+      }
     }
     this.$store.dispatch('article/getAllArticles', this.params)
+  },
+  mounted() {
+    this.setQueryValues(['types'])
+    this.$watch(
+      "$refs.filters.parameters.types",
+      (new_value, old_value) => {
+        this.params.types = new_value
+      },
+    );
   },
   data() {
     return {
       search: '',
       params: {
         page: '1',
-        search: ''
+        search: '',
+        types: []
       }
     }
   },
@@ -85,6 +98,17 @@ export default {
       this.timer = setTimeout(() => {
         this.params.search = this.search.trim().toLowerCase()
       }, 800);
+    },
+    setQueryValues(keys) {
+      keys.forEach(key => {
+        if (this.$route.query[key]) {
+          if(Array.isArray(this.$route.query[key])) {
+            this.$refs.filters.parameters[key] = this.$route.query[key]
+          } else {
+            this.$refs.filters.parameters[key] = [this.$route.query[key]]
+          }
+        }
+      })
     },
   },
   computed: {

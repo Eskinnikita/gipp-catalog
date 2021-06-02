@@ -143,6 +143,57 @@ export default {
       color: var(--accent-color) !important;
     }
   }
+}
 
+@media (max-width: 575.98px) {
+  .main-page {
+    &__col {
+      &_right {
+        display: none;
+      }
+      &_left {
+        margin-right: 0;
+      }
+    }
+
+    &__block {
+      &_fresh-pubs {
+        flex-direction: column;
+        align-items: start;
+      }
+    }
+  }
+
+  .rec-publication {
+    width: 100% !important;
+    margin-bottom: 20px;
+  }
+
+  .main-news {
+    flex-direction: column;
+
+    &__right {
+      margin-left: 0 !important;
+    }
+  }
+}
+
+@media (min-width: 576px) and (max-width: 815px) {
+  .main-page {
+    &__col {
+      &_right {
+        display: none;
+      }
+      &_left {
+        margin-right: 0;
+      }
+    }
+
+    &__block {
+      &_fresh-pubs {
+        overflow-x: scroll;
+      }
+    }
+  }
 }
 </style>

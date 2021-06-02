@@ -1,9 +1,9 @@
 <template>
   <div>
-    <Header />
+    <Header/>
     <main class="page">
       <div class="page__container">
-        <Nuxt />
+        <Nuxt/>
       </div>
     </main>
   </div>
@@ -18,7 +18,7 @@ export default {};
 
 html {
   font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, sans-serif;
+  Roboto, "Helvetica Neue", Arial, sans-serif;
   font-size: 16px;
   word-spacing: 1px;
   background-color: #ebeef5;
@@ -39,6 +39,18 @@ a {
 
 .el-avatar > img {
   width: 100% !important;
+}
+
+.header {
+  &__burger-menu {
+    .el-button {
+      font-size: 25px;
+    }
+
+    .el-drawer {
+      padding: 40px 15px !important;
+    }
+  }
 }
 
 .page {
@@ -85,14 +97,17 @@ a {
   //min-width: 100px;
   line-height: normal;
   padding: 30px 15px 20px;
+
   img {
     object-fit: cover;
     max-height: 250px;
   }
 }
+
 .avatar-uploader .el-upload:hover {
   border-color: #409EFF;
 }
+
 .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
@@ -119,7 +134,7 @@ textarea {
   }
 }
 
-.ql-container{
+.ql-container {
   min-height: 300px !important;
 }
 
@@ -139,5 +154,13 @@ textarea {
 .vc-compact-color-item {
   width: 30px !important;
   height: 30px !important;
+}
+
+@media (max-width: 575.98px) {
+  .page {
+    &__container {
+      margin-top: 65px !important;
+    }
+  }
 }
 </style>

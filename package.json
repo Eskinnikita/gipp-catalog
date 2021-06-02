@@ -32,6 +32,7 @@
     "moment": "^2.29.1",
     "nuxt": "^2.15.3",
     "quill-image-uploader": "^1.2.2",
+    "vue-burger-menu": "^2.0.5",
     "vue-color": "^2.8.1",
     "vue-editor-js": "^2.0.2",
     "vue-quill-editor": "^3.0.6",

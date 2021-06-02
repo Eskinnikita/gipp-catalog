@@ -113,7 +113,7 @@ router.get('/:id', async (req, res) => {
 
 router.post('/all', async (req, res) => {
   try {
-    const {page, search} = req.body
+    const {page, search, types} = req.body
     const limit = 10
     const options = {
       where: {},
@@ -132,6 +132,15 @@ router.post('/all', async (req, res) => {
           model: Organ, attributes: ['id', 'name', 'role'],
         }
       ]
+    }
+    if (types.length) {
+      options.where.authorRole = types.map(el => {
+        if(el === 'Издательство') {
+          return 3
+        } else {
+          return 2
+        }
+      })
     }
     if (search && search !== '') {
       options.where.title = sequelize.where(sequelize.fn('LOWER', sequelize.col('title')), 'LIKE', '%' + search + '%')
