@@ -56,7 +56,7 @@
       <div class="snippet-list__users">
         <h3 class="snippet-list__title">Комментарии на рассмотрение</h3>
         <template v-if="items.rows.length">
-          <comment-snippet
+          <review-snippet
             :approved="false"
             :show-controls="true"
             @openConfirmDialog="openConfirmDialog"
@@ -106,12 +106,12 @@
 
 <script>
 import userSnippet from "@/components/cabinetSnippets/userSnippet"
-import commentSnippet from "@/components/snippets/commentSnippet"
+import reviewSnippet from "@/components/snippets/reviewSnippet"
 
 export default {
   components: {
     userSnippet,
-    commentSnippet
+    reviewSnippet
   },
   created() {
     if (this.$route.query.search) {

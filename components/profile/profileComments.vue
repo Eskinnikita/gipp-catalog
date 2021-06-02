@@ -1,11 +1,9 @@
 <template>
   <div class="profile-news">
-    <template v-if="reviews.length">
+    <template v-if="comments.length">
       <comment-snippet
         class="profile-news__review"
-        :show-controls="false"
-        :approved="true"
-        v-for="(item, index) in reviews"
+        v-for="(item, index) in comments"
         :comment-info="item"
         :key="index"
       />
@@ -17,13 +15,13 @@
 </template>
 
 <script>
-import commentSnippet from "@/components/snippets/commentSnippet"
+import commentSnippet from "@/components/news/commentSnippet"
 export default {
   components: {
     commentSnippet
   },
   props: {
-    reviews: {
+    comments: {
       type: Array,
       required: true
     }

@@ -17,7 +17,7 @@
           <font-awesome-icon :icon="{ prefix: 'fab', iconName: network.icon }"></font-awesome-icon> {{ network.title }}
         </ShareNetwork>
       </div>
-      <el-button class="accent-element" slot="reference" type="primary" plain icon="el-icon-share">
+      <el-button class="accent-element social-sharing__btn" slot="reference" type="primary" plain icon="el-icon-share">
       </el-button>
     </el-popover>
   </div>
@@ -79,6 +79,10 @@ export default {
 
     &__network {
       margin-bottom: 10px;
+    }
+
+    &__btn {
+      width: 100%;
     }
   }
 </style>

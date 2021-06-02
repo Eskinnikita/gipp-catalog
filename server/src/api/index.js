@@ -14,6 +14,7 @@ const articlesApi = require('./articles')
 const profileApi = require('./profile')
 const organizationsApi = require('./organizations')
 const favouritesApi = require('./favourites')
+const commentsApi = require('./comments')
 
 router.use(authApi)
 router.use('/users', usersApi)
@@ -28,5 +29,6 @@ router.use('/articles', articlesApi)
 router.use('/profile', profileApi)
 router.use('/organs', organizationsApi)
 router.use('/favourites', favouritesApi)
+router.use('/comments', commentsApi)
 
 module.exports = router;

@@ -1,13 +1,20 @@
 const express = require('express')
 const Publication = require('../models/publication')
 const Article = require('../models/article')
+const Comment = require('../models/comment')
+const Publisher = require('../models/publisher')
+const User = require('../models/user')
+const Organ = require('../models/organization')
+const authorParser = require('../utils/authorParser')
 
 const router = express.Router()
 
 router.post('/tab-content', async (req, res) => {
   try {
     const {tab, page, role, id} = req.body
-    let tabContent, limit
+    console.log(req.body)
+    let tabContent = {}
+    let limit
     if (tab === 'catalog') {
       limit = 12
       tabContent = await Publication.findAndCountAll({
@@ -26,6 +33,28 @@ router.post('/tab-content', async (req, res) => {
         attributes: {exclude: ['blocks']},
         order: [['updatedAt', 'DESC']],
       })
+      tabContent.limit = limit
+    } else if (tab === 'comments') {
+      limit = 6
+      const comments = await Comment.findAndCountAll({
+        where: {authorId: id, authorRole: role},
+        limit: limit,
+        offset: (+page - 1) * limit,
+        order: [['createdAt', 'DESC']],
+        include: [
+          {
+            model: Publisher, attributes: ['id', 'name', 'logoUrl', 'role'],
+          },
+          {
+            model: User, attributes: ['id', 'name', 'role'],
+          },
+          {
+            model: Organ, attributes: ['id', 'name', 'role'],
+          }
+        ]
+      })
+      const commentsCopy = JSON.parse(JSON.stringify(comments))
+      tabContent.rows = authorParser(commentsCopy.rows)
       tabContent.limit = limit
     }
     res.status(200).json(tabContent)

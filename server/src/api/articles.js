@@ -4,6 +4,8 @@ const Article = require('../models/article')
 const User = require('../models/user')
 const Organ = require('../models/organization')
 const Publisher = require('../models/publisher')
+const Comment = require('../models/comment')
+const authorParser = require('../utils/authorParser')
 const sequelize = require('sequelize')
 
 const router = express.Router()
@@ -70,12 +72,33 @@ router.post('/', upload.single('mainImage'), async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
+    Article.hasMany(Comment)
     const id = req.params.id
-    const article = await Article.findOne({where: {id}})
+    const article = await Article.findOne({
+      where: {id},
+      include: {
+        model: Comment,
+        include: [
+          {
+            model: Publisher,
+            attributes: ['id', 'name', 'logoUrl', 'role']
+          },
+          {
+            model: User,
+            attributes: ['id', 'name', 'role']
+          },
+          {
+            model: Organ,
+            attributes: ['id', 'name', 'role']
+          }
+        ]
+      }
+    })
       .catch(e => {
         res.status(404).json({message: e})
       })
     const articleCopy = JSON.parse(JSON.stringify(article))
+    articleCopy.Comments = authorParser(articleCopy.Comments)
     const authorModel = defineModel(article.authorRole)
     articleCopy.author = await authorModel.findOne(
       {
@@ -119,18 +142,7 @@ router.post('/all', async (req, res) => {
       }
     )
     const allArticlesCopy = JSON.parse(JSON.stringify(allArticles))
-    const roles = ['User', 'Publisher', 'Organ']
-    allArticlesCopy.rows.forEach(el => {
-      roles.forEach(role => {
-        if (el[role] !== null) {
-          if (el.hasOwnProperty(role) && el[role] && el[role].role === el.authorRole) {
-            el.author = el[role]
-            delete el[role]
-          }
-          delete el[role]
-        }
-      })
-    })
+    allArticlesCopy.rows = authorParser(allArticlesCopy.rows)
     allArticlesCopy.limit = limit
     res.status(200).json(allArticlesCopy)
   } catch (err) {

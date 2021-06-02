@@ -22,6 +22,9 @@ const Review = sequelize.define("Review", {
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  rating: {
+    type: DataTypes.INTEGER
+  },
   approved: {
     type: DataTypes.BOOLEAN,
     allowNull: false

@@ -10,13 +10,13 @@
                  v-if="profile && !profile.logoUrl && profile.logoUrl !== undefined">
             </div>
           </div>
-          <div class="profile-page__controls left__item">
-            <social-sharing v-if="profile.role === 2" :meta-info="socialInfo"/>
-          </div>
           <div class="left__item" v-if="isUserAdmin">
             <nuxt-link :to="`${profileId}/edit`">
               <el-button style="width: 100%" type="primary">Редактировать</el-button>
             </nuxt-link>
+          </div>
+          <div class="profile-page__controls left__item">
+            <social-sharing v-if="profile.role === 2" :meta-info="socialInfo"/>
           </div>
           <info-block v-if="profile.role === 2" :info-items="info"/>
         </div>
@@ -44,7 +44,7 @@
                 v-if="params.tab === 'news' && tabContent.rows && profile.role === 2"
                 :articles="tabContent.rows"
               />
-              <!--          <profile-comments :reviews="publisher.Reviews" v-if="params.tab === 'comments' && publisher.Reviews"/>-->
+              <profile-comments :comments="tabContent.rows" v-if="params.tab === 'comments' && tabContent.rows"/>
               <div class="profile-page__pagination">
                 <el-pagination
                   v-if="tabContent.rows && tabContent.rows.length"
@@ -82,7 +82,7 @@ export default {
     if (this.routeName === 'organization') {
       this.params.role = 2
       this.params.tab = 'news'
-    } else if (this.routeName === 'users') {
+    } else if (this.routeName === 'user') {
       this.params.role = 1
       this.params.tab = 'comments'
     }

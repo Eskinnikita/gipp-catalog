@@ -1,25 +1,43 @@
 <template>
-  <div class="article-page">
+  <div class="article">
     <div class="article__container">
       <div v-if="isUserArticleAuthor" class="article__controls">
         <el-button type="primary" @click="goToArticleEditor">Редактировать</el-button>
         <el-button type="text">Удалить</el-button>
       </div>
       <article-view v-if="article" :preview="false" :article="article"/>
+      <el-divider></el-divider>
+      <comment-section :comment-info="commentInfo" v-if="user"/>
+      <template v-else>
+        <p style="text-align: center">Войдите, чтобы оставить комментарий!</p>
+      </template>
+      <el-divider></el-divider>
+      <div class="article__comments">
+        <comment-snippet class="article__comment" v-for="(comment, index) in article.Comments" :key="index" :comment-info="comment"/>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import articleView from "@/components/news/articleView"
+import commentSection from "@/components/news/commentSection"
+import commentSnippet from "@/components/news/commentSnippet"
 
 export default {
   components: {
-    articleView
+    articleView,
+    commentSection,
+    commentSnippet
   },
   created() {
     this.articleId = this.$route.params.id
     this.$store.dispatch('article/getArticle', this.articleId)
+  },
+  data() {
+    return {
+      articleId: null,
+    }
   },
   head() {
     return {
@@ -43,11 +61,6 @@ export default {
       link: [{rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'}]
     }
   },
-  data() {
-    return {
-      articleId: null
-    }
-  },
   methods: {
     goToArticleEditor() {
       this.$router.push({path: `/editor/${this.article.id}`})
@@ -61,10 +74,17 @@ export default {
       return this.$store.state.auth.user
     },
     isUserArticleAuthor() {
-      if(this.user) {
+      if (this.user) {
         return this.article.authorRole === this.user.role && this.article.authorId === this.user.id || this.user.role === 4
       } else {
         return false
+      }
+    },
+    commentInfo() {
+      return {
+        articleId: this.articleId,
+        authorId: this.user.id,
+        authorRole: this.user.role
       }
     }
   },
@@ -77,13 +97,30 @@ export default {
 <style lang="scss" scoped>
 .article {
   &__container {
-    padding: 30px 20px 40px 20px;
+    padding: 30px 20px 60px 20px;
   }
 
   &__controls {
     display: flex;
     justify-content: center;
     margin-bottom: 10px;
+  }
+
+  &__comments {
+    width: 100%;
+    max-width: 650px;
+    margin: 20px auto;
+  }
+
+  &__comment {
+    margin-bottom: 25px;
+  }
+
+  &__comment-textarea {
+    textarea {
+      min-height: 100px !important;
+      font-size: 14px !important;
+    }
   }
 }
 </style>

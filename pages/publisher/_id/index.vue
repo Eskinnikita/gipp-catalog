@@ -10,13 +10,13 @@
              v-if="publisher && !publisher.logoUrl && publisher.logoUrl !== undefined">
         </div>
       </div>
-      <div class="profile-page__controls left__item">
-        <social-sharing :meta-info="socialInfo"/>
-      </div>
       <div class="left__item" v-if="isUserAdmin">
         <nuxt-link :to="`${publisherId}/edit`">
           <el-button class="accent-element" style="width: 100%" type="primary">Редактировать</el-button>
         </nuxt-link>
+      </div>
+      <div class="profile-page__controls left__item">
+        <social-sharing :meta-info="socialInfo"/>
       </div>
       <info-block :info-items="info"/>
     </div>
@@ -56,7 +56,9 @@
             v-if="params.tab === 'news' && tabContent.rows"
             :articles="tabContent.rows"
           />
-          <!--          <profile-comments :reviews="publisher.Reviews" v-if="params.tab === 'comments' && publisher.Reviews"/>-->
+          <profile-comments
+            v-if="params.tab === 'comments' && tabContent.rows"
+            :comments="tabContent.rows"/>
           <div class="profile-page__pagination">
             <el-pagination
               v-if="tabContent.rows && tabContent.rows.length"

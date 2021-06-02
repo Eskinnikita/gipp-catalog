@@ -12,17 +12,13 @@
            v-if="publication && !publication.coverLink && publication.coverLink !== undefined">
       </div>
       <div class="profile-page__controls controls">
-        <div class="left__item" v-if="isUserAdmin">
-          <nuxt-link :to="`${publicationId}/edit`">
-            <el-button class="accent-element" style="width: 100%" type="primary">Редактировать</el-button>
-          </nuxt-link>
-        </div>
         <a class="left__item" :href="publication.subsLink" target="_blank">
           <el-button class="accent-element" style="width: 100%" type="primary">Подписаться</el-button>
         </a>
         <div class="controls__bottom left__item">
-          <social-sharing :meta-info="socialInfo"/>
-          <favourite-button :is-fav="publication.favourite" @click.native="addToFavourite"/>
+          <social-sharing class="controls__row-button" :meta-info="socialInfo"/>
+          <favourite-button class="controls__row-button" :is-fav="publication.favourite"
+                            @click.native="addToFavourite"/>
         </div>
       </div>
       <info-block v-if="info.length" :info-items="info"/>
@@ -36,10 +32,12 @@
         <p class="profile-page__desc" v-if="publication.desc">
           {{ publication.desc }}
         </p>
-        <div class="profile-page__tags-container"
-             v-if="publication.publisher.tags && publication.publisher.tags.length">
-          <!--          <el-tag :type="randomType()" v-for="item in publication.publisher.Publications" :key="item">{{ item.title }}</el-tag>-->
-        </div>
+<!--        <div class="profile-page__tags-container">-->
+<!--          <el-tag :type="randomType()" v-for="item in publication.publisher.Publications" :key="item">{{-->
+<!--              item.title-->
+<!--            }}-->
+<!--          </el-tag>-->
+<!--        </div>-->
         <div class="profile-page__recommends recommends" v-if="publication.publisher.Publications.length">
           <h4 class="profile-page__subtitle">Еще от <b>{{ publication.publisher.name }}</b></h4>
           <div class="recommends__container"
@@ -51,12 +49,13 @@
         <div class="profile-page__reviews reviews">
           <div class="reviews__header">
             <h4 class="profile-page__subtitle">Отзывы</h4>
-            <el-button v-if="!couldReview" type="primary" @click="$refs.reviewModal.openModal()">Оставить отзыв
+            <el-button v-if="!couldReview" class="accent-element" type="primary" @click="$refs.reviewModal.openModal()">
+              Оставить отзыв
             </el-button>
           </div>
           <div class="reviews__container">
             <template v-if="publication.Reviews.length">
-              <comment-snippet
+              <review-snippet
                 :approved="true"
                 class="profile-page__comment"
                 v-for="(item, index) in publication.Reviews"
@@ -77,7 +76,7 @@
 <script>
 import infoBlock from "@/components/profile/infoBlock"
 import recPublications from "@/components/profile/snippets/recPublications"
-import commentSnippet from "@/components/snippets/commentSnippet"
+import reviewSnippet from "@/components/snippets/reviewSnippet"
 import reviewModal from "@/components/modals/reviewModal"
 import socialSharing from "@/components/social/socialSharing"
 import favouriteButton from "@/components/profile/favouriteButton"
@@ -87,7 +86,7 @@ export default {
   components: {
     infoBlock,
     recPublications,
-    commentSnippet,
+    reviewSnippet,
     reviewModal,
     socialSharing,
     favouriteButton
@@ -342,9 +341,13 @@ export default {
   &__bottom {
     display: flex;
     justify-content: space-between;
+  }
 
-    * {
-      flex: 1;
+  &__row-button {
+    width: 50%;
+
+    &:first-child {
+      margin-right: 15px;
     }
   }
 }

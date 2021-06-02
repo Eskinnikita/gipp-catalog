@@ -108,6 +108,7 @@ export default {
   max-width: 650px;
   margin: 0 auto;
   color: #303133;
+  padding-bottom: 20px;
 
   &__title {
     color: #000;

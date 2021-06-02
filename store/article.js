@@ -16,6 +16,10 @@ export const mutations = {
   },
   async SET_ARTICLE_ON_UPDATE(state, article) {
     state.articleOnUpdate = article
+  },
+  ADD_COMMENT(state, comment) {
+    console.log(comment)
+    state.article.Comments.unshift(comment)
   }
 }
 
@@ -74,6 +78,19 @@ export const actions = {
       console.log(e)
     }
   },
+  async sendComment({commit}, data) {
+    try {
+      let res = null
+      res = await this.$axios.$post(`/comments`, data)
+      if (res) {
+        console.log(res)
+        commit('ADD_COMMENT', res[0])
+        return res
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
 }
 
 export const getters = {}
