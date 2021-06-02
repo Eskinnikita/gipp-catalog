@@ -8,6 +8,7 @@ const User = require('../models/user')
 const PubTag = require('../models/pubTag')
 const Review = require('../models/review')
 const Organ = require('../models/organization')
+const Article = require('../models/article')
 const UserPublications = require('../models/userPublications')
 const PublisherConfig = require('../models/publisherConfig')
 
@@ -110,10 +111,11 @@ router.post('/', async (req, res) => {
       order: [
         [Publication, 'updatedAt', 'DESC']
       ]
-    }).catch(e => {
-      console.log(e)
-      res.status(404).json({message: e})
     })
+      .catch(e => {
+        console.log(e)
+        res.status(404).json({message: e})
+      })
     const isFavourite = await UserPublications.findOne({where: req.body})
       .catch(e => {
         console.log(e)
@@ -159,6 +161,29 @@ router.patch('/:id', upload.single('cover'), async (req, res) => {
       res.status(409).json({message: e})
     })
     res.status(200).json(updatedPublication)
+  } catch (e) {
+    res.status(500).json({message: e})
+  }
+})
+
+router.get('/main-page', async (req, res) => {
+  try {
+    const mainPageData = {}
+    const articles = await Article.findAll({
+      limit: 9,
+      order: [['updatedAt', 'DESC']],
+      attributes: {exclude: ['blocks']}
+    })
+    const publications = await Publication.findAll({
+      limit: 11,
+      order: [['updatedAt', 'DESC']],
+      attributes: ['id', 'coverLink', 'title', 'age', 'count', 'period']
+    })
+    mainPageData.mainNews = articles.slice(0,4)
+    mainPageData.sideNews = articles.splice(4, articles.length - 1)
+    mainPageData.freshPubs = publications.slice(0,3)
+    mainPageData.pubsList = publications.slice(3, publications.length)
+    res.status(200).json(mainPageData)
   } catch (e) {
     res.status(500).json({message: e})
   }

@@ -16,7 +16,7 @@ router.post('/tab-content', async (req, res) => {
     let tabContent = {}
     let limit
     if (tab === 'catalog') {
-      limit = 12
+      limit = 8
       tabContent = await Publication.findAndCountAll({
         where: {publisherId: id},
         limit: limit,

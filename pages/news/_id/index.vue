@@ -13,7 +13,9 @@
       </template>
       <el-divider></el-divider>
       <div class="article__comments">
-        <comment-snippet class="article__comment" v-for="(comment, index) in article.Comments.slice().reverse()" :key="index" :comment-info="comment"/>
+        <template   v-if="article.Comments && article.Comments.length">
+          <comment-snippet class="article__comment" v-for="(comment, index) in article.Comments.slice().reverse()" :key="index" :comment-info="comment"/>
+        </template>
       </div>
     </div>
   </div>

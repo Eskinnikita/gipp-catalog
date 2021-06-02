@@ -42,7 +42,7 @@
           <h4 class="profile-page__subtitle">Еще от <b>{{ publication.publisher.name }}</b></h4>
           <div class="recommends__container"
                :style="{ 'justify-content': publication.publisher.Publications.length === 2 ? 'flex-start' : 'space-between'}">
-            <rec-publications v-for="(recPub, index) in publication.publisher.Publications" :rec-pub="recPub"
+            <rec-publications v-if="index < 4" v-for="(recPub, index) in publication.publisher.Publications" :rec-pub="recPub"
                               :key="index"/>
           </div>
         </div>
@@ -212,7 +212,7 @@ export default {
   }
 
   &__left {
-    max-width: 190px;
+    width: 190px;
     margin-right: 30px;
   }
 
@@ -223,6 +223,7 @@ export default {
   &__image {
     width: 100%;
     object-fit: contain;
+    min-width: 180px;
   }
 
   &__info {
