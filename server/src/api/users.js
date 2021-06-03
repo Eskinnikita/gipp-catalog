@@ -34,6 +34,7 @@ const upload = multer({
   fileFilter: fileFilter
 })
 
+//Подтвеждение заявки
 router.post('/confirm', passport.authenticate('jwt', {session: false}), async (req, res) => {
   try {
     const {role, id} = req.body
@@ -81,6 +82,7 @@ router.post('/confirm', passport.authenticate('jwt', {session: false}), async (r
   }
 })
 
+//Отклонение заявки
 router.post('/deny', passport.authenticate('jwt', {session: false}), async (req, res) => {
   try {
     const {role, id, comment} = req.body
@@ -119,6 +121,7 @@ router.post('/deny', passport.authenticate('jwt', {session: false}), async (req,
   }
 })
 
+//Получение пользователя
 router.get('/:id', async (req, res) => {
   try {
     const id = req.params.id
@@ -129,6 +132,7 @@ router.get('/:id', async (req, res) => {
   }
 })
 
+//Обновление пользователя
 router.patch('/:id', upload.single('logo'),async (req, res) => {
   try {
     const id = req.params.id

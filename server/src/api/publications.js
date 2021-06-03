@@ -40,6 +40,7 @@ const upload = multer({
   fileFilter: fileFilter
 })
 
+//Добавление издания
 router.post('/create', upload.single('cover'), async (req, res) => {
   try {
     const parsedPublication = JSON.parse(req.body.publication)
@@ -59,6 +60,7 @@ router.post('/create', upload.single('cover'), async (req, res) => {
   }
 })
 
+//Получение издания
 router.post('/', async (req, res) => {
   try {
     const {publicationId, userId} = req.body
@@ -129,6 +131,7 @@ router.post('/', async (req, res) => {
   }
 })
 
+//Получение издания для обновления
 router.get('/update/:id', async (req, res) => {
   try {
     const id = req.params.id
@@ -144,6 +147,7 @@ router.get('/update/:id', async (req, res) => {
   }
 })
 
+//Обновление издания
 router.patch('/:id', upload.single('cover'), async (req, res) => {
   try {
     const id = req.params.id
@@ -166,6 +170,7 @@ router.patch('/:id', upload.single('cover'), async (req, res) => {
   }
 })
 
+//Получение данных для главной страницы
 router.get('/main-page', async (req, res) => {
   try {
     const mainPageData = {}

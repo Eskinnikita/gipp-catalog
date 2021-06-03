@@ -5,9 +5,11 @@ const Article = require('../models/article')
 const Publisher = require('../models/publisher')
 const User = require('../models/user')
 const Organ = require('../models/organization')
+const passport = require('passport')
 
 const router = express.Router()
 
+//Получение изданий для каталога
 router.post('/all', async (req, res) => {
   try {
     const {page, age, types, search} = req.body
@@ -38,7 +40,7 @@ router.post('/all', async (req, res) => {
   }
 })
 
-
+//Получение данных для глобального поиска
 router.post('/search', async (req, res) => {
   try {
     Publication.belongsTo(Publisher)

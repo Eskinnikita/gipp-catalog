@@ -9,6 +9,7 @@ const authorParser = require('../utils/authorParser')
 
 const router = express.Router()
 
+//Получение данный для отображение во вкладке профиля
 router.post('/tab-content', async (req, res) => {
   try {
     const {tab, page, role, id} = req.body

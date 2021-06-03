@@ -5,6 +5,7 @@ const User = require('../models/user')
 const Organ = require('../models/organization')
 const Review = require('../models/review')
 const Publisher = require('../models/Publisher')
+const passport = require('passport')
 
 const router = express.Router()
 
@@ -27,7 +28,8 @@ const defineModel = (role) => {
   return Model
 }
 
-router.post('/users/pubs/all', async (req, res) => {
+//Получешние списка публикаций для администратора
+router.post('/users/pubs/all', passport.authenticate("jwt", { session: false }), async (req, res) => {
   try {
     const {page, role, search} = req.body
     const Model = defineModel(+role)
@@ -61,7 +63,8 @@ router.post('/users/pubs/all', async (req, res) => {
   }
 })
 
-router.post('/users/users/all', async (req, res) => {
+//Получешние списка пользователей для администратора
+router.post('/users/users/all', passport.authenticate("jwt", { session: false }), async (req, res) => {
   try {
     const {page, search} = req.body
     const limit = 10
@@ -85,7 +88,8 @@ router.post('/users/users/all', async (req, res) => {
   }
 })
 
-router.post('/reviews/all', async (req, res) => {
+//Получешние списка отзывов для администратора
+router.post('/reviews/all', passport.authenticate("jwt", { session: false }),async (req, res) => {
   try {
     const {page} = req.body
     const limit = 10
@@ -123,7 +127,8 @@ router.post('/reviews/all', async (req, res) => {
   }
 })
 
-router.post('/reviews/confirm', async (req, res) => {
+//Подтверждение отзыва
+router.post('/reviews/confirm', passport.authenticate("jwt", { session: false }), async (req, res) => {
   try {
     const {id} = req.body
     const updatedReview = await Review.update({approved: true}, {

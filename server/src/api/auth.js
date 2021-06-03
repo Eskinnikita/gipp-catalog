@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken')
 
 const router = express.Router()
 
+//Авторизация пользователя
 router.post('/login', async (req, res) => {
   const {email, password} = req.body
   let userWithEmail
@@ -59,6 +60,7 @@ router.post('/login', async (req, res) => {
   res.status(200).json(userWithToken)
 })
 
+//Регистрация пользователя
 router.post('/register', async (req, res) => {
   const {name, email, password, role} = req.body
 
@@ -94,6 +96,7 @@ router.post('/register', async (req, res) => {
   }
 })
 
+//Отправка запроса организации или издателя
 router.post('/request', async (req, res) => {
   const {name, phone, email, address, role, approved} = req.body
   let Model

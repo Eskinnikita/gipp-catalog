@@ -35,6 +35,7 @@ const upload = multer({
   fileFilter: fileFilter
 })
 
+//Получение издателя
 router.get('/:id', async (req, res) => {
   try {
     const id = req.params.id
@@ -57,6 +58,7 @@ router.get('/:id', async (req, res) => {
   }
 })
 
+//Обновление издателя
 router.patch('/:id', upload.single('logo'), async (req, res) => {
   try {
     const id = req.params.id

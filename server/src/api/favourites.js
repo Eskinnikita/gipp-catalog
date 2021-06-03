@@ -3,7 +3,7 @@ const UserPublication = require('../models/userPublications')
 const Publication = require('../models/publication')
 const router = express.Router()
 
-
+//Добавление или удаление из избранного
 router.post('/', async (req, res) => {
   try {
     const existedAssoc = await UserPublication.findOne({where: req.body})
@@ -22,6 +22,7 @@ router.post('/', async (req, res) => {
   }
 })
 
+//Получение списка избранного
 router.post('/all', async (req, res) => {
   try {
     UserPublication.belongsTo(Publication, {foreignKey: 'publicationId'})

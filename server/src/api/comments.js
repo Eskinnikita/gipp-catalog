@@ -7,6 +7,7 @@ const authorParser = require('../utils/authorParser')
 
 const router = express.Router()
 
+//Добавление комментария
 router.post('/', async (req, res) => {
   try {
     const comment = await Comment.create(req.body).catch(e => {

@@ -3,6 +3,7 @@ const Review = require('../models/review')
 
 const router = express.Router()
 
+//Добавление отзыва
 router.post('/', async (req, res) => {
   try {
     const review = Review.create(req.body).catch(e => {

@@ -28,6 +28,7 @@ const upload = multer({
   fileFilter: fileFilter
 })
 
+//Загрузка файлов новостной статьи
 router.post('/save/image', upload.single('image'), async (req, res) => {
   try {
     const serverUrl = process.env.PRODUCTION == 'true' ? '' : 'http://localhost:8082'

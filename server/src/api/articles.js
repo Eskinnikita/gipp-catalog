@@ -6,6 +6,7 @@ const Organ = require('../models/organization')
 const Publisher = require('../models/publisher')
 const Comment = require('../models/comment')
 const authorParser = require('../utils/authorParser')
+const passport = require('passport')
 const sequelize = require('sequelize')
 
 const router = express.Router()
@@ -54,6 +55,7 @@ const defineModel = (role) => {
   return Model
 }
 
+//Добавление новостной статьи
 router.post('/', upload.single('mainImage'), async (req, res) => {
   try {
     const parsedData = JSON.parse(req.body.data)
@@ -70,6 +72,7 @@ router.post('/', upload.single('mainImage'), async (req, res) => {
   }
 })
 
+//Получение новостной статьи
 router.get('/:id', async (req, res) => {
   try {
     Article.hasMany(Comment)
@@ -111,6 +114,7 @@ router.get('/:id', async (req, res) => {
   }
 })
 
+//Получение списках всех новостных статей
 router.post('/all', async (req, res) => {
   try {
     const {page, search, types} = req.body
@@ -159,6 +163,7 @@ router.post('/all', async (req, res) => {
   }
 })
 
+//Обновление новостной статьи
 router.patch('/:id', upload.single('mainImage'), async (req, res) => {
   try {
     const id = req.params.id
