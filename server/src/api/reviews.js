@@ -4,7 +4,7 @@ const Review = require('../models/review')
 const router = express.Router()
 
 //Добавление отзыва
-router.post('/', async (req, res) => {
+router.post('/',  passport.authenticate("jwt", {session: false}), async (req, res) => {
   try {
     const review = Review.create(req.body).catch(e => {
       res.status(401).json({message: e.message})

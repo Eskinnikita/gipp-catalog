@@ -1,6 +1,7 @@
 const express = require('express')
 const Organ = require('../models/organization')
 const multer = require('multer')
+const passport = require('passport')
 
 const router = express.Router()
 
@@ -41,11 +42,11 @@ router.get('/:id', async (req, res) => {
 })
 
 //Обновление организации
-router.patch('/:id', upload.single('logo'),async (req, res) => {
+router.patch('/:id', upload.single('logo'), passport.authenticate("jwt", {session: false}), async (req, res) => {
   try {
     const id = req.params.id
     const infoToUpdate = JSON.parse(req.body.user)
-    if(req.body.logo !== 'null') {
+    if (req.body.logo !== 'null') {
       infoToUpdate.logoUrl = req.file.path
     }
     const updatedOrgan = await Organ.update(infoToUpdate, {

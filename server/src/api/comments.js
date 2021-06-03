@@ -3,12 +3,13 @@ const Comment = require('../models/comment')
 const User = require('../models/user')
 const Organ = require('../models/organization')
 const Publisher = require('../models/publisher')
+const passport = require('passport')
 const authorParser = require('../utils/authorParser')
 
 const router = express.Router()
 
 //Добавление комментария
-router.post('/', async (req, res) => {
+router.post('/', passport.authenticate("jwt", {session: false}), async (req, res) => {
   try {
     const comment = await Comment.create(req.body).catch(e => {
       res.status(401).json({message: e.message})

@@ -56,7 +56,7 @@ const defineModel = (role) => {
 }
 
 //Добавление новостной статьи
-router.post('/', upload.single('mainImage'), async (req, res) => {
+router.post('/', upload.single('mainImage'), passport.authenticate("jwt", {session: false}), async (req, res) => {
   try {
     const parsedData = JSON.parse(req.body.data)
     if (req.file) {
@@ -164,7 +164,7 @@ router.post('/all', async (req, res) => {
 })
 
 //Обновление новостной статьи
-router.patch('/:id', upload.single('mainImage'), async (req, res) => {
+router.patch('/:id', upload.single('mainImage'), passport.authenticate("jwt", {session: false}), async (req, res) => {
   try {
     const id = req.params.id
     const parsedData = JSON.parse(req.body.data)

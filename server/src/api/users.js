@@ -133,7 +133,7 @@ router.get('/:id', async (req, res) => {
 })
 
 //Обновление пользователя
-router.patch('/:id', upload.single('logo'),async (req, res) => {
+router.patch('/:id', upload.single('logo'),  passport.authenticate("jwt", {session: false}), async (req, res) => {
   try {
     const id = req.params.id
     const infoToUpdate = JSON.parse(req.body.user)

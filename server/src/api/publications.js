@@ -41,7 +41,7 @@ const upload = multer({
 })
 
 //Добавление издания
-router.post('/create', upload.single('cover'), async (req, res) => {
+router.post('/create', upload.single('cover'),  passport.authenticate("jwt", {session: false}), async (req, res) => {
   try {
     const parsedPublication = JSON.parse(req.body.publication)
     if (req.file) {
@@ -132,7 +132,7 @@ router.post('/', async (req, res) => {
 })
 
 //Получение издания для обновления
-router.get('/update/:id', async (req, res) => {
+router.get('/update/:id',  passport.authenticate("jwt", {session: false}), async (req, res) => {
   try {
     const id = req.params.id
     const publication = await Publication.findOne({
@@ -148,7 +148,7 @@ router.get('/update/:id', async (req, res) => {
 })
 
 //Обновление издания
-router.patch('/:id', upload.single('cover'), async (req, res) => {
+router.patch('/:id', upload.single('cover'),  passport.authenticate("jwt", {session: false}), async (req, res) => {
   try {
     const id = req.params.id
     const infoToUpdate = JSON.parse(req.body.publication)

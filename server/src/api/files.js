@@ -1,4 +1,5 @@
 const express = require('express')
+const passport = require('passport')
 const multer = require('multer')
 
 const router = express.Router()
@@ -29,7 +30,7 @@ const upload = multer({
 })
 
 //Загрузка файлов новостной статьи
-router.post('/save/image', upload.single('image'), async (req, res) => {
+router.post('/save/image', upload.single('image'),  passport.authenticate("jwt", {session: false}), async (req, res) => {
   try {
     const serverUrl = process.env.PRODUCTION == 'true' ? '' : 'http://localhost:8082'
     if (req.file.path !== 'null') {

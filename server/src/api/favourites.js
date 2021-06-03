@@ -2,9 +2,10 @@ const express = require('express')
 const UserPublication = require('../models/userPublications')
 const Publication = require('../models/publication')
 const router = express.Router()
+const passport = require('passport')
 
 //Добавление или удаление из избранного
-router.post('/', async (req, res) => {
+router.post('/', passport.authenticate("jwt", {session: false}), async (req, res) => {
   try {
     const existedAssoc = await UserPublication.findOne({where: req.body})
     const favStatus = {}
@@ -23,7 +24,7 @@ router.post('/', async (req, res) => {
 })
 
 //Получение списка избранного
-router.post('/all', async (req, res) => {
+router.post('/all', passport.authenticate("jwt", {session: false}), async (req, res) => {
   try {
     UserPublication.belongsTo(Publication, {foreignKey: 'publicationId'})
     const {id, role} = req.body
