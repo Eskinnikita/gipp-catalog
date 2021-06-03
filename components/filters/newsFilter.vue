@@ -3,7 +3,7 @@
     <el-form class="demo-form-inline">
       <div class="filter__block">
         <div class="filter__input-label">
-          Виды
+          Автор
         </div>
         <el-checkbox-group v-model="parameters.types" >
           <el-checkbox v-for="(type, index) in types" :label="type" :key="index">{{type}}</el-checkbox>

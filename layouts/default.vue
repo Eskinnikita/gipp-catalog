@@ -57,7 +57,7 @@ a {
   &__container {
     min-height: 100vh;
     padding: 15px;
-    margin: 85px auto 20px;
+    margin: 75px auto 20px;
     max-width: 1020px;
     background-color: #fff;
     border-radius: 4px;

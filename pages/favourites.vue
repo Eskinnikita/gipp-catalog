@@ -26,6 +26,7 @@
 import coverSnippet from "@/components/snippets/coverSnippet"
 
 export default {
+  middleware: "isAuth",
   components: {
     coverSnippet
   },

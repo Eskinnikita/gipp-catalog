@@ -58,6 +58,7 @@
 import confirmDialog from "@/components/modals/confirmDialog"
 
 export default {
+  middleware: "isOrganOrUser",
   components: {
     confirmDialog
   },

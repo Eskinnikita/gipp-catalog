@@ -1,6 +1,7 @@
 <template>
   <div class="profile-page" v-if="pageReady">
     <review-modal ref="reviewModal"/>
+    <login-modal ref="loginModal"/>
     <div class="profile-page__left left">
       <div class="profile-page__image-container left__item">
         <img
@@ -32,24 +33,25 @@
         <p class="profile-page__desc" v-if="publication.desc">
           {{ publication.desc }}
         </p>
-<!--        <div class="profile-page__tags-container">-->
-<!--          <el-tag :type="randomType()" v-for="item in publication.publisher.Publications" :key="item">{{-->
-<!--              item.title-->
-<!--            }}-->
-<!--          </el-tag>-->
-<!--        </div>-->
+        <!--        <div class="profile-page__tags-container">-->
+        <!--          <el-tag :type="randomType()" v-for="item in publication.publisher.Publications" :key="item">{{-->
+        <!--              item.title-->
+        <!--            }}-->
+        <!--          </el-tag>-->
+        <!--        </div>-->
         <div class="profile-page__recommends recommends" v-if="publication.publisher.Publications.length">
           <h4 class="profile-page__subtitle">Еще от <b>{{ publication.publisher.name }}</b></h4>
           <div class="recommends__container"
                :style="{ 'justify-content': publication.publisher.Publications.length === 2 ? 'flex-start' : 'space-between'}">
-            <rec-publications v-if="index < 4" v-for="(recPub, index) in publication.publisher.Publications" :rec-pub="recPub"
+            <rec-publications v-if="index < 4" v-for="(recPub, index) in publication.publisher.Publications"
+                              :rec-pub="recPub"
                               :key="index"/>
           </div>
         </div>
         <div class="profile-page__reviews reviews">
           <div class="reviews__header">
             <h4 class="profile-page__subtitle">Отзывы</h4>
-            <el-button v-if="!couldReview" class="accent-element" type="primary" @click="$refs.reviewModal.openModal()">
+            <el-button v-if="!couldReview" class="accent-element" type="primary" @click="openReviewModal">
               Оставить отзыв
             </el-button>
           </div>
@@ -80,6 +82,7 @@ import reviewSnippet from "@/components/snippets/reviewSnippet"
 import reviewModal from "@/components/modals/reviewModal"
 import socialSharing from "@/components/social/socialSharing"
 import favouriteButton from "@/components/profile/favouriteButton"
+import loginModal from "@/components/modals/loginModal"
 
 export default {
   layout: 'transparent',
@@ -89,7 +92,8 @@ export default {
     reviewSnippet,
     reviewModal,
     socialSharing,
-    favouriteButton
+    favouriteButton,
+    loginModal
   },
   created() {
     this.serverUrl = process.env.serverUrl
@@ -114,16 +118,27 @@ export default {
   },
   methods: {
     addToFavourite() {
-      this.$store.dispatch('publication/addToFavourite', {
-        userId: this.user.id,
-        userRole: this.user.role,
-        publicationId: this.publication.id,
-        isFavPage: false
-      })
+      if (this.user) {
+        this.$store.dispatch('publication/addToFavourite', {
+          userId: this.user.id,
+          userRole: this.user.role,
+          publicationId: this.publication.id,
+          isFavPage: false
+        })
+      } else {
+        this.$refs.loginModal.openModal()
+      }
     },
     randomType() {
       const types = ["success", "info", "warning", "danger"]
       return types[Math.floor(Math.random() * types.length)]
+    },
+    openReviewModal() {
+      if (this.user) {
+        this.$refs.reviewModal.openModal()
+      } else {
+        this.$refs.loginModal.openModal()
+      }
     }
   },
   computed: {

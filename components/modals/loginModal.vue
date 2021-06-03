@@ -14,6 +14,8 @@
         <el-input type="password" v-model="form.password"></el-input>
       </el-form-item>
     </el-form>
+    Нет аккаунта?
+    <el-button type="text" class="reg-btn" style="color: #1e88e5 !important;">Зарегистрироваться</el-button>
     <span slot="footer" class="dialog-footer">
       <el-button @click="closeModal">Отменить</el-button>
       <el-button type="primary" @click="login">Войти</el-button>
@@ -39,7 +41,7 @@ export default {
       this.dialogFormVisible = false;
     },
     login() {
-        this.$store.dispatch('auth/loginUser', this.form)
+      this.$store.dispatch('auth/loginUser', this.form)
         .then(() => {
           this.closeModal()
           this.$router.push({path: '/'})
@@ -49,4 +51,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.reg-btn span{
+
+}
+</style>

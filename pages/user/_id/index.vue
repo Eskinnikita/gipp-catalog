@@ -69,6 +69,7 @@ import profileComments from "@/components/profile/profileComments"
 import socialSharing from "@/components/social/socialSharing"
 
 export default {
+  middleware: "isOrganOrUser",
   layout: 'transparent',
   components: {
     infoBlock,

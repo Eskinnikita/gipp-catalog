@@ -75,19 +75,11 @@ if (process.browser) {
 }
 
 export default {
+  middleware: "isOrganOrPublisher",
   layout: 'transparent',
   components: {
     articleView,
     confirmDialog
-  },
-  beforeResolve(to, from, next) {
-    if (this.$store.getters['auth/notUser'] && this.$store.getters['auth/isAuthenticated']) {
-      console.log('ssss')
-      next('/')
-    } else {
-      console.log('mmm')
-      next();
-    }
   },
   created() {
     if (this.$route.params.id) {

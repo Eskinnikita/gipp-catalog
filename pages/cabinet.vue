@@ -30,8 +30,8 @@
 
 <script>
 import snippetsList from "@/components/cabinetSnippets/snippetsList"
-
 export default {
+  middleware: "isAdmin",
   components: {
     snippetsList
   },

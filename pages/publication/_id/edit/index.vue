@@ -112,6 +112,7 @@
 <script>
 import confirmDialog from "@/components/modals/confirmDialog"
 export default {
+  middleware: "isPublisher",
   components: {
     confirmDialog
   },

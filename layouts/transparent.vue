@@ -12,7 +12,6 @@
 <script>
 export default {
   created() {
-    console.log('TRANS RELOADED')
   }
 };
 </script>
@@ -52,7 +51,7 @@ a {
   &__container {
     min-height: 100vh;
     padding: 15px;
-    margin: 85px auto 20px;
+    margin: 75px auto 20px;
     max-width: 1020px;
     border-radius: 4px;
     &_transparent {

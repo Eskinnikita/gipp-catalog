@@ -57,6 +57,7 @@
 import confirmDialog from "@/components/modals/confirmDialog"
 import palette from '@/assets/jsons/palette.json'
 export default {
+  middleware: "isPublisher",
   components: {
     confirmDialog
   },
