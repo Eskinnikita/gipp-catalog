@@ -76,6 +76,12 @@ export default {
         this.params.age = new_value
       },
     );
+    this.$watch(
+      "$refs.filters.parameters.tags",
+      (new_value, old_value) => {
+        this.params.tags = new_value
+      },
+    );
   },
   data() {
     return {
@@ -84,7 +90,8 @@ export default {
         search: '',
         page: '1',
         types: [],
-        age: []
+        age: [],
+        tags: []
       }
     }
   },

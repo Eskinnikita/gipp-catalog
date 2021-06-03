@@ -6,18 +6,35 @@ const Publisher = require('../models/publisher')
 const User = require('../models/user')
 const Organ = require('../models/organization')
 const passport = require('passport')
+const {Op} = require('sequelize')
+const PublicationTags = require('../models/publicationTags')
 
 const router = express.Router()
 
 //Получение изданий для каталога
 router.post('/all', async (req, res) => {
   try {
-    const {page, age, types, search} = req.body
+    Publication.hasMany(PublicationTags)
+    const {page, age, types, tags, search} = req.body
+    console.log(tags)
     const limit = 16
     const options = {
       where: {},
       limit: limit,
       offset: (+page - 1) * limit,
+    }
+    if(tags.length) {
+      options.include = [
+        {
+          model: PublicationTags,
+          required: true,
+          where: {
+            pubTagId: {
+              [Op.in]: tags
+            }
+          }
+        }
+      ]
     }
     if (types.length) {
       options.where.type = types
@@ -34,6 +51,7 @@ router.post('/all', async (req, res) => {
       }
     )
     allPublications.limit = limit
+    // console.log(JSON.parse(JSON.stringify(allPublications)))
     res.status(200).json(allPublications)
   } catch (err) {
     res.status(500).json({message: err})
