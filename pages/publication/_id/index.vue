@@ -13,6 +13,9 @@
            v-if="publication && !publication.coverLink && publication.coverLink !== undefined">
       </div>
       <div class="profile-page__controls controls">
+        <nuxt-link class="left__item"  v-if="isUserAdmin"  :to="`${publication.id}/edit`">
+          <el-button class="accent-element" style="width: 100%" type="primary">Редактировать</el-button>
+        </nuxt-link>
         <a class="left__item" :href="publication.subsLink" target="_blank">
           <el-button class="accent-element" style="width: 100%" type="primary">Подписаться</el-button>
         </a>
@@ -48,6 +51,7 @@
                               :key="index"/>
           </div>
         </div>
+        <el-divider></el-divider>
         <div class="profile-page__reviews reviews">
           <div class="reviews__header">
             <h4 class="profile-page__subtitle">Отзывы</h4>
@@ -346,6 +350,10 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 15px;
+    .profile-page__subtitle {
+      margin-bottom: 0;
+    }
   }
 
   &__container {

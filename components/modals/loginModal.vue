@@ -15,7 +15,9 @@
       </el-form-item>
     </el-form>
     Нет аккаунта?
-    <el-button type="text" class="reg-btn" style="color: #1e88e5 !important;">Зарегистрироваться</el-button>
+    <nuxt-link :to="'/register'">
+      <el-button type="text" class="reg-btn" style="color: #1e88e5 !important;">Зарегистрироваться</el-button>
+    </nuxt-link>
     <span slot="footer" class="dialog-footer">
       <el-button @click="closeModal">Отменить</el-button>
       <el-button type="primary" @click="login">Войти</el-button>

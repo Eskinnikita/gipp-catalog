@@ -20,6 +20,9 @@
             :show-author="true"
           />
         </template>
+        <template v-else>
+          Ничего не найдено!
+        </template>
       </div>
       <div class="news__pagination">
         <el-pagination

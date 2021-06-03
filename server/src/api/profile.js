@@ -56,6 +56,7 @@ router.post('/tab-content', async (req, res) => {
       })
       const commentsCopy = JSON.parse(JSON.stringify(comments))
       tabContent.rows = authorParser(commentsCopy.rows)
+      tabContent.count = commentsCopy.count
       tabContent.limit = limit
     }
     res.status(200).json(tabContent)

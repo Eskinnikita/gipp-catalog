@@ -61,7 +61,7 @@
             :comments="tabContent.rows"/>
           <div class="profile-page__pagination">
             <el-pagination
-              v-if="tabContent.rows && tabContent.rows.length"
+              v-if="tabContent.rows && tabContent.rows.length && (tabContent.count > tabContent.limit)"
               @current-change="handleCurrentChange"
               :current-page="+params.page"
               layout="pager"

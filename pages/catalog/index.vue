@@ -9,6 +9,7 @@
         <el-input class="catalog-header__search" type="text" placeholder="Поиск" prefix-icon="el-icon-search" v-model="search"/>
       </div>
       <div
+        v-if="publications.rows && publications.rows.length"
         class="catalog__publications-container"
         :style="{'justify-content': publications.length > 3 ? 'space-between' : 'flex-start'}"
       >
@@ -19,6 +20,9 @@
           route="/publication"
         />
       </div>
+      <template v-else>
+        Ничего не найдено!
+      </template>
       <div class="catalog__pagination">
         <el-pagination
           @current-change="handleCurrentChange"
