@@ -8,4 +8,6 @@ const PubTag = sequelize.define("PubTag", {
   }
 });
 
+
+
 module.exports = PubTag;

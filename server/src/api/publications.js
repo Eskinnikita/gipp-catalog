@@ -11,6 +11,7 @@ const Organ = require('../models/organization')
 const Article = require('../models/article')
 const UserPublications = require('../models/userPublications')
 const PublisherConfig = require('../models/publisherConfig')
+const PublicationTags = require('../models/publicationTags')
 
 
 const router = express.Router()
@@ -43,7 +44,9 @@ const upload = multer({
 //Добавление издания
 router.post('/create', upload.single('cover'),  passport.authenticate("jwt", {session: false}), async (req, res) => {
   try {
+    PublicationTags.belongsTo(PubTag, {foreignKey: 'pubTagId'})
     const parsedPublication = JSON.parse(req.body.publication)
+    const tags = JSON.parse(req.body.tags)
     if (req.file) {
       parsedPublication.coverLink = req.file.path
     }
@@ -53,6 +56,15 @@ router.post('/create', upload.single('cover'),  passport.authenticate("jwt", {se
       .catch(e => {
         res.status(409).json({message: e})
       })
+    const parsedTags = []
+    tags.forEach(el => {
+       parsedTags.push({
+         publicationId: newPublication.id,
+         pubTagId: el.pubTagId
+       })
+    })
+    console.log(parsedTags)
+    await PublicationTags.bulkCreate(parsedTags)
     res.status(200).json(newPublication)
   } catch (e) {
     console.log(e)
@@ -66,6 +78,7 @@ router.post('/', async (req, res) => {
     const {publicationId, userId} = req.body
     Publication.hasMany(Review)
     Publisher.hasOne(PublisherConfig)
+    PublicationTags.belongsTo(PubTag, {foreignKey: 'pubTagId'})
     const publication = await Publication.findOne({
       where: {id: +publicationId},
       include: [
@@ -123,6 +136,14 @@ router.post('/', async (req, res) => {
         console.log(e)
         res.status(404).json({message: e})
       })
+    publicationCopy.tags = await PublicationTags.findAll({
+      where: {
+        publicationId: publicationId
+      },
+      include: {
+        model: PubTag
+      }
+    })
     publicationCopy.favourite = !!isFavourite
     res.status(200).json(publicationCopy)
   } catch (e) {
@@ -134,14 +155,23 @@ router.post('/', async (req, res) => {
 //Получение издания для обновления
 router.get('/update/:id',  passport.authenticate("jwt", {session: false}), async (req, res) => {
   try {
+    PublicationTags.belongsTo(PubTag, {foreignKey: 'pubTagId'})
     const id = req.params.id
     const publication = await Publication.findOne({
       where: {id}
     }).catch(e => {
       res.status(404).json({message: e})
     })
-    console.log(publication)
-    res.status(200).json(publication)
+    const publicationCopy = JSON.parse(JSON.stringify(publication))
+    publicationCopy.tags = await PublicationTags.findAll({
+      where: {
+        publicationId: id
+      },
+      include: {
+        model: PubTag
+      }
+    })
+    res.status(200).json(publicationCopy)
   } catch (e) {
     res.status(500).json({message: e})
   }
@@ -152,7 +182,7 @@ router.patch('/:id', upload.single('cover'),  passport.authenticate("jwt", {sess
   try {
     const id = req.params.id
     const infoToUpdate = JSON.parse(req.body.publication)
-
+    const tags = JSON.parse(req.body.tags)
     if (req.file) {
       infoToUpdate.coverLink = req.file.path
     }
@@ -161,8 +191,16 @@ router.patch('/:id', upload.single('cover'),  passport.authenticate("jwt", {sess
       where: {
         id
       }
-    }).catch(e => {
+    })
+      .catch(e => {
       res.status(409).json({message: e})
+    })
+    await PublicationTags.destroy({
+      where: {
+        publicationId: id
+      }
+    }).then(() => {
+      PublicationTags.bulkCreate(tags)
     })
     res.status(200).json(updatedPublication)
   } catch (e) {

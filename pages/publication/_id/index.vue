@@ -36,12 +36,12 @@
         <p class="profile-page__desc" v-if="publication.desc">
           {{ publication.desc }}
         </p>
-        <!--        <div class="profile-page__tags-container">-->
-        <!--          <el-tag :type="randomType()" v-for="item in publication.publisher.Publications" :key="item">{{-->
-        <!--              item.title-->
-        <!--            }}-->
-        <!--          </el-tag>-->
-        <!--        </div>-->
+        <div class="profile-page__tags-container">
+          <el-tag v-if="publication.tags.length" class="profile-page__tag" :type="randomType()" v-for="(item, index) in publication.tags" :key="index">{{
+              item.PubTag.tag
+            }}
+          </el-tag>
+        </div>
         <div class="profile-page__recommends recommends" v-if="publication.publisher.Publications.length">
           <h4 class="profile-page__subtitle">Еще от <b>{{ publication.publisher.name }}</b></h4>
           <div class="recommends__container"
@@ -319,7 +319,12 @@ export default {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    margin-bottom: 30px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+  }
+
+  &__tag {
+    margin-bottom: 10px;
   }
 }
 

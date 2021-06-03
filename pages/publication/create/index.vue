@@ -90,13 +90,13 @@
             <el-input v-model="publication.subindex" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="Выберите один или несколько тегов"><br/>
-            <el-select v-model="publication.PubTags" multiple placeholder="Теги">
+            <el-select v-model="publicationTags" multiple placeholder="Теги">
               <el-option
                 filterable
                 v-for="(item, index) in tags"
                 :key="index"
                 :label="item.tag"
-                :value="item.tag">
+                :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -126,10 +126,11 @@ export default {
   },
   data() {
     return {
-      tags: null,
+      tags: [],
       imageFile: null,
       disabled: false,
       imageUrl: '',
+      publicationTags: [],
       publication: {
         publisherId: this.$store.state.auth.user.id,
         title: '',
@@ -140,8 +141,7 @@ export default {
         count: 1,
         period: 'неделю',
         strips: null,
-        weight: null,
-        PubTags: []
+        weight: null
       },
       rules: {
         title: [
@@ -212,20 +212,22 @@ export default {
       this.imageFile = file.raw
     },
     parseTags() {
-      const tagsArr = []
-      this.publication.PubTags.forEach(el => {
-        tagsArr.push({'tag': el})
+      const tags = []
+      this.publicationTags.forEach(el => {
+        tags.push({
+          pubTagId: el
+        })
       })
-      this.publication.PubTags = tagsArr
+      return tags
     },
     createPublication() {
-      this.parseTags()
-      console.log(this.publication)
+      const parsedTags = this.parseTags()
       this.publication.weight = +this.publication.weight
       this.publication.strips = +this.publication.strips
       const formData = new FormData();
       formData.append('publication', JSON.stringify(this.publication))
       formData.append('cover', this.imageFile)
+      formData.append('tags', JSON.stringify(parsedTags))
       this.$store.dispatch('publication/createPublication', formData)
         .then(res => {
           this.$notify({

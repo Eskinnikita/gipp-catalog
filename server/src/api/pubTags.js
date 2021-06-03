@@ -1,11 +1,14 @@
 const express = require('express')
-const pubTag = require('../models/pubTag')
+const passport = require('passport')
+const PubTag = require('../models/pubTag')
 
 const router = express.Router()
 
-router.get('/pub/all', async (req, res) => {
+router.get('/pub/all', passport.authenticate("jwt", {session: false}), async (req, res) => {
   try {
-    const tags = await pubTag.findAll().catch(
+    const tags = await PubTag.findAll({
+      order: [['tag', 'ASC']]
+    }).catch(
       e => {
         console.log("Error", e)
       }

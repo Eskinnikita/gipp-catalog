@@ -89,16 +89,17 @@
           <el-form-item label="Подписной индекс">
             <el-input v-model="publication.subindex" autocomplete="off"></el-input>
           </el-form-item>
-          <!--          <el-form-item label="Выберите один или несколько тегов"><br/>-->
-          <!--            <el-select v-model="publication.tags" multiple placeholder="Теги">-->
-          <!--              <el-option-->
-          <!--                v-for="item in age"-->
-          <!--                :key="item.value"-->
-          <!--                :label="item.label"-->
-          <!--                :value="item.value">-->
-          <!--              </el-option>-->
-          <!--            </el-select>-->
-          <!--          </el-form-item>-->
+          <el-form-item label="Выберите один или несколько тегов"><br/>
+            <el-select v-model="publicationTags" multiple placeholder="Теги">
+              <el-option
+                filterable
+                v-for="(item, index) in tags"
+                :key="index"
+                :label="item.tag"
+                :value="item.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item class="pub-create__controls">
             <el-button type="primary" @click="openConfirmModal">Сохранить</el-button>
             <el-button>Назад</el-button>
@@ -119,12 +120,18 @@ export default {
   created() {
     this.publicationId = this.$route.params.id
     this.serverUrl = process.env.serverUrl
+    this.$store.dispatch('publication/getTags').then(res => {
+      if(res) {
+        this.tags = res
+      }
+    })
     this.$store.dispatch('publication/getPublicationForUpdate', this.publicationId)
     .then(res => {
       this.publication = JSON.parse(JSON.stringify(res))
       if(res.coverLink) {
         this.imageUrl = this.serverUrl + '/' + res.coverLink
       }
+      this.parseTagsForUpdate(this.publication.tags)
     })
   },
   data() {
@@ -133,6 +140,8 @@ export default {
       imageFile: null,
       disabled: false,
       imageUrl: '',
+      tags: [],
+      publicationTags: [],
       publication: {
         publisherId: this.$store.state.auth.user.id,
         title: '',
@@ -197,6 +206,11 @@ export default {
     }
   },
   methods: {
+    parseTagsForUpdate(tags) {
+      tags.forEach(el => {
+        this.publicationTags.push(el.PubTag.id)
+      })
+    },
     openConfirmModal() {
       this.$refs["pubForm"].validate((valid) => {
         if (valid) {
@@ -213,11 +227,21 @@ export default {
     handleChange(file, fileList) {
       this.imageFile = file.raw
     },
+    parseTags(tags) {
+       return tags.map(el => {
+         return {
+           publicationId: +this.publicationId,
+           pubTagId: el
+         }
+       })
+    },
     updatePublication() {
+      const parsedTags = this.parseTags(this.publicationTags)
       this.publication.weight = +this.publication.weight
       this.publication.strips = +this.publication.strips
       const formData = new FormData();
       formData.append('publication', JSON.stringify(this.publication))
+      formData.append('tags', JSON.stringify(parsedTags))
       formData.append('cover', this.imageFile)
       this.$store.dispatch('publication/updatePublication', {id: this.publicationId, formData: formData})
         .then(() => {
