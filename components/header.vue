@@ -6,8 +6,9 @@
           <img src="../assets/logo.svg" alt="Логотип ГИПП"/>
         </nuxt-link>
       </div>
-      <div class="header__burger-menu">
-        <adaptive-menu/>
+      <div class="header__burger-menu burger-menu">
+        <adaptive-menu class="burger-menu__button burger-menu__button_burger" v-if="user"/>
+        <el-button class="burger-menu__button" v-else plain type="primary"@click="$refs.loginModal.openModal()">Войти</el-button>
       </div>
       <div class="header__navbar navbar">
         <el-menu
@@ -189,16 +190,6 @@ export default {
   z-index: 1000;
   border-bottom: 2px solid #ebeef5;
 
-  &__burger-menu {
-    display: none;
-    .el-button {
-      font-size: 25px;
-    }
-    .el-drawer {
-      padding: 40px 15px !important;
-    }
-  }
-
   &__inner {
     display: flex;
     justify-content: space-between;
@@ -225,6 +216,17 @@ export default {
 
   &__menu {
     font-size: 14px;
+  }
+}
+
+.burger-menu {
+  display: none;
+  &__button {
+    &_burger {
+     .el-button {
+       font-size: 30px !important;
+     }
+    }
   }
 }
 

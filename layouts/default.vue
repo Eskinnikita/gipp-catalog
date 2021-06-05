@@ -41,18 +41,6 @@ a {
   width: 100% !important;
 }
 
-.header {
-  &__burger-menu {
-    .el-button {
-      font-size: 25px;
-    }
-
-    .el-drawer {
-      padding: 40px 15px !important;
-    }
-  }
-}
-
 .page {
   &__container {
     min-height: 100vh;
@@ -156,11 +144,30 @@ textarea {
   height: 30px !important;
 }
 
+.el-drawer {
+  padding: 40px 15px !important;
+}
+
+.burger-menu {
+  &__button {
+    &_burger {
+      .el-button {
+        font-size: 30px !important;
+      }
+    }
+  }
+}
+
 @media (max-width: 575.98px) {
   .page {
     &__container {
       margin-top: 65px !important;
     }
+  }
+
+  .el-dialog {
+    width: 90% !important;
+
   }
 }
 </style>
