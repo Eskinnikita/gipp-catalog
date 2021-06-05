@@ -112,6 +112,7 @@
         ></el-input>
         <template v-if="items.rows.length">
           <tag-snippet
+            @openTagDeleteConfirmDialog="openTagDeleteConfirmDialog"
             class="snippet-list__review-block"
             v-for="(item, index) in items.rows"
             :key="index"
@@ -121,37 +122,40 @@
         <p v-if="!items.rows.length">Список пуст</p>
       </div>
     </template>
-        <!-- ДИАЛОГ ПОДТВЕЖДЕНИЯ ЗАЯВКИ -->
-        <el-dialog
-          title="Подтверждение действия"
-          :visible.sync="dialogVisible"
-          width="30%">
+    <!-- ДИАЛОГ ПОДТВЕЖДЕНИЯ ЗАЯВКИ -->
+    <el-dialog
+      title="Подтверждение действия"
+      :visible.sync="dialogVisible"
+      width="30%">
           <span v-if="dataOnConfirm">
-            {{dataOnConfirm.message}}
+            {{ dataOnConfirm.message }}
           </span>
-          <span slot="footer" class="dialog-footer">
+      <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">Отменить</el-button>
             <el-button type="primary" @click="confirmRequest">Подтвердить</el-button>
           </span>
-        </el-dialog>
-        <!-- ДИАЛОГ ОТКЛОНЕНИЯ ЗАЯВКИ -->
-        <el-dialog
-          title="Отклонение действия"
-          :visible.sync="denyDialogVisible"
-          width="30%">
+    </el-dialog>
+    <!-- ДИАЛОГ ОТКЛОНЕНИЯ ЗАЯВКИ -->
+    <el-dialog
+      title="Отклонение действия"
+      :visible.sync="denyDialogVisible"
+      width="30%">
           <span v-if="dataOnConfirm">
-             {{dataOnDeny.message}}
+             {{ dataOnDeny.message }}
           </span>
-          <el-form v-if="dataOnConfirm.modalId === 1">
-            <el-form-item label="Причина отклонения">
-              <el-input v-model="denyComment" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-form>
-          <span slot="footer" class="dialog-footer">
+      <el-form v-if="dataOnConfirm.modalId === 1">
+        <el-form-item label="Причина отклонения">
+          <el-input v-model="denyComment" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
             <el-button @click="denyDialogVisible = false">Отменить</el-button>
             <el-button type="primary" @click="denyRequest">Подтвердить</el-button>
           </span>
-        </el-dialog>
+    </el-dialog>
+    <confirm-dialog ref="tagDeleteConfirmModal" :on-confirm="deleteTag" title="Подтверждение">
+      Вы уверены, что хотите удалить тег?
+    </confirm-dialog>
   </div>
 </template>
 
@@ -160,13 +164,15 @@ import userSnippet from "@/components/cabinetSnippets/userSnippet"
 import reviewSnippet from "@/components/snippets/reviewSnippet"
 import articleSnippet from "@/components/news/articleSnippet"
 import tagSnippet from "@/components/cabinetSnippets/tagSnippet"
+import confirmDialog from "@/components/modals/confirmDialog"
 
 export default {
   components: {
     userSnippet,
     reviewSnippet,
     articleSnippet,
-    tagSnippet
+    tagSnippet,
+    confirmDialog
   },
   created() {
     if (this.$route.query.search) {
@@ -175,6 +181,7 @@ export default {
   },
   data() {
     return {
+      tagToDelete: null,
       tag: '',
       search: '',
       timer: null,
@@ -196,13 +203,24 @@ export default {
     }
   },
   methods: {
+    deleteTag() {
+      this.$store.dispatch('admin/deleteTag', this.tagToDelete)
+      .then(() => {
+        this.$refs.tagDeleteConfirmModal.opened = false
+        this.tagToDelete = null
+      })
+    },
+    openTagDeleteConfirmDialog(data) {
+      this.$refs.tagDeleteConfirmModal.opened = true
+      this.tagToDelete = data.id
+    },
     addTag() {
       const tag = this.tag.trim()
-      if(this.tag.trim()) {
+      if (this.tag.trim()) {
         this.$store.dispatch('admin/addTag', {
           tag: tag.toLowerCase()
-        }).then(data => {
-          console.log(data)
+        }).then(() => {
+          this.tag = ''
           this.sendNotification('Успех!', 'Тег добавлен', 'success')
         }).catch(e => {
           this.sendNotification('Ошибка!', 'Тег уже существует', 'error')
@@ -237,7 +255,7 @@ export default {
     },
     confirmRequest() {
       console.log('called 2')
-      if(this.dataOnConfirm.modalId === 1) {
+      if (this.dataOnConfirm.modalId === 1) {
         this.$store.dispatch('admin/confirmRequest', {
           id: this.dataOnConfirm.id,
           role: this.dataOnConfirm.role
@@ -245,7 +263,7 @@ export default {
           this.sendNotification('Пользователь одобрен!', 'Уведомление выслано пользователю на почту', 'success')
           this.dialogVisible = false
         })
-      } else if(this.dataOnConfirm.modalId === 2) {
+      } else if (this.dataOnConfirm.modalId === 2) {
         this.$store.dispatch('admin/confirmReview', {
           id: this.dataOnConfirm.id
         }).then(() => {
@@ -255,7 +273,7 @@ export default {
       }
     },
     denyRequest() {
-      if(this.dataOnDeny.modalId === 1) {
+      if (this.dataOnDeny.modalId === 1) {
         this.$store.dispatch('admin/denyRequest', {
           id: this.dataOnDeny.id,
           role: this.dataOnDeny.role,
@@ -265,7 +283,7 @@ export default {
           this.denyDialogVisible = false
           this.sendNotification('Заявка отклонена!', 'Уведомление выслано пользователю на почту', 'success')
         })
-      } else if(this.dataOnDeny.modalId === 2) {
+      } else if (this.dataOnDeny.modalId === 2) {
         this.$store.dispatch('admin/denyReview', {
           id: this.dataOnConfirm.id,
           role: this.dataOnConfirm.role

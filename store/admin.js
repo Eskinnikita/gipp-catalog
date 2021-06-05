@@ -29,6 +29,12 @@ export const mutations = {
     state.adminPanelListItems.notApproved.splice(userIndex, 1)
     user.approved = true
     state.adminPanelListItems.approved.rows.unshift(user)
+  },
+  ADD_ITEM(state, item) {
+    state.adminPanelListItems.rows.unshift(item)
+  },
+  REMOVE_TAG(state, tag) {
+
   }
 }
 
@@ -86,6 +92,20 @@ export const actions = {
       let res = null
       res = await this.$axios.$post('/tags', data)
       if (res) {
+        commit('ADD_ITEM', res)
+        return res
+      }
+    } catch (e) {
+      throw e;
+    }
+  },
+  async deleteTag({commit}, data) {
+    try {
+      let res = null
+      res = await this.$axios.$delete(`/tags/${data}`)
+      if (res) {
+        console.log(res)
+        commit('REMOVE_ITEM', res)
         return res
       }
     } catch (e) {

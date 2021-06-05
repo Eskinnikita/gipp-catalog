@@ -2,7 +2,7 @@
   <div>
     <div class="tag-snippet">
       <span class="tag-snippet__name">{{tag.tag}}</span>
-      <el-button type="danger">Удалить</el-button>
+      <el-button @click="openConfirmModal" type="danger">Удалить</el-button>
     </div>
     <el-divider></el-divider>
   </div>
@@ -15,6 +15,13 @@ export default {
       type: Object,
       require: true
     }
+  },
+  methods: {
+    openConfirmModal(){
+      this.$emit('openTagDeleteConfirmDialog', {
+        id: this.tag.id
+      })
+    },
   }
 }
 </script>
