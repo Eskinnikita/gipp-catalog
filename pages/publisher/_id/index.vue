@@ -18,13 +18,14 @@
       <div class="profile-page__controls left__item">
         <social-sharing :meta-info="socialInfo"/>
       </div>
-      <info-block :info-items="info"/>
+      <info-block class="profile-page__info-block" :info-items="info"/>
     </div>
     <div class="profile-page__right left__item">
       <h3 class="profile-page__title">{{ publisher.name }}</h3>
       <p class="profile-page__desc" v-if="publisher.description">
         {{ publisher.description }}
       </p>
+      <info-block class="profile-page__info-block_adaptive" :info-items="info"/>
       <div class="profile-page__content">
         <el-tabs v-model="params.tab" @tab-click="handleTabChange">
           <el-tab-pane label="Каталог" name="catalog">
@@ -255,6 +256,12 @@ export default {
     font-size: 14px;
   }
 
+  &__info-block {
+    &_adaptive {
+      display: none;
+    }
+  }
+
   &__tab-content {
     margin-top: 20px;
   }
@@ -296,5 +303,38 @@ export default {
     border-radius: 4px;
   }
 }
+
+@media (max-width: 575.98px) {
+  .profile-page {
+    flex-direction: column;
+
+    &__image-container {
+      img {
+        max-height: 150px;
+      }
+    }
+
+    &__desc {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    &__info-block {
+      display: none;
+      &_adaptive {
+        display: block;
+        margin-bottom: 20px;
+      }
+    }
+
+  }
+
+  .left {
+    max-width: 100%;
+    margin-right: 0;
+  }
+}
+
+
 
 </style>

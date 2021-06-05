@@ -69,4 +69,12 @@ export default {
     padding: 20px 30px;
   }
 }
+
+@media (max-width: 575.98px) {
+  .favourites {
+    &__publications-container {
+      grid-template-columns: repeat(auto-fill, 125px);
+    }
+  }
+}
 </style>

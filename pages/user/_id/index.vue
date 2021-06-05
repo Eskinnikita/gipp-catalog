@@ -18,13 +18,14 @@
           <div class="profile-page__controls left__item">
             <social-sharing v-if="profile.role === 2" :meta-info="socialInfo"/>
           </div>
-          <info-block v-if="profile.role === 2" :info-items="info"/>
+          <info-block class="profile-page__info-block" v-if="profile.role === 2" :info-items="info"/>
         </div>
         <div class="profile-page__right left__item">
           <h3 class="profile-page__title">{{ profile.name }}</h3>
           <p class="profile-page__desc" v-if="profile.description">
             {{ profile.description }}
           </p>
+          <info-block class="profile-page__info-block_adaptive" v-if="profile.role === 2" :info-items="info"/>
           <div class="profile-page__content">
             <el-tabs v-model="params.tab" @tab-click="handleTabChange">
               <el-tab-pane label="Новости" name="news" v-if="profile.role === 2">
@@ -253,6 +254,12 @@ export default {
     font-size: 14px;
   }
 
+  &__info-block {
+    &_adaptive {
+      display: none;
+    }
+  }
+
   &__tab-content {
     margin-top: 20px;
   }
@@ -292,6 +299,36 @@ export default {
   &__item {
     margin-bottom: 15px;
     border-radius: 4px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .profile-page {
+    flex-direction: column;
+
+    &__image-container {
+      img {
+        max-height: 150px;
+      }
+    }
+
+    &__desc {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    &__info-block {
+      display: none;
+      &_adaptive {
+        display: block;
+        margin-bottom: 20px;
+      }
+    }
+  }
+
+  .left {
+    max-width: 100%;
+    margin-right: 0;
   }
 }
 

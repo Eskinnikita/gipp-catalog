@@ -3,7 +3,7 @@
     <confirm-dialog ref="confirmModal" :on-confirm="updatePublisher" title="Подтверждение">
       Вы уверены, что хотите внести изменения?
     </confirm-dialog>
-    <h3 class="pub-create__title">Редактирование издательства</h3>
+    <h3 class="pub-create__title">Редактирование профиля</h3>
     <h4 class="pub-create__title">Аватар профиля <span
       style="font-weight: normal">(нажмите на логотип для изображения)</span></h4>
     <div class="pub-create__cover">

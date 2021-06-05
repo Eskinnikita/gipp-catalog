@@ -1,7 +1,7 @@
 <template>
   <div class="news">
     <div class="news__filters">
-      <news-filter ref="filters"/>
+      <news-filter class="news__filter" ref="filters"/>
     </div>
     <div class="news__content">
       <div class="news__header news-header">
@@ -152,10 +152,6 @@ export default {
     padding: 20px 30px 30px 30px;
   }
 
-  &__publications-container {
-
-  }
-
   &__pagination {
     display: flex;
     justify-content: center;
@@ -177,6 +173,24 @@ export default {
   &__search {
     max-width: 40%;
     min-width: 20%;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .news {
+    flex-direction: column;
+
+    &__filter {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+  }
+
+  .news-header {
+    &__search {
+      max-width: 100%;
+      margin-left: 25px;
+    }
   }
 }
 </style>

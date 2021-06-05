@@ -86,4 +86,17 @@ a {
   color: var(--accent-color) !important;
 }
 
+@media (max-width: 575.98px) {
+  .page {
+    &__container {
+      margin-top: 65px !important;
+    }
+  }
+
+  .el-dialog {
+    width: 90% !important;
+
+  }
+}
+
 </style>

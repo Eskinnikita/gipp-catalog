@@ -363,5 +363,20 @@ export default {
   margin-top: 5vh !important;
 }
 
+@media (max-width: 575.98px) {
+  .el-upload {
+    width: 100% !important;
+    img {
+      width: 100%;
+    }
+  }
+
+  .article-editor {
+    &__editor-header {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+}
 
 </style>

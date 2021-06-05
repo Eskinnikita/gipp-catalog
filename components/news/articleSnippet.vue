@@ -129,4 +129,23 @@ export default {
     align-items: center;
   }
 }
+
+@media (max-width: 575.98px) {
+  .article-info {
+    &__title {
+      font-size: 18px;
+    }
+
+    &__main-image {
+      width: 100%;
+      height: 170px;
+    }
+  }
+
+  .article-snippet {
+    &__avatar-image {
+      display: none;
+    }
+  }
+}
 </style>

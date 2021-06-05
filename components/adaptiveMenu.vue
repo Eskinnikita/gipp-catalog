@@ -28,6 +28,10 @@
             Профиль
           </button>
           <el-divider></el-divider>
+          <button @click="goTo('favourites')" class="menu-list__item">
+            Избранное
+          </button>
+          <el-divider></el-divider>
           <button @click="goTo('catalog')" class="menu-list__item">
             Каталог
           </button>
@@ -75,6 +79,8 @@ export default {
         this.$router.push({path: "/catalog", query: {page: '1'}});
       } else if (route === 'news') {
         this.$router.push({path: "/news", query: {page: '1'}});
+      } else if (route === 'favourites') {
+        this.$router.push({path: "/favourites"});
       }
       this.drawer = false
     },

@@ -195,4 +195,23 @@ export default {
     }
   }
 }
+
+@media (max-width: 575.98px) {
+    .article {
+      &__title {
+        margin-top: 10px;
+        font-size: 22px;
+      }
+
+      &__subtitle {
+        font-size: 20px;
+        line-height: 25px;
+      }
+
+      &__paragraph {
+        font-size: 18px;
+        line-height: 24px;
+      }
+    }
+}
 </style>

@@ -31,7 +31,7 @@
                             @click.native="addToFavourite"/>
         </div>
       </div>
-      <info-block v-if="info.length" :info-items="info"/>
+      <info-block class="profile-page__info-block" v-if="info.length" :info-items="info"/>
     </div>
     <div class="profile-page__right left__item">
       <h2 class="profile-page__title">{{ publication.title }}</h2>
@@ -42,6 +42,7 @@
         <p class="profile-page__desc" v-if="publication.desc">
           {{ publication.desc }}
         </p>
+        <info-block class="profile-page__info-block_adaptive" v-if="info.length" :info-items="info"/>
         <div class="profile-page__tags-container">
           <el-tag v-if="publication.tags.length" class="profile-page__tag" :type="randomType()"
                   v-for="(item, index) in publication.tags" :key="index">{{
@@ -329,6 +330,12 @@ export default {
     }
   }
 
+  &__info-block {
+    &_adaptive {
+      display: none;
+    }
+  }
+
   &__image-container {
     padding: 5px;
     background-color: #fff;
@@ -397,6 +404,48 @@ export default {
 
     &:first-child {
       margin-right: 15px;
+    }
+  }
+}
+
+@media (max-width: 575.98px) {
+  .profile-page {
+    flex-direction: column;
+
+    &__image-container {
+      img {
+        max-height: 300px;
+      }
+    }
+
+    &__desc {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    &__info-block {
+      display: none;
+      &_adaptive {
+        display: block;
+        margin-bottom: 20px;
+      }
+    }
+
+  }
+
+  .left {
+    width: 100%;
+    max-width: 100%;
+    margin-right: 0;
+  }
+
+  .page-info {
+    padding: 15px 0;
+  }
+
+  .recommends {
+    &__container {
+      flex-direction: column;
     }
   }
 }

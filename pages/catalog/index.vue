@@ -1,7 +1,7 @@
 <template>
   <div class="catalog">
     <div class="catalog__filters">
-      <catalog-filter ref="filters"/>
+      <catalog-filter class="catalog__filter" ref="filters"/>
     </div>
     <div class="catalog__content">
       <div class="catalog__header catalog-header">
@@ -11,7 +11,7 @@
       <div
         v-if="publications.rows && publications.rows.length"
         class="catalog__publications-container"
-        :style="{'justify-content': publications.length > 3 ? 'space-between' : 'flex-start'}"
+        :style="{'justify-content': publications.rows.length > 3 ? 'space-between' : 'flex-start'}"
       >
         <cover-snippet
           v-for="(publication, index) in publications.rows"
@@ -193,6 +193,28 @@ export default {
   &__search {
     max-width: 40%;
     min-width: 20%;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .catalog {
+    flex-direction: column;
+
+    &__filter {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    &__publications-container {
+      grid-template-columns: repeat(auto-fill, 130px);
+    }
+  }
+
+  .catalog-header {
+    &__search {
+      max-width: 100%;
+      margin-left: 25px;
+    }
   }
 }
 
