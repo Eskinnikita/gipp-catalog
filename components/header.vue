@@ -115,7 +115,7 @@ export default {
         this.$router.push({path: "/catalog", query: {page: '1'}});
       } else {
         this.activeIndex = "2";
-        this.$router.push({path: "/news"});
+        this.$router.push({path: "/news",  query: {page: '1'}});
       }
     },
     goToRegisterPage() {

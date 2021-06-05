@@ -53,9 +53,5 @@ export default {
     display: flex;
     flex-direction: column;
   }
-
-  &__reset {
-    margin-top: 15px;
-  }
 }
 </style>

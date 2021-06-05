@@ -50,7 +50,7 @@ export const actions = {
         commit('SET_ARTICLES', res)
       }
     } catch (e) {
-      console.log(e)
+      throw e;
     }
   },
   async saveArticle({commit}, data) {
@@ -63,7 +63,7 @@ export const actions = {
         return res
       }
     } catch (e) {
-      console.log(e)
+      throw e;
     }
   },
   async updateArticle({commit}, data) {
@@ -75,7 +75,7 @@ export const actions = {
         return res
       }
     } catch (e) {
-      console.log(e)
+      throw e;
     }
   },
   async sendComment({commit}, data) {
@@ -88,7 +88,18 @@ export const actions = {
         return res
       }
     } catch (e) {
-      console.log(e)
+      throw e;
+    }
+  },
+  async deleteArticle({commit}, id) {
+    try {
+      let res = null
+      res = await this.$axios.$delete(`/articles/${id}`)
+      if (res) {
+        return res
+      }
+    } catch (e) {
+      throw e;
     }
   }
 }

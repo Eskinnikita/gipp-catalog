@@ -26,7 +26,7 @@ export const actions = {
       return res
     }
     catch(e) {
-      console.log(e.message)
+      throw e;
     }
   },
   async getProfile({commit}, data) {
@@ -46,7 +46,7 @@ export const actions = {
       return res
     }
     catch(e) {
-      console.log(e.message)
+      throw e;
     }
   },
 }

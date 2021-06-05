@@ -15,7 +15,7 @@ export const actions = {
        return res
       }
     } catch (e) {
-      console.log(e)
+      throw e;
     }
   },
 }

@@ -3,7 +3,7 @@
     <div class="article__container">
       <div v-if="isUserArticleAuthor" class="article__controls">
         <el-button type="primary" @click="goToArticleEditor">Редактировать</el-button>
-        <el-button type="text">Удалить</el-button>
+        <el-button @click="$refs.confirmModal.opened = true" type="text">Удалить</el-button>
       </div>
       <article-view v-if="article" :preview="false" :article="article"/>
       <el-divider></el-divider>
@@ -18,6 +18,9 @@
         </template>
       </div>
     </div>
+    <confirm-dialog ref="confirmModal" :on-confirm="deleteArticle" title="Подтверждение">
+      Вы уверены, что хотите удалить новость?
+    </confirm-dialog>
   </div>
 </template>
 
@@ -25,12 +28,14 @@
 import articleView from "@/components/news/articleView"
 import commentSection from "@/components/news/commentSection"
 import commentSnippet from "@/components/news/commentSnippet"
+import confirmDialog from "@/components/modals/confirmDialog"
 
 export default {
   components: {
     articleView,
     commentSection,
-    commentSnippet
+    commentSnippet,
+    confirmDialog
   },
   created() {
     this.articleId = this.$route.params.id
@@ -66,6 +71,11 @@ export default {
   methods: {
     goToArticleEditor() {
       this.$router.push({path: `/editor/${this.article.id}`})
+    },
+    deleteArticle() {
+      this.$store.dispatch('article/deleteArticle', this.article.id).then(() => {
+        // this.$router.push({path: `/news`});
+      })
     }
   },
   computed: {

@@ -185,5 +185,18 @@ router.patch('/:id', upload.single('mainImage'), passport.authenticate("jwt", {s
   }
 })
 
+router.delete('/:id', async (req, res) => {
+  try {
+    const articleId = +req.params.id
+    await Article.destroy({where: {id: articleId}})
+      .catch(e => {
+        console.log(e)
+      })
+    // await Comment.destroy({where: {articleId: articleId}})
+    res.status(200).json({message: 'Успех'})
+  } catch (e) {
+    res.status(500).json({message: e})
+  }
+})
 
 module.exports = router

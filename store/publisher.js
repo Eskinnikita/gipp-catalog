@@ -31,14 +31,14 @@ export const actions = {
       }
       return res
     } catch (e) {
-      console.log(e)
+      throw e;
     }
   },
   async updatePublisher({commit}, data) {
     try {
       await this.$axios.$patch(`/publisher/${data.id}`, data.formData)
     } catch (e) {
-      console.log(e)
+      throw e;
     }
   }
 }

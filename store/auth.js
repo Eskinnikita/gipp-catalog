@@ -25,7 +25,7 @@ export const actions = {
         commit('SET_USER', res)
       }
     } catch (e) {
-      console.log(e)
+      throw e;
     }
   },
   async makeRequest({commit}, request) {
@@ -33,7 +33,7 @@ export const actions = {
       let res = null
       await this.$axios.$post('/request', request)
     } catch (e) {
-      console.log(e)
+      throw e;
     }
   },
   async createUser({commit}, newUserData) {
@@ -44,7 +44,7 @@ export const actions = {
         commit('SET_USER', res)
       }
     } catch (e) {
-      console.log(e)
+      throw e;
     }
   },
   logout({commit}) {

@@ -232,4 +232,17 @@ router.get('/main-page', async (req, res) => {
   }
 })
 
+router.delete('/:id', async (req, res) => {
+  try {
+    const pubId = +req.params.id
+    await Publication.destroy({where: {id: pubId}})
+    await Review.destroy({where: {publicationId: pubId}})
+    await PublicationTags.destroy({where: {publicationId: pubId}})
+    await UserPublications.destroy({where: {publicationId: pubId}})
+    res.status(200).json({message: 'Успех'})
+  } catch (e) {
+    res.status(500).json({message: e})
+  }
+})
+
 module.exports = router

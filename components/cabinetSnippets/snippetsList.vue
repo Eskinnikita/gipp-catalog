@@ -52,9 +52,31 @@
         <p v-if="!items.rows.length">Список пуст</p>
       </div>
     </template>
+    <template v-if="role === 4">
+      <div class="snippet-list__users">
+        <h3 class="snippet-list__title">Статьи</h3>
+        <el-input
+          class="snippet-list__search"
+          placeholder="Поиск"
+          prefix-icon="el-icon-search"
+          v-model.lazy="search"
+        ></el-input>
+        <template v-if="items.rows.length">
+          <article-snippet
+            class="snippet-list__article-block"
+            v-for="(item, index) in items.rows"
+            :key="index"
+            :article="item"
+            :show-author="true"
+            :is-admin-page="true"
+          />
+        </template>
+        <p v-if="!items.rows.length">Список пуст</p>
+      </div>
+    </template>
     <template v-if="role === 5">
       <div class="snippet-list__users">
-        <h3 class="snippet-list__title">Комментарии на рассмотрение</h3>
+        <h3 class="snippet-list__title">Отзывы на рассмотрение</h3>
         <template v-if="items.rows.length">
           <review-snippet
             :approved="false"
@@ -65,6 +87,35 @@
             v-for="(item, index) in items.rows"
             :key="index"
             :comment-info="item"
+          />
+        </template>
+        <p v-if="!items.rows.length">Список пуст</p>
+      </div>
+    </template>
+    <template v-if="role === 6">
+      <div class="snippet-list__users">
+        <h3 class="snippet-list__title">Теги изданий</h3>
+        <div class="snippet-list__tag-add">
+          <el-input
+            class="snippet-list__search"
+            placeholder="Тег"
+            v-model.lazy="tag"
+          ></el-input>
+          <el-button type="primary" @click="addTag">Добавить</el-button>
+        </div>
+        <el-divider></el-divider>
+        <el-input
+          class="snippet-list__search"
+          placeholder="Поиск"
+          prefix-icon="el-icon-search"
+          v-model.lazy="search"
+        ></el-input>
+        <template v-if="items.rows.length">
+          <tag-snippet
+            class="snippet-list__review-block"
+            v-for="(item, index) in items.rows"
+            :key="index"
+            :tag="item"
           />
         </template>
         <p v-if="!items.rows.length">Список пуст</p>
@@ -107,11 +158,15 @@
 <script>
 import userSnippet from "@/components/cabinetSnippets/userSnippet"
 import reviewSnippet from "@/components/snippets/reviewSnippet"
+import articleSnippet from "@/components/news/articleSnippet"
+import tagSnippet from "@/components/cabinetSnippets/tagSnippet"
 
 export default {
   components: {
     userSnippet,
-    reviewSnippet
+    reviewSnippet,
+    articleSnippet,
+    tagSnippet
   },
   created() {
     if (this.$route.query.search) {
@@ -120,6 +175,7 @@ export default {
   },
   data() {
     return {
+      tag: '',
       search: '',
       timer: null,
       dialogVisible: false,
@@ -140,11 +196,24 @@ export default {
     }
   },
   methods: {
-    sendNotification(title, message) {
+    addTag() {
+      const tag = this.tag.trim()
+      if(this.tag.trim()) {
+        this.$store.dispatch('admin/addTag', {
+          tag: tag.toLowerCase()
+        }).then(data => {
+          console.log(data)
+          this.sendNotification('Успех!', 'Тег добавлен', 'success')
+        }).catch(e => {
+          this.sendNotification('Ошибка!', 'Тег уже существует', 'error')
+        })
+      }
+    },
+    sendNotification(title, message, type) {
       this.$notify({
         title: title,
         message: message,
-        type: 'success',
+        type: type,
         position: 'bottom-right'
       });
     },
@@ -173,7 +242,7 @@ export default {
           id: this.dataOnConfirm.id,
           role: this.dataOnConfirm.role
         }).then(() => {
-          this.sendNotification('Пользователь одобрен!', 'Уведомление выслано пользователю на почту')
+          this.sendNotification('Пользователь одобрен!', 'Уведомление выслано пользователю на почту', 'success')
           this.dialogVisible = false
         })
       } else if(this.dataOnConfirm.modalId === 2) {
@@ -181,7 +250,7 @@ export default {
           id: this.dataOnConfirm.id
         }).then(() => {
           this.dialogVisible = false
-          this.sendNotification('Отзыв опебликован!', 'Отзыв появился на странице издания')
+          this.sendNotification('Отзыв опебликован!', 'Отзыв появился на странице издания', 'success')
         })
       }
     },
@@ -194,7 +263,7 @@ export default {
         }).then(() => {
           this.denyComment = ''
           this.denyDialogVisible = false
-          this.sendNotification('Заявка отклонена!', 'Уведомление выслано пользователю на почту')
+          this.sendNotification('Заявка отклонена!', 'Уведомление выслано пользователю на почту', 'success')
         })
       } else if(this.dataOnDeny.modalId === 2) {
         this.$store.dispatch('admin/denyReview', {
@@ -202,7 +271,7 @@ export default {
           role: this.dataOnConfirm.role
         }).then(() => {
           this.dialogVisible = false
-          this.sendNotification('Отзыв отклонен!', 'Отказ в публикации отзыва')
+          this.sendNotification('Отзыв отклонен!', 'Отказ в публикации отзыва', 'success')
         })
       }
     },

@@ -30,6 +30,7 @@
 
 <script>
 import snippetsList from "@/components/cabinetSnippets/snippetsList"
+
 export default {
   middleware: "isAdmin",
   components: {
@@ -41,9 +42,16 @@ export default {
       this.$router.push({path: '/cabinet', query: {tab: '1', page: '1'}});
     } else {
       if (this.$route.query.tab) {
-        this.params.activeTab = this.$route.query.tab
-        const tabConfig = this.navItems.find(el => el.index === this.$route.query.tab)
-        this.params.role = tabConfig.role
+        const tabInfo = this.navItems.findIndex(el => {
+          return el.index === this.$route.query.tab
+        })
+        if(tabInfo !== -1) {
+          this.params.activeTab = this.$route.query.tab
+          const tabConfig = this.navItems.find(el => el.index === this.$route.query.tab)
+          this.params.role = tabConfig.role
+        } else {
+          this.$router.push({path: '/cabinet', query: {tab: '1', page: '1'}});
+        }
       }
       if (this.$route.query.page) {
         this.params.page = this.$route.query.page
@@ -94,8 +102,14 @@ export default {
         {
           index: '5',
           icon: 'el-icon-s-comment',
-          text: 'Комментарии',
+          text: 'Отзывы',
           role: 5
+        },
+        {
+          index: '6',
+          icon: 'el-icon-price-tag',
+          text: 'Теги',
+          role: 6
         }
       ]
     }
@@ -158,6 +172,26 @@ export default {
             }
           }
         }
+      } else if (role === 4) {
+        return {
+          dispatch: 'admin/getArticles',
+          data: {
+            route: '/admin/articles/all',
+            params: {
+              page: this.params.page
+            }
+          }
+        }
+      } else if(role === 6) {
+        return {
+          dispatch: 'admin/getTags',
+          data: {
+            route: '/admin/tags/all',
+            params: {
+              page: this.params.page
+            }
+          }
+        }
       }
     }
   },
@@ -172,7 +206,6 @@ export default {
   watch: {
     params: {
       handler(val) {
-        console.log('called server')
         this.getListItems(val)
       },
       deep: true

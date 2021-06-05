@@ -2,6 +2,9 @@
   <div class="profile-page" v-if="pageReady">
     <review-modal ref="reviewModal"/>
     <login-modal ref="loginModal"/>
+    <confirm-dialog ref="confirmModal" :on-confirm="deletePublication" title="Подтверждение">
+      Вы уверены, что хотите удалить издание?
+    </confirm-dialog>
     <div class="profile-page__left left">
       <div class="profile-page__image-container left__item">
         <img
@@ -13,9 +16,12 @@
            v-if="publication && !publication.coverLink && publication.coverLink !== undefined">
       </div>
       <div class="profile-page__controls controls">
-        <nuxt-link class="left__item"  v-if="isUserAdmin"  :to="`${publication.id}/edit`">
-          <el-button class="accent-element" style="width: 100%" type="primary">Редактировать</el-button>
-        </nuxt-link>
+        <div v-if="isUserAdmin" class="profile-page__admin-controls left__item">
+          <nuxt-link :to="`${publication.id}/edit`">
+            <el-button class="accent-element left__item" style="width: 100%" type="primary">Редактировать</el-button>
+          </nuxt-link>
+          <el-button @click="$refs.confirmModal.opened = true" class="accent-element" style="width: 100%" type="primary">Удалить</el-button>
+        </div>
         <a class="left__item" :href="publication.subsLink" target="_blank">
           <el-button class="accent-element" style="width: 100%" type="primary">Подписаться</el-button>
         </a>
@@ -37,7 +43,8 @@
           {{ publication.desc }}
         </p>
         <div class="profile-page__tags-container">
-          <el-tag v-if="publication.tags.length" class="profile-page__tag" :type="randomType()" v-for="(item, index) in publication.tags" :key="index">{{
+          <el-tag v-if="publication.tags.length" class="profile-page__tag" :type="randomType()"
+                  v-for="(item, index) in publication.tags" :key="index">{{
               item.PubTag.tag
             }}
           </el-tag>
@@ -87,6 +94,7 @@ import reviewModal from "@/components/modals/reviewModal"
 import socialSharing from "@/components/social/socialSharing"
 import favouriteButton from "@/components/profile/favouriteButton"
 import loginModal from "@/components/modals/loginModal"
+import confirmDialog from "@/components/modals/confirmDialog"
 
 export default {
   layout: 'transparent',
@@ -97,7 +105,8 @@ export default {
     reviewModal,
     socialSharing,
     favouriteButton,
-    loginModal
+    loginModal,
+    confirmDialog
   },
   created() {
     this.serverUrl = process.env.serverUrl
@@ -121,6 +130,12 @@ export default {
     }
   },
   methods: {
+    deletePublication() {
+      this.$store.dispatch('publication/deletePublication', this.publication.id)
+      .then(() => {
+        this.$router.push({path: `/publisher/${this.user.id}`, query: {tab: 'catalog', page: '1'}});
+      })
+    },
     addToFavourite() {
       if (this.user) {
         this.$store.dispatch('publication/addToFavourite', {
@@ -223,7 +238,12 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  min-height: 100vh;
+
+  &__admin-controls {
+    border: 1px solid var(--accent-color);
+    border-radius: 4px;
+    padding: 10px;
+  }
 
   &__subtitle {
     font-weight: normal;
@@ -260,10 +280,9 @@ export default {
   }
 
   &__content {
-    min-height: 100vh;
     background-color: #fff;
     border-radius: 4px;
-    padding: 20px 20px 40px;
+    padding: 20px 20px 50px;
     color: #606266;
   }
 
@@ -356,6 +375,7 @@ export default {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
+
     .profile-page__subtitle {
       margin-bottom: 0;
     }

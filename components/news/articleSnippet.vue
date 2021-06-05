@@ -20,9 +20,12 @@
           <h2 class="article-info__title">{{ article.title }}</h2>
         </nuxt-link>
         <img v-if="article.mainImageUrl" class="article-info__main-image" :src="`${serverUrl}/${article.mainImageUrl}`" alt="">
-        <div class="article-info__read">
+        <div class="article-info__read" :style="{'margin-top': isAdminPage ? '10px' : '0'} ">
           <nuxt-link :to="`/news/${article.id}`">
             <el-button type="text">Читать статью</el-button>
+          </nuxt-link>
+          <nuxt-link :to="`/editor/${article.id}`">
+            <el-button style="margin-left: 20px;" type="primary" v-if="isAdminPage">Редактировать</el-button>
           </nuxt-link>
         </div>
       </div>
@@ -40,6 +43,10 @@ export default {
     showAuthor: {
       type: Boolean,
       required: true
+    },
+    isAdminPage: {
+      type: Boolean,
+      default: false
     }
   },
   created() {
@@ -100,6 +107,8 @@ export default {
     font-size: 14px;
     margin-right: 10px;
   }
+
+
 }
 
 .article-info {
@@ -112,6 +121,12 @@ export default {
     object-fit: cover;
     height: 280px;
     width: 75%;
+  }
+
+  &__read {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
   }
 }
 </style>

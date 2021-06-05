@@ -6,7 +6,7 @@
       </div>
       <div>
         <div class="user-snippet__snippet-info snippet-info">
-          <h4 class="snippet-info__name">{{ userInfo.name }}</h4>
+          <el-button @click="goToProfile(userInfo.role, userInfo.id)" type="text" class="snippet-info__name">{{ userInfo.name }}</el-button>
           <div class="reader-snippet__additional-info">
             <div class="reader-snippet__additional-info-item">
               <i class="el-icon-message"/> {{ userInfo.email }}
@@ -48,6 +48,15 @@ export default {
       modalData.message = 'Отклонить заявку?'
       this.$emit('openDenyDialog', modalData)
     },
+    goToProfile(role, id) {
+      if (role === 3) {
+        this.$router.push({path: `/publisher/${id}`, query: {tab: 'catalog', page: '1'}});
+      } else if (role === 1) {
+        this.$router.push({path: `/user/${id}`, query: {tab: 'comments', page: '1'}});
+      } else if (role === 2) {
+        this.$router.push({path: `/organization/${id}`, query: {tab: 'news', page: '1'}});
+      }
+    }
   },
   computed: {
     notApproved() {
@@ -84,8 +93,8 @@ export default {
 
 .snippet-info {
   &__name {
-    font-weight: normal;
-    margin-bottom: 15px;
+    font-weight: normal !important;
+    font-size: 16px;
   }
 }
 </style>

@@ -42,7 +42,7 @@ export const actions = {
         commit('SET_ITEMS', res)
       }
     } catch (e) {
-      console.log(e)
+      throw e;
     }
   },
   async getPubs({commit}, data) {
@@ -54,7 +54,42 @@ export const actions = {
         commit('SET_ITEMS', res)
       }
     } catch (e) {
-      console.log(e)
+      throw e;
+    }
+  },
+  async getArticles({commit}, data) {
+    try {
+      commit('SET_EMPTY_ITEMS')
+      let res = null
+      res = await this.$axios.$post(data.route, data.params)
+      if (res) {
+        commit('SET_ITEMS', res)
+      }
+    } catch (e) {
+      throw e;
+    }
+  },
+  async getTags({commit}, data) {
+    try {
+      commit('SET_EMPTY_ITEMS')
+      let res = null
+      res = await this.$axios.$post(data.route, data.params)
+      if (res) {
+        commit('SET_ITEMS', res)
+      }
+    } catch (e) {
+      throw e;
+    }
+  },
+  async addTag({commit}, data) {
+    try {
+      let res = null
+      res = await this.$axios.$post('/tags', data)
+      if (res) {
+        return res
+      }
+    } catch (e) {
+      throw e;
     }
   },
   async getReviews({commit}, data) {
@@ -77,7 +112,7 @@ export const actions = {
         commit('SET_ITEMS', res)
       }
     } catch (e) {
-      console.log(e)
+      throw e;
     }
   },
   async confirmRequest({commit}, data) {
@@ -89,7 +124,7 @@ export const actions = {
         commit('REPLACE_SNIPPET', data)
       }
     } catch (e) {
-      console.log(e)
+      throw e;
     }
   },
   async denyRequest({commit}, data) {
@@ -101,7 +136,7 @@ export const actions = {
         commit('REMOVE_USER', data)
       }
     } catch (e) {
-      console.log(e)
+      throw e;
     }
   },
   async confirmReview({commit}, data) {
@@ -112,7 +147,7 @@ export const actions = {
         commit('REMOVE_ITEM', data)
       }
     } catch (e) {
-      console.log(e)
+      throw e;
     }
   },
 }

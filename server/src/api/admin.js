@@ -6,6 +6,9 @@ const Organ = require('../models/organization')
 const Review = require('../models/review')
 const Publisher = require('../models/Publisher')
 const passport = require('passport')
+const Article = require('../models/article')
+const PubTag = require('../models/pubTag')
+const authorParser = require('../utils/authorParser')
 
 const router = express.Router()
 
@@ -137,6 +140,70 @@ router.post('/reviews/confirm', passport.authenticate("jwt", { session: false })
       }
     })
     res.status(200).json(updatedReview)
+  } catch (err) {
+    res.status(500).json({message: err})
+  }
+})
+
+router.post('/articles/all', passport.authenticate("jwt", { session: false }),async (req, res) => {
+  try {
+    const {page, search} = req.body
+    const limit = 10
+    const options = {
+      where: {},
+      attributes: {exclude: ['blocks']},
+      order: [['updatedAt', 'DESC']],
+      limit: limit,
+      offset: (+page - 1) * limit,
+      include: [
+        {
+          model: Publisher, attributes: ['id', 'name', 'logoUrl', 'role'],
+        },
+        {
+          model: User, attributes: ['id', 'name', 'role'],
+        },
+        {
+          model: Organ, attributes: ['id', 'name', 'role'],
+        }
+      ]
+    }
+    if (search && search !== '') {
+      options.where.title = sequelize.where(sequelize.fn('LOWER', sequelize.col('title')), 'LIKE', '%' + search + '%')
+    }
+    const allArticles = await Article.findAndCountAll(options).catch(
+      e => {
+        console.log("Error", e)
+      }
+    )
+    const allArticlesCopy = JSON.parse(JSON.stringify(allArticles))
+    allArticlesCopy.rows = authorParser(allArticlesCopy.rows)
+    allArticlesCopy.limit = limit
+    res.status(200).json(allArticlesCopy)
+  } catch (err) {
+    res.status(500).json({message: err})
+  }
+})
+
+router.post('/tags/all', passport.authenticate("jwt", { session: false }), async (req, res) => {
+  try {
+    const {page, search} = req.body
+    const limit = 20
+    const options = {
+      where: {},
+      limit: limit,
+      offset: (+page - 1) * limit,
+      order: [['tag', 'ASC']]
+    }
+    if (search && search !== '') {
+      options.where.tag = sequelize.where(sequelize.fn('LOWER', sequelize.col('tag')), 'LIKE', '%' + search + '%')
+    }
+
+    const tags = await PubTag.findAndCountAll(options).catch(
+      e => {
+        console.log("Error", e)
+      }
+    )
+    res.status(200).json(tags)
   } catch (err) {
     res.status(500).json({message: err})
   }

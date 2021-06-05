@@ -67,7 +67,7 @@ export const actions = {
       }
       return res
     } catch (e) {
-      console.log(e)
+      throw e;
     }
   },
   async createPublication({commit}, formData) {
@@ -78,7 +78,7 @@ export const actions = {
         return res
       }
     } catch (e) {
-      console.log(e)
+      throw e;
     }
   },
   async getPublication({commit}, data) {
@@ -90,7 +90,7 @@ export const actions = {
       }
       return res
     } catch (e) {
-      console.log(e)
+      throw e;
     }
   },
   async getPublicationForUpdate({commit}, id) {
@@ -102,14 +102,14 @@ export const actions = {
       }
       return res
     } catch (e) {
-      console.log(e)
+      throw e;
     }
   },
   async updatePublication({commit}, data) {
     try {
       await this.$axios.$patch(`/publication/${data.id}`, data.formData)
     } catch (e) {
-      console.log(e)
+      throw e;
     }
   },
   async getAllPublications({commit}, params) {
@@ -122,7 +122,7 @@ export const actions = {
       }
       return res
     } catch (e) {
-      console.log(e)
+      throw e;
     }
   },
   async sendReview({}, data) {
@@ -133,7 +133,7 @@ export const actions = {
         return res
       }
     } catch (e) {
-      console.log(e)
+      throw e;
     }
   },
   async searchPublicationsGlobal({commit}, data) {
@@ -145,7 +145,7 @@ export const actions = {
       }
       return res
     } catch (e) {
-      console.log(e)
+      throw e;
     }
   },
   async addToFavourite({commit}, data) {
@@ -161,7 +161,7 @@ export const actions = {
         commit('CHANGE_FAVOURITE', res)
       }
     } catch (e) {
-      console.log(e)
+      throw e;
     }
   },
   async getFavourites({commit}, data) {
@@ -174,7 +174,18 @@ export const actions = {
         return res
       }
     } catch (e) {
-      console.log(e)
+      throw e;
+    }
+  },
+  async deletePublication({commit}, id) {
+    try {
+      let res = null
+      res = await this.$axios.$delete(`/publication/${id}`)
+      if (res) {
+        return res
+      }
+    } catch (e) {
+      throw e;
     }
   },
 }
