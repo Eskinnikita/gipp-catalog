@@ -4,14 +4,13 @@
       <font-awesome-icon :icon="{ prefix: 'fa', iconName: 'bars' }"></font-awesome-icon>
     </el-button>
     <el-drawer
-      v-if=""
       :modalAppendToBody="false"
       title="I am the title"
       size="300px"
       :visible.sync="drawer"
       :with-header="false">
-      <div class="adaptive-menu__container" v-if="user">
-        <div class="adaptive-menu__profile">
+      <div class="adaptive-menu__container">
+        <div class="adaptive-menu__profile" v-if="user">
           <el-avatar
             class="adaptive-menu__avatar"
             size="large"
@@ -24,14 +23,29 @@
         </div>
         <el-divider/>
         <div class="adaptive-menu__menu-list menu-list">
-          <button @click="goTo('profile')" class="menu-list__item">
-            Профиль
-          </button>
-          <el-divider></el-divider>
-          <button @click="goTo('favourites')" class="menu-list__item">
-            Избранное
-          </button>
-          <el-divider></el-divider>
+          <template v-if="!user">
+            <el-button
+              style="width: 100%; font-size: 16px !important;"
+              type="primary"
+              plain
+              @click="openLoginModal"
+              class="menu-list__login-button">
+              Войти
+            </el-button>
+            <el-divider></el-divider>
+          </template>
+          <template v-if="user">
+            <button @click="goTo('profile')" class="menu-list__item">
+              Профиль
+            </button>
+            <el-divider></el-divider>
+          </template>
+          <template v-if="user">
+            <button @click="goTo('favourites')" class="menu-list__item">
+              Избранное
+            </button>
+            <el-divider></el-divider>
+          </template>
           <button @click="goTo('catalog')" class="menu-list__item">
             Каталог
           </button>
@@ -39,10 +53,12 @@
           <button @click="goTo('news')" class="menu-list__item">
             Новости
           </button>
-          <el-divider></el-divider>
-          <button @click="logout" class="menu-list__item menu-list__item_quit">
-            Выйти
-          </button>
+          <template v-if="user">
+            <el-divider></el-divider>
+            <button @click="logout" class="menu-list__item menu-list__item_quit">
+              Выйти
+            </button>
+          </template>
         </div>
       </div>
     </el-drawer>
@@ -89,6 +105,10 @@ export default {
         this.drawer = false
         this.$router.push({path: "/"});
       })
+    },
+    openLoginModal() {
+      this.drawer = false
+      this.$emit('openLoginModal')
     }
   },
   computed: {
@@ -134,6 +154,11 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+
+  //&__login-button {
+  //  width: 100% !important;
+  //  font-size: 16px !important;
+  //}
 
   &__item {
     font-size: 17px;

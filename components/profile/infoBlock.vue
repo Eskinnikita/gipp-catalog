@@ -38,4 +38,11 @@ export default {
   }
 
 }
+
+@media (max-width: 575.98px) {
+  .page-info {
+    font-size: 16px;
+  }
+}
+
 </style>

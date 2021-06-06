@@ -7,8 +7,7 @@
         </nuxt-link>
       </div>
       <div class="header__burger-menu burger-menu">
-        <adaptive-menu class="burger-menu__button burger-menu__button_burger" v-if="user"/>
-        <el-button class="burger-menu__button" v-else plain type="primary"@click="$refs.loginModal.openModal()">Войти</el-button>
+        <adaptive-menu @openLoginModal="openLoginModal" class="burger-menu__button burger-menu__button_burger" />
       </div>
       <div class="header__navbar navbar">
         <el-menu
@@ -58,7 +57,7 @@
           </el-dropdown>
         </template>
         <template v-else>
-          <el-button type="primary" plain @click="$refs.loginModal.openModal()"
+          <el-button type="primary" plain @click="openLoginModal"
           >Вход
           </el-button
           >
@@ -98,6 +97,9 @@ export default {
     this.serverUrl = process.env.serverUrl
   },
   methods: {
+    openLoginModal() {
+      this.$refs.loginModal.openModal()
+    },
     setupNav(routeName) {
       switch (routeName) {
         case "news":
