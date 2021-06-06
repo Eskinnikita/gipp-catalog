@@ -1,7 +1,7 @@
 import * as Cookies from 'js-cookie'
 
 export const state = () => ({
-  user: null
+  user: null,
 })
 
 export const mutations = {
@@ -30,7 +30,6 @@ export const actions = {
   },
   async makeRequest({commit}, request) {
     try {
-      let res = null
       await this.$axios.$post('/request', request)
     } catch (e) {
       throw e;
@@ -44,6 +43,7 @@ export const actions = {
         commit('SET_USER', res)
       }
     } catch (e) {
+      console.log(e)
       throw e;
     }
   },

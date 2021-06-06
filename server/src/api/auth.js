@@ -29,21 +29,14 @@ router.post('/login', async (req, res) => {
         console.log("Error", e)
       }
     )
-  // const userWithEmail = await User.findOne({where: {email}}).catch(
-  //   e => {
-  //     console.log("Error: ", e)
-  //   }
-  // )
-  //
+
   if (!userWithEmail) {
-    console.log('1', userWithEmail, password)
     return res.status(400).json({
       message: "Неверная почта или пароль!"
     })
   }
 
   if (userWithEmail.password !== password) {
-    console.log('2',userWithEmail, password)
     return res.status(400).json({
       message: "Неверная почта или пароль!"
     })
@@ -71,7 +64,7 @@ router.post('/register', async (req, res) => {
   )
 
   if (existedUser) {
-    res.status(409).json({
+    return res.status(409).json({
       message: "Пользователь уже существует!"
     })
   }
@@ -112,7 +105,7 @@ router.post('/request', async (req, res) => {
   )
 
   if (existedRequest) {
-    res.status(409).json({
+    return res.status(409).json({
       message: "Вы уже подавали заявку! Ожидайте рассмотрения администратором портала"
     })
   }

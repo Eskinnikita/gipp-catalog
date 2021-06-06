@@ -40,9 +40,7 @@ export default {
     }
   },
   methods: {
-    regNewUser() {
-      console.log(this.form)
-    }
+
   },
   watch: {}
 };

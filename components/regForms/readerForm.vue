@@ -18,6 +18,9 @@
     <el-form-item label="Как к вам обращаться?" prop="name">
       <el-input v-model="form.name"></el-input>
     </el-form-item>
+    <div class="reg__error">
+      {{error}}
+    </div>
     <el-form-item class="reg__controls">
       <el-button type="primary" @click="sendNewUser">Зарегистрироваться</el-button>
     </el-form-item>
@@ -47,6 +50,7 @@ export default {
       }
     };
     return {
+      error: null,
       form: {
         name: '',
         email: '',
@@ -56,14 +60,15 @@ export default {
       },
       rules: {
         password: [
-          {required: true, validator: validatePass, trigger: 'blur' }
+          {required: true, validator: validatePass, trigger: 'blur'},
+          {min: 8, message: 'Пароль должен быть не менее 8 символов!', trigger: 'blur'}
         ],
         checkPassword: [
-          {required: true, validator: validatePass2, trigger: 'blur' }
+          {required: true, validator: validatePass2, trigger: 'blur'}
         ],
         email: [
-          { required: true, message: 'Пожалуйста, введите вашу почту', trigger: 'blur' },
-          { type: 'email', message: 'Пожалуйста, проверьте введенную почту', trigger: ['blur', 'change'] }
+          {required: true, message: 'Пожалуйста, введите вашу почту', trigger: 'blur'},
+          {type: 'email', message: 'Пожалуйста, проверьте введенную почту', trigger: ['blur', 'change']}
         ],
         name: [
           {required: true, message: 'Пожалуйста, введите имя', trigger: 'blur'},
@@ -74,11 +79,18 @@ export default {
   },
   methods: {
     sendNewUser() {
+      this.error = null
       this.$refs["userForm"].validate((valid) => {
         if (valid) {
-          this.$store.dispatch('auth/createUser', this.form).then(() => {
-            this.$router.push({path: "/"});
-          })
+          this.$store.dispatch('auth/createUser', this.form)
+            .then(() => {
+              this.$router.push({path: "/"});
+            })
+            .catch(e => {
+              if (e) {
+                this.error = 'Профиль с указанной почтой уже существует!'
+              }
+            })
         } else {
           console.log(this.form)
           console.log('error submit!!');
@@ -91,4 +103,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .reg {
+    &__error {
+      color: #F56C6C;
+      margin-bottom: 20px;
+    }
+  }
 </style>
