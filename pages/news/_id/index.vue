@@ -85,6 +85,18 @@ export default {
     if(this.article.title) {
       return {
         title: `${this.article.title} | ${process.env.appName}`,
+        meta: [
+          {
+            hid: 'article-description',
+            name: 'description',
+            content: `${this.article.title}`
+          },
+          {
+            hid: 'article-keywords',
+            name: 'keywords',
+            content: `${this.article.title}, анонс мероприятия, свежие детские издания, новости издательств, статья партнера`
+          }
+        ]
       }
     }
   },

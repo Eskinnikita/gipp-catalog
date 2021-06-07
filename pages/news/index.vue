@@ -133,7 +133,19 @@ export default {
   },
   head() {
     return {
-      title: `Новости | ${process.env.appName}`
+      title: `Новости | ${process.env.appName}`,
+      meta: [
+        {
+          hid: 'news-description',
+          name: 'description',
+          content: 'Актуальные и интересные новости детских издательств и представителей организаций о новинках, предстоящих событиях, выставках и многом другом.'
+        },
+        {
+          hid: 'news-keywords',
+          name: 'keywords',
+          content: 'новости издательств, читать новости детских сми, детские издания анонсы, встречи с авторами, детские сми'
+        }
+      ]
     }
   },
 }

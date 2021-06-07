@@ -149,10 +149,17 @@ export default {
     return {
       title: `Издания | ${process.env.appName}`,
       meta: [
-        {charset: 'utf-8'},
-        {name: 'viewport', content: 'width=device-width, initial-scale=1'}
-      ],
-      link: [{rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'}]
+        {
+          hid: 'catalog-description',
+          name: 'description',
+          content: 'Полный каталог детских изданий СППИ ГИПП с указанием описания, характеристик и тематик.'
+        },
+        {
+          hid: 'catalog-keywords',
+          name: 'keywords',
+          content: 'каталог изданий, десткие журналы, подписной каталог детских изданий, подписаться на журнал, детские сми'
+        }
+      ]
     }
   },
 }

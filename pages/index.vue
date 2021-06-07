@@ -85,7 +85,19 @@ export default {
   },
   head() {
     return {
-      title: `${process.env.appName}`
+      title: `${process.env.appName}`,
+      meta: [
+        {
+          hid: 'homepage-description',
+          name: 'description',
+          content: 'Объединенный каталог детских изданий от издательств-членов СППИ ГИПП. Свежие изданий, новости издательств.'
+        },
+        {
+          hid: 'homepage-keywords',
+          name: 'keywords',
+          content: 'детские журналы, детские издания, гильдия издателей, подписаться на журнал, оформить подписку'
+        }
+      ]
     }
   },
 };

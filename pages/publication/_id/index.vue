@@ -246,6 +246,17 @@ export default {
         title: this.publication.title,
         desc: this.publication.desc
       }
+    },
+    publicationDescription() {
+      if(this.publication.desc) {
+        if(this.publication.desc.length > 220) {
+          return this.publication.desc.slice(0, 220) + '...'
+        } else {
+          return this.publication.desc
+        }
+      } else {
+        return 'Официальная страница представителя организации с новостями и описанием.'
+      }
     }
   },
   beforeDestroy() {
@@ -255,9 +266,21 @@ export default {
     this.$store.commit('publication/SET_EMPTY_PUBLICATION')
   },
   head() {
-    if(this.publication.title) {
+    if(this.publication.title && this.publication.publisher.name) {
       return {
-        title: `${this.publication.title} | ${process.env.appName}`
+        title: `${this.publication.title} | ${process.env.appName}`,
+        meta: [
+          {
+            hid: 'publication-description',
+            name: 'description',
+            content: this.publicationDescription
+          },
+          {
+            hid: 'publication-keywords',
+            name: 'keywords',
+            content: `${this.publication.title}, ${this.publication.publisher.name}, журнал, подписаться на журнал, характеристики издания, оставить отзыв изданию`
+          }
+        ]
       }
     }
   },

@@ -181,6 +181,17 @@ export default {
         title: this.profile.name,
         desc: this.profile.description ? this.profile.description : ''
       }
+    },
+    userDescription() {
+      if(this.profile.role === 2 && this.profile.description) {
+        if(this.profile.description.length > 220) {
+          return this.profile.description.slice(0, 220) + '...'
+        } else {
+          return `${this.profile.name}. ${this.profile.description}`
+        }
+      } else {
+        return `${this.profile.name}`
+      }
     }
   },
   watch: {
@@ -197,7 +208,19 @@ export default {
   head() {
     if(this.profile.name) {
       return {
-        title: `${this.profile.name} | ${process.env.appName}`
+        title: `${this.profile.name} | ${process.env.appName}`,
+        meta: [
+          {
+            hid: 'article-description',
+            name: 'description',
+            content: this.userDescription
+          },
+          {
+            hid: 'article-keywords',
+            name: 'keywords',
+            content: `${this.profile.name}`
+          }
+        ]
       }
     }
   },

@@ -182,6 +182,17 @@ export default {
         title: this.publisher.name,
         desc: this.publisher.description
       }
+    },
+    publisherDescription() {
+      if(this.publisher.description) {
+        if(this.publisher.description.length > 220) {
+          return this.publisher.description.slice(0, 220) + '...'
+        } else {
+          return this.publisher.description
+        }
+      } else {
+        return 'Официальная страница издательства с каталогом изданий, новостями издательства и описанием.'
+      }
     }
   },
   watch: {
@@ -201,7 +212,19 @@ export default {
   head() {
     if(this.publisher.name) {
       return {
-        title: `${this.publisher.name} | ${process.env.appName}`
+        title: `${this.publisher.name} | ${process.env.appName}`,
+        meta: [
+          {
+            hid: 'publisher-description',
+            name: 'description',
+            content: `${this.publisher.name}. ${this.publisherDescription}`
+          },
+          {
+            hid: 'publisher-keywords',
+            name: 'keywords',
+            content: `${this.publisher.name}, подписаться на издание, отзывы, описание, контакты, журналы издательства`
+          }
+        ]
       }
     }
   },
