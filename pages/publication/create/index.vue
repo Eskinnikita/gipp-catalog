@@ -239,7 +239,12 @@ export default {
           this.$router.push({path: `/publication/${res.id}`});
         })
     }
-  }
+  },
+  head() {
+    return {
+      title: `Создание издания | ${process.env.appName}`
+    }
+  },
 }
 </script>
 

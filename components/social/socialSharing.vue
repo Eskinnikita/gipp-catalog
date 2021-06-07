@@ -72,6 +72,7 @@ export default {
 
 <style lang="scss" scoped>
   .social-sharing {
+    width: 100%;
     &__networks-container {
       display: flex;
       flex-direction: column;

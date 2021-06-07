@@ -130,7 +130,12 @@ export default {
     search() {
       this.sendSearchString()
     }
-  }
+  },
+  head() {
+    return {
+      title: `Новости | ${process.env.appName}`
+    }
+  },
 }
 </script>
 

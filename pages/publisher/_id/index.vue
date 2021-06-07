@@ -197,7 +197,14 @@ export default {
     root.style.setProperty('--main-color', "#ebeef5", 'important');
     root.style.setProperty('--accent-color', "#409EFF", 'important');
     this.$store.commit('publisher/SET_EMPTY_PUBLISHER')
-  }
+  },
+  head() {
+    if(this.publisher.name) {
+      return {
+        title: `${this.publisher.name} | ${process.env.appName}`
+      }
+    }
+  },
 }
 </script>
 
@@ -307,6 +314,10 @@ export default {
 @media (max-width: 575.98px) {
   .profile-page {
     flex-direction: column;
+
+    &__desc {
+      width: 100%;
+    }
 
     &__image-container {
       img {

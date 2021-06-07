@@ -16,12 +16,14 @@
            v-if="publication && !publication.coverLink && publication.coverLink !== undefined">
       </div>
       <div class="profile-page__controls controls">
-        <div v-if="isUserAdmin" class="profile-page__admin-controls left__item">
-          <nuxt-link :to="`${publication.id}/edit`">
-            <el-button class="accent-element left__item" style="width: 100%" type="primary">Редактировать</el-button>
-          </nuxt-link>
-          <el-button @click="$refs.confirmModal.opened = true" class="accent-element" style="width: 100%" type="primary">Удалить</el-button>
-        </div>
+        <!--        <div v-if="isUserAdmin" class="profile-page__admin-controls left__item">-->
+        <!--          <nuxt-link :to="`${publication.id}/edit`">-->
+        <!--            <el-button class="accent-element left__item" style="width: 100%" type="primary">Редактировать</el-button>-->
+        <!--          </nuxt-link>-->
+        <!--          <el-button @click="$refs.confirmModal.opened = true" class="accent-element" style="width: 100%"-->
+        <!--                     type="primary">Удалить-->
+        <!--          </el-button>-->
+        <!--        </div>-->
         <a class="left__item" :href="publication.subsLink" target="_blank">
           <el-button class="accent-element" style="width: 100%" type="primary">Подписаться</el-button>
         </a>
@@ -34,10 +36,28 @@
       <info-block class="profile-page__info-block" v-if="info.length" :info-items="info"/>
     </div>
     <div class="profile-page__right left__item">
-      <h2 class="profile-page__title">{{ publication.title }}</h2>
-      <nuxt-link :to="`/publisher/${publication.publisher.id}`">
-        <el-button class="profile-page__publisher-name" type="text">{{ publication.publisher.name }}</el-button>
-      </nuxt-link>
+      <!--      <h2 class="profile-page__title">{{ publication.title }}</h2>-->
+      <!--      <nuxt-link :to="`/publisher/${publication.publisher.id}`">-->
+      <!--        <el-button class="profile-page__publisher-name" type="text">{{ publication.publisher.name }}</el-button>-->
+      <!--      </nuxt-link>-->
+      <div class="profile-page__right-header">
+        <div class="right-header__info">
+          <h2 class="profile-page__title">{{ publication.title }}</h2>
+          <nuxt-link :to="`/publisher/${publication.publisher.id}`">
+            <el-button class="profile-page__publisher-name" type="text">{{ publication.publisher.name }}</el-button>
+          </nuxt-link>
+        </div>
+        <div class="right-header__controls" v-if="isUserAdmin">
+          <nuxt-link class="right-header__edit" :to="`${publication.id}/edit`">
+            <el-button class="accent-element" type="primary" icon="el-icon-edit" ></el-button>
+          </nuxt-link>
+          <el-button @click="$refs.confirmModal.opened = true"
+                     class="accent-element"
+                     icon="el-icon-delete"
+                     type="primary">
+          </el-button>
+        </div>
+      </div>
       <div class="profile-page__content">
         <p class="profile-page__desc" v-if="publication.desc">
           {{ publication.desc }}
@@ -54,9 +74,12 @@
           <h4 class="profile-page__subtitle">Еще от <b>{{ publication.publisher.name }}</b></h4>
           <div class="recommends__container"
                :style="{ 'justify-content': publication.publisher.Publications.length === 2 ? 'flex-start' : 'space-between'}">
-            <rec-publications v-if="index < 4" v-for="(recPub, index) in publication.publisher.Publications"
-                              :rec-pub="recPub"
-                              :key="index"/>
+            <rec-publications
+              v-if="index < 4"
+              v-for="(recPub, index) in publication.publisher.Publications"
+              :rec-pub="recPub"
+              :key="index"
+            />
           </div>
         </div>
         <el-divider></el-divider>
@@ -133,9 +156,9 @@ export default {
   methods: {
     deletePublication() {
       this.$store.dispatch('publication/deletePublication', this.publication.id)
-      .then(() => {
-        this.$router.push({path: `/publisher/${this.user.id}`, query: {tab: 'catalog', page: '1'}});
-      })
+        .then(() => {
+          this.$router.push({path: `/publisher/${this.user.id}`, query: {tab: 'catalog', page: '1'}});
+        })
     },
     addToFavourite() {
       if (this.user) {
@@ -230,7 +253,14 @@ export default {
     root.style.setProperty('--main-color', "#ebeef5", 'important');
     root.style.setProperty('--accent-color', "#409EFF", 'important');
     this.$store.commit('publication/SET_EMPTY_PUBLICATION')
-  }
+  },
+  head() {
+    if(this.publication.title) {
+      return {
+        title: `${this.publication.title} | ${process.env.appName}`
+      }
+    }
+  },
 }
 </script>
 
@@ -352,6 +382,24 @@ export default {
   &__tag {
     margin-bottom: 10px;
   }
+
+  &__right-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.right-header {
+  &__controls {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  &__edit {
+    margin-right: 15px;
+  }
 }
 
 .left {
@@ -425,10 +473,16 @@ export default {
 
     &__info-block {
       display: none;
+
       &_adaptive {
         display: block;
         margin-bottom: 20px;
       }
+    }
+
+    &__right-header {
+      flex-direction: column;
+      margin-bottom: 20px;
     }
 
   }
@@ -446,6 +500,29 @@ export default {
   .recommends {
     &__container {
       flex-direction: column;
+    }
+  }
+
+  .right-header {
+    &__info {
+      width: 100%;
+    }
+
+    &__controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      .el-button {
+        width: 45%;
+      }
+    }
+
+    &__edit {
+      width: 45%;
+      .el-button {
+        width: 100%;
+      }
     }
   }
 }

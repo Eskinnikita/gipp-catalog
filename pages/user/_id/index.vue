@@ -70,7 +70,6 @@ import profileComments from "@/components/profile/profileComments"
 import socialSharing from "@/components/social/socialSharing"
 
 export default {
-  middleware: "isOrganOrUser",
   layout: 'transparent',
   components: {
     infoBlock,
@@ -195,6 +194,13 @@ export default {
   // beforeDestroy() {
   //   this.$store.commit('publisher/SET_EMPTY_PUBLISHER')
   // }
+  head() {
+    if(this.profile.name) {
+      return {
+        title: `${this.profile.name} | ${process.env.appName}`
+      }
+    }
+  },
 }
 </script>
 
@@ -203,7 +209,6 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  min-height: 100vh;
 
   &__pagination {
     margin-top: 30px;
@@ -305,6 +310,10 @@ export default {
 @media (max-width: 575.98px) {
   .profile-page {
     flex-direction: column;
+
+    &__desc {
+      width: 100%;
+    }
 
     &__image-container {
       img {

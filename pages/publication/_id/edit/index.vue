@@ -255,7 +255,12 @@ export default {
           this.$router.push({path: `/publication/${this.publicationId}`});
         })
     }
-  }
+  },
+  head() {
+    return {
+      title: `Редактирование издания | ${process.env.appName}`
+    }
+  },
 }
 </script>
 

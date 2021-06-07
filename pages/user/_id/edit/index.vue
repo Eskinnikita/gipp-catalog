@@ -158,7 +158,12 @@ export default {
     coverUrl() {
       return this.serverUrl + '/' + this.recPub.coverLink
     }
-  }
+  },
+  head() {
+    return {
+      title: `Редактирование профиля | ${process.env.appName}`
+    }
+  },
 }
 </script>
 

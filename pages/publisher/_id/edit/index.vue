@@ -152,7 +152,12 @@ export default {
   },
   computed: {
 
-  }
+  },
+  head() {
+    return {
+      title: `Редактирование профиля | ${process.env.appName}`
+    }
+  },
 }
 </script>
 

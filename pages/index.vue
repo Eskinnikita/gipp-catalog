@@ -1,37 +1,39 @@
 <template>
   <div v-if="pageReady" class="main-page">
     <div class="main-page__col main-page__col_left">
-      <h4 class="main-page__title">
-        Главные
-      </h4>
-      <main-news :articles="mainContent.mainNews"/>
-      <div class="main-page__separator"></div>
-      <div class="main-page__block main-page__block_main-news">
+      <div class="main-page__left-block">
+        <h4 class="main-page__title">
+          Главные
+        </h4>
+        <main-news :articles="mainContent.mainNews"/>
       </div>
-      <h4 class="main-page__title">
-        Свежие выпуски
-      </h4>
-      <div class="main-page__block main-page__block_fresh-pubs">
-        <rec-publications
-          v-for="(recPub, index) in mainContent.freshPubs"
-          :rec-pub="recPub"
-          :key="index"
-        />
+      <div class="main-page__left-block">
+        <h4 class="main-page__title">
+          Свежие выпуски
+        </h4>
+        <div class="main-page__block main-page__block_fresh-pubs">
+          <rec-publications
+            v-for="(recPub, index) in mainContent.freshPubs"
+            :rec-pub="recPub"
+            :key="index"
+          />
+        </div>
       </div>
-      <div class="main-page__separator"></div>
-      <h4 class="main-page__title">
-        Свежие выпуски
-      </h4>
-      <div class="main-page__block main-page__block_all-pubs">
-        <cover-snippet
-          v-for="(publication, index) in mainContent.pubsList"
-          :key="index"
-          :publication="publication"
-          route="/publication"
-        />
-      </div>
-      <div class="main-page__link">
-        <el-link @click="goToCatalog" type="primary">Перейти к каталогу</el-link>
+      <div class="main-page__left-block">
+        <h4 class="main-page__title">
+          Свежие выпуски
+        </h4>
+        <div class="main-page__block main-page__block_all-pubs">
+          <cover-snippet
+            v-for="(publication, index) in mainContent.pubsList"
+            :key="index"
+            :publication="publication"
+            route="/publication"
+          />
+        </div>
+        <div class="main-page__link">
+          <el-link @click="goToCatalog" type="primary">Перейти к каталогу</el-link>
+        </div>
       </div>
     </div>
     <div class="main-page__col main-page__col_right">
@@ -80,7 +82,12 @@ export default {
     mainContent() {
       return this.$store.state.mainContent
     }
-  }
+  },
+  head() {
+    return {
+      title: `${process.env.appName}`
+    }
+  },
 };
 </script>
 
@@ -89,6 +96,13 @@ export default {
   display: flex;
   justify-content: space-between;
   min-height: 100vh;
+
+  &__left-block {
+    background-color: #fff;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    padding: 25px 25px 30px;
+  }
 
   &__title {
     font-weight: normal;
@@ -112,18 +126,18 @@ export default {
 
   &__col {
     border-radius: 4px;
-    background-color: #fff;
 
     &_right {
       max-width: 300px;
       min-width: 250px;
-      padding: 15px;
+      padding: 25px 15px 15px;
+      background-color: #fff;
     }
 
     &_left {
-      padding: 30px 30px 50px 30px;
+      padding: 0 30px 50px 30px;
       width: 100%;
-      margin-right: 20px;
+      margin-right: 10px;
     }
   }
 
@@ -147,11 +161,17 @@ export default {
 
 @media (max-width: 575.98px) {
   .main-page {
+    &__link {
+      margin: 20px auto;
+    }
+
     &__col {
       &_right {
         display: none;
       }
+
       &_left {
+        padding: 0;
         margin-right: 0;
       }
     }
@@ -184,6 +204,7 @@ export default {
       &_right {
         display: none;
       }
+
       &_left {
         margin-right: 0;
       }

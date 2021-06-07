@@ -152,7 +152,6 @@ export const actions = {
       let res = null
       res = await this.$axios.$post('/users/deny', data)
       if (res) {
-        console.log(res)
         commit('REMOVE_USER', data)
       }
     } catch (e) {
@@ -163,6 +162,17 @@ export const actions = {
     try {
       let res = null
       res = await this.$axios.$post('/admin/reviews/confirm', data)
+      if (res) {
+        commit('REMOVE_ITEM', data)
+      }
+    } catch (e) {
+      throw e;
+    }
+  },
+  async denyReview({commit}, data) {
+    try {
+      let res = null
+      res = await this.$axios.$post('/admin/reviews/deny', data)
       if (res) {
         commit('REMOVE_ITEM', data)
       }

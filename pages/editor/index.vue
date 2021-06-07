@@ -309,7 +309,12 @@ export default {
     ...mapState('auth', {
       user: state => state.user
     })
-  }
+  },
+  head() {
+    return {
+      title: `Редактор статей | ${process.env.appName}`
+    }
+  },
 }
 </script>
 

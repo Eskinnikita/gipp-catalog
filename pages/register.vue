@@ -42,7 +42,12 @@ export default {
   methods: {
 
   },
-  watch: {}
+  watch: {},
+  head() {
+    return {
+      title: `Регистрация | ${process.env.appName}`
+    }
+  },
 };
 </script>
 

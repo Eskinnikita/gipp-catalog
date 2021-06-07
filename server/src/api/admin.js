@@ -32,7 +32,7 @@ const defineModel = (role) => {
 }
 
 //Получешние списка публикаций для администратора
-router.post('/users/pubs/all', passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.post('/users/pubs/all', passport.authenticate("jwt", {session: false}), async (req, res) => {
   try {
     const {page, role, search} = req.body
     const Model = defineModel(+role)
@@ -60,14 +60,14 @@ router.post('/users/pubs/all', passport.authenticate("jwt", { session: false }),
       }
     )
 
-    res.status(200).json({approved: approvedUsers, notApproved: notApprovedUsers, count: approvedUsers.count})
+    res.status(200).json({approved: approvedUsers, notApproved: notApprovedUsers, count: approvedUsers.count, limit: limit})
   } catch (err) {
     res.status(500).json({message: err})
   }
 })
 
 //Получешние списка пользователей для администратора
-router.post('/users/users/all', passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.post('/users/users/all', passport.authenticate("jwt", {session: false}), async (req, res) => {
   try {
     const {page, search} = req.body
     const limit = 10
@@ -75,6 +75,7 @@ router.post('/users/users/all', passport.authenticate("jwt", { session: false })
       where: {},
       limit: limit,
       offset: (+page - 1) * limit,
+      order: [['name', 'ASC']]
     }
     if (search && search !== '') {
       options.where.name = sequelize.where(sequelize.fn('LOWER', sequelize.col('name')), 'LIKE', '%' + search + '%')
@@ -85,14 +86,16 @@ router.post('/users/users/all', passport.authenticate("jwt", { session: false })
         console.log("Error", e)
       }
     )
-    res.status(200).json(users)
+    const usersCopy = JSON.parse(JSON.stringify(users))
+    usersCopy.limit = limit
+    res.status(200).json(usersCopy)
   } catch (err) {
     res.status(500).json({message: err})
   }
 })
 
 //Получешние списка отзывов для администратора
-router.post('/reviews/all', passport.authenticate("jwt", { session: false }),async (req, res) => {
+router.post('/reviews/all', passport.authenticate("jwt", {session: false}), async (req, res) => {
   try {
     const {page} = req.body
     const limit = 10
@@ -110,7 +113,7 @@ router.post('/reviews/all', passport.authenticate("jwt", { session: false }),asy
           model: User, attributes: ['id', 'name', 'role'],
         },
         {
-          model: Organ, attributes: ['id', 'name',  'role'],
+          model: Organ, attributes: ['id', 'name', 'role'],
         },
         {
           model: Publication, attributes: ['id', 'title']
@@ -123,15 +126,16 @@ router.post('/reviews/all', passport.authenticate("jwt", { session: false }),asy
         console.log("Error", e)
       }
     )
-
-    res.status(200).json(reviews)
+    const reviewsCopy = JSON.parse(JSON.stringify(reviews))
+    reviewsCopy.limit = limit
+    res.status(200).json(reviewsCopy)
   } catch (err) {
     res.status(500).json({message: err})
   }
 })
 
 //Подтверждение отзыва
-router.post('/reviews/confirm', passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.post('/reviews/confirm', passport.authenticate("jwt", {session: false}), async (req, res) => {
   try {
     const {id} = req.body
     const updatedReview = await Review.update({approved: true}, {
@@ -145,7 +149,19 @@ router.post('/reviews/confirm', passport.authenticate("jwt", { session: false })
   }
 })
 
-router.post('/articles/all', passport.authenticate("jwt", { session: false }),async (req, res) => {
+router.post('/reviews/deny', passport.authenticate("jwt", {session: false}), async (req, res) => {
+  try {
+    const {id} = req.body
+    console.log(req.body)
+    const reviewToDelete = await Review.findOne({where: {id}})
+    await Review.destroy({where: {id}})
+    res.status(200).json(reviewToDelete)
+  } catch (err) {
+    res.status(500).json({message: err})
+  }
+})
+
+router.post('/articles/all', passport.authenticate("jwt", {session: false}), async (req, res) => {
   try {
     const {page, search} = req.body
     const limit = 10
@@ -184,10 +200,10 @@ router.post('/articles/all', passport.authenticate("jwt", { session: false }),as
   }
 })
 
-router.post('/tags/all', passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.post('/tags/all', passport.authenticate("jwt", {session: false}), async (req, res) => {
   try {
     const {page, search} = req.body
-    const limit = 20
+    const limit = 15
     const options = {
       where: {},
       limit: limit,
@@ -203,7 +219,9 @@ router.post('/tags/all', passport.authenticate("jwt", { session: false }), async
         console.log("Error", e)
       }
     )
-    res.status(200).json(tags)
+    const tagsCopy = JSON.parse(JSON.stringify(tags))
+    tagsCopy.limit = limit
+    res.status(200).json(tagsCopy)
   } catch (err) {
     res.status(500).json({message: err})
   }

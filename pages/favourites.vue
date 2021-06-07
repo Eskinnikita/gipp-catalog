@@ -43,7 +43,12 @@ export default {
     favourites() {
       return this.$store.state.publication.favouritePublications
     }
-  }
+  },
+  head() {
+    return {
+      title: `Избранное | ${process.env.appName}`
+    }
+  },
 }
 </script>
 

@@ -16,12 +16,12 @@
                      :role="+params.role"/>
       <div class="cabinet__pagination">
         <el-pagination
-          v-if="listItems"
+          v-if="listItems && (listItems.count > listItems.limit)"
           @current-change="handleCurrentChange"
-          :pager-count="7"
           :current-page="+params.page"
           layout="pager"
-          :page-count="pagesCount">
+          :page-size="listItems.limit"
+          :total="listItems.count">
         </el-pagination>
       </div>
     </div>
@@ -138,6 +138,7 @@ export default {
       if (this.params.search.trim() !== '') {
         serverParams.data.params.search = this.params.search.toLowerCase()
       }
+      this.$router.push({path: '/cabinet', query: {tab: this.params.activeTab, page: this.params.page, search: this.params.search}});
       this.$store.dispatch(serverParams.dispatch, serverParams.data)
     },
     defineServerQueryParams(role) {
@@ -213,7 +214,12 @@ export default {
   },
   beforeDestroy() {
     this.$store.commit('admin/SET_EMPTY_ITEMS')
-  }
+  },
+  head() {
+    return {
+      title: `Панель администратора | ${process.env.appName}`
+    }
+  },
 }
 </script>
 

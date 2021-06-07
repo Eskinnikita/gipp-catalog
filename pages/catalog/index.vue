@@ -143,7 +143,17 @@ export default {
     search() {
       this.sendSearchString()
     }
-  }
+  },
+  head() {
+    return {
+      title: `Издания | ${process.env.appName}`,
+      meta: [
+        {charset: 'utf-8'},
+        {name: 'viewport', content: 'width=device-width, initial-scale=1'}
+      ],
+      link: [{rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'}]
+    }
+  },
 }
 </script>
 

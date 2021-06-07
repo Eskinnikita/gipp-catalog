@@ -16,7 +16,8 @@
       </div>
     </div>
     <div v-if="+userInfo.role === 1 || userInfo.approved">
-      <el-button type="danger" icon="el-icon-delete" circle></el-button>
+      <el-button type="primary" @click="goToEdit(userInfo.role, userInfo.id)"  icon="el-icon-edit" circle></el-button>
+      <el-button type="danger" @click="openDeleteModal" icon="el-icon-delete" circle></el-button>
     </div>
     <div v-if="notApproved">
       <el-button type="success" @click="openConfirmModal" plain>Принять</el-button>
@@ -36,6 +37,9 @@ export default {
     }
   },
   methods: {
+    openDeleteModal(){
+      this.$emit('openDeleteModal')
+    },
     openConfirmModal(){
       const modalData = this.userInfo
       modalData.modalId = 1
@@ -55,6 +59,15 @@ export default {
         this.$router.push({path: `/user/${id}`, query: {tab: 'comments', page: '1'}});
       } else if (role === 2) {
         this.$router.push({path: `/organization/${id}`, query: {tab: 'news', page: '1'}});
+      }
+    },
+    goToEdit(role, id) {
+      if (role === 3) {
+        this.$router.push({path: `/publisher/${id}/edit`});
+      } else if (role === 1) {
+        this.$router.push({path: `/user/${id}/edit`});
+      } else if (role === 2) {
+        this.$router.push({path: `/organization/${id}/edit`});
       }
     }
   },

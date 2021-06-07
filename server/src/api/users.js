@@ -2,6 +2,8 @@ const express = require('express')
 const User = require('../models/user')
 const Publisher = require('../models/publisher')
 const Organ = require('../models/organization')
+const Review = require('../models/review')
+const UserPublication = require('../models/userPublications')
 const passport = require('passport')
 const generator = require('generate-password');
 const transporter = require('../utils/nodemailerClient')
@@ -153,5 +155,16 @@ router.patch('/:id', upload.single('logo'),  passport.authenticate("jwt", {sessi
   }
 })
 
+router.delete('/:id', upload.single('logo'),  passport.authenticate("jwt", {session: false}), async (req, res) => {
+  try {
+    const userId = req.params.id
+    await Comment.destroy({where: {authorRole: 1, authorId: userId}})
+    await Review.destroy({where: {reviewerRole: 1, reviewerId: userId}})
+    await UserPublication.destroy({where: {userId: userId, userRole: 1}})
+    await User.destroy({where: {id: userId}})
+  } catch (e) {
+    res.status(500).json({message: e})
+  }
+})
 
 module.exports = router

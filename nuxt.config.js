@@ -1,9 +1,9 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'gipp',
+    title: 'Каталог детских СМИ',
     htmlAttrs: {
-      lang: 'en'
+      lang: 'ru'
     },
     meta: [
       {charset: 'utf-8'},
@@ -64,6 +64,7 @@ export default {
 
   env: {
     production: false,
-    serverUrl: process.env.production ? '' : 'http://localhost:8082'
+    serverUrl: process.env.production ? '' : 'http://localhost:8082',
+    appName: 'Каталог детских СМИ'
   }
 }

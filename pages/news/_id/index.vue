@@ -46,35 +46,13 @@ export default {
       articleId: null,
     }
   },
-  head() {
-    return {
-      title: this.article.title,
-      meta: [
-        {charset: 'utf-8'},
-        {name: 'viewport', content: 'width=device-width, initial-scale=1'},
-        {
-          hid: 'description',
-          name: 'description',
-          content: 'Увлечения современной молодежи, проживающей в городе Москва весьма разнообразны. ' +
-            'Проводимые опросы показывают, что большинство респондентов помимо посещения учебных заведений ' +
-            'и работы регулярно уделяют время различным хобби.'
-        },
-        {
-          hid: 'keywords',
-          name: 'keywords',
-          content: 'ГИПП, Гильдия Издателей, Детские СМИ, Детские журналы'
-        }
-      ],
-      link: [{rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'}]
-    }
-  },
   methods: {
     goToArticleEditor() {
       this.$router.push({path: `/editor/${this.article.id}`})
     },
     deleteArticle() {
       this.$store.dispatch('article/deleteArticle', this.article.id).then(() => {
-        // this.$router.push({path: `/news`});
+        this.$router.push({path: `/news`});
       })
     }
   },
@@ -102,7 +80,14 @@ export default {
   },
   beforeDestroy() {
     this.$store.commit('article/SET_EMPTY_ARTICLE')
-  }
+  },
+  head() {
+    if(this.article.title) {
+      return {
+        title: `${this.article.title} | ${process.env.appName}`,
+      }
+    }
+  },
 }
 </script>
 
