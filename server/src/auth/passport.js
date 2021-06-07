@@ -28,7 +28,6 @@ passport.use(
           }
         })
         .catch((e) => {
-          console.log('error')
           return done(e)
         })
       // return User.findOne({where: {id: jwtPayload.id, email: jwtPayload.email}})

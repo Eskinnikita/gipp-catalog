@@ -72,7 +72,7 @@ export default {
     },
     commentInfo() {
       return {
-        articleId: this.articleId,
+        articleId: +this.articleId,
         authorId: this.user.id,
         authorRole: this.user.role
       }

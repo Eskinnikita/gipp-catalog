@@ -1,4 +1,4 @@
-const { DataTypes } = require("sequelize");
+const {DataTypes} = require("sequelize");
 const sequelize = require("../database");
 
 const Organ = sequelize.define("Organ", {
@@ -32,10 +32,14 @@ const Organ = sequelize.define("Organ", {
     type: DataTypes.INTEGER,
     allowNull: false
   },
-  approved: {
-  type: DataTypes.BOOLEAN,
+  blocked: {
+    type: DataTypes.BOOLEAN,
     allowNull: false
-}
+  },
+  approved: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false
+  }
 });
 
 module.exports = Organ;

@@ -38,13 +38,30 @@ export default {
       this.userToDelete = user
       this.$refs.deleteConfirmModal.opened = true
     },
+    sendNotification(title, message, type) {
+      this.$notify({
+        title: title,
+        message: message,
+        type: type,
+        position: 'bottom-right'
+      });
+    },
     deleteUser() {
-      this.$store.dispatch('admin/getUsers', this.userToDelete)
-      .then(() => {
-        this.$refs.deleteConfirmModal.opened = false
-        this.userToDelete = null
-        this.sendNotification('Успех!', 'Пользователь удален', 'success')
-      })
+      let route = ''
+      if (this.userToDelete.role === 1) {
+        route = `/users/`
+      } else if (this.userToDelete.role === 2) {
+        route = '/organs/block/'
+      } else if (this.userToDelete.role === 3) {
+        route = '/publisher/block/'
+      }
+      route += this.userToDelete.id
+      this.$store.dispatch('admin/deleteUser', {route, role: this.userToDelete.role})
+        .then(() => {
+          this.$refs.deleteConfirmModal.opened = false
+          this.userToDelete = null
+          this.sendNotification('Успех!', 'Пользователь удален', 'success')
+        })
     }
   }
 }

@@ -48,6 +48,7 @@ export default {
         address: '',
         phone: '',
         role: 2,
+        blocked: false,
         approved: false
       },
       rules: {

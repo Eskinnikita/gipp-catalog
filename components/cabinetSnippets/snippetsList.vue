@@ -11,11 +11,16 @@
               prefix-icon="el-icon-search"
               v-model.lazy="search"
     />
-    <users-tab v-if="hasApprovedList" :items="items.approved.rows"/>
-    <users-tab v-if="role === 1" :items="items.rows"/>
-    <news-tab v-if="role === 4" :items="items.rows"/>
-    <reviews-tab v-if="role === 5" :items="items.rows"/>
-    <tags-tab v-if="role === 6" :items="items.rows"/>
+    <template v-if="hasApprovedList" >
+      <users-tab v-if="items.approved.rows && items.approved.rows.length" :items="items.approved.rows"/>
+      <p v-if="!items.approved.rows.length">Список пуст</p>
+    </template>
+    <template v-if="items.rows && items.rows.length">
+      <users-tab v-if="role === 1" :items="items.rows"/>
+      <news-tab v-if="role === 4" :items="items.rows"/>
+      <reviews-tab v-if="role === 5" :items="items.rows"/>
+      <tags-tab v-if="role === 6" :items="items.rows"/>
+    </template>
   </div>
 </template>
 

@@ -88,4 +88,27 @@ router.patch('/:id', upload.single('logo'), passport.authenticate("jwt", {sessio
   }
 })
 
+router.patch('/block/:id', passport.authenticate("jwt", {session: false}), async (req, res) => {
+  try {
+    const id = req.params.id
+    const publisherToUpdate = await Publisher.findOne({
+      where: {
+        id
+      }
+    }).catch(e => {
+      res.status(409).json({message: e})
+    })
+    const updatedPublisher = await Publisher.update({blocked: true, password: ''}, {
+      where: {
+        id
+      }
+    }).catch(e => {
+      res.status(409).json({message: e})
+    })
+    res.status(200).json(publisherToUpdate)
+  } catch (e) {
+    res.status(500).json({message: e})
+  }
+})
+
 module.exports = router

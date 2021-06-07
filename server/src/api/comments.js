@@ -30,10 +30,11 @@ router.post('/', passport.authenticate("jwt", {session: false}), async (req, res
           attributes: ['id', 'name', 'role']
         }
       ]
+    }).catch(e => {
+      res.status(401).json({message: e.message})
     })
     const authorCopy = JSON.parse(JSON.stringify([commentWithAuthor]))
     commentWithAuthor = authorParser(authorCopy)
-    console.log(commentWithAuthor)
     res.status(200).json(commentWithAuthor)
   } catch (err) {
     res.status(500).json({message: err})

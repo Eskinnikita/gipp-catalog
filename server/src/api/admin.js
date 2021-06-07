@@ -39,7 +39,8 @@ router.post('/users/pubs/all', passport.authenticate("jwt", {session: false}), a
     const limit = 10
     const options = {
       where: {
-        approved: true
+        approved: true,
+        blocked: false
       },
       limit: limit,
       offset: (+page - 1) * limit,

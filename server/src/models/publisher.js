@@ -27,6 +27,10 @@ const Publisher = sequelize.define("Publisher", {
     type: DataTypes.INTEGER,
     allowNull: false
   },
+  blocked: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false
+  },
   approved: {
     type: DataTypes.BOOLEAN,
     allowNull: false

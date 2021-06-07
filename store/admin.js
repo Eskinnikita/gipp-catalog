@@ -15,7 +15,14 @@ export const mutations = {
     })
     state.adminPanelListItems.notApproved.splice(userIndex, 1)
   },
+  REMOVE_APPROVED_USER(state, data) {
+    const userIndex = state.adminPanelListItems.approved.rows.findIndex(el => {
+      return el.id === data.id
+    })
+    state.adminPanelListItems.approved.rows.splice(userIndex, 1)
+  },
   REMOVE_ITEM(state, data) {
+    console.log('REMOVE', data)
     const itemIndex = state.adminPanelListItems.rows.findIndex(el => {
       return el.id === data.id
     })
@@ -175,6 +182,24 @@ export const actions = {
       res = await this.$axios.$post('/admin/reviews/deny', data)
       if (res) {
         commit('REMOVE_ITEM', data)
+      }
+    } catch (e) {
+      throw e;
+    }
+  },
+  async deleteUser({commit}, data) {
+    try {
+      let res = null
+      if(data.role === 1) {
+        res = await this.$axios.$delete(data.route)
+      } else {
+        res = await this.$axios.$patch(data.route)
+      }
+      console.log(res)
+      if (data.role === 1) {
+        commit('REMOVE_ITEM', res)
+      } else {
+        commit('REMOVE_APPROVED_USER', res)
       }
     } catch (e) {
       throw e;

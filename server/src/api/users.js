@@ -3,6 +3,7 @@ const User = require('../models/user')
 const Publisher = require('../models/publisher')
 const Organ = require('../models/organization')
 const Review = require('../models/review')
+const Comment = require('../models/comment')
 const UserPublication = require('../models/userPublications')
 const passport = require('passport')
 const generator = require('generate-password');
@@ -135,11 +136,11 @@ router.get('/:id', async (req, res) => {
 })
 
 //Обновление пользователя
-router.patch('/:id', upload.single('logo'),  passport.authenticate("jwt", {session: false}), async (req, res) => {
+router.patch('/:id', upload.single('logo'), passport.authenticate("jwt", {session: false}), async (req, res) => {
   try {
     const id = req.params.id
     const infoToUpdate = JSON.parse(req.body.user)
-    if(req.body.logo !== 'null') {
+    if (req.body.logo !== 'null') {
       infoToUpdate.logoUrl = req.file.path
     }
     const updatedUser = await User.update(infoToUpdate, {
@@ -155,13 +156,21 @@ router.patch('/:id', upload.single('logo'),  passport.authenticate("jwt", {sessi
   }
 })
 
-router.delete('/:id', upload.single('logo'),  passport.authenticate("jwt", {session: false}), async (req, res) => {
+//Удаление пользователя
+router.delete('/:id', passport.authenticate("jwt", {session: false}), async (req, res) => {
   try {
     const userId = req.params.id
+    const userToDelete = await User.findOne({where: {id: userId}})
+      .catch(e => res.status(409).json({message: e}))
     await Comment.destroy({where: {authorRole: 1, authorId: userId}})
+      .catch(e => res.status(409).json({message: e}))
     await Review.destroy({where: {reviewerRole: 1, reviewerId: userId}})
+      .catch(e => res.status(409).json({message: e}))
     await UserPublication.destroy({where: {userId: userId, userRole: 1}})
+      .catch(e => res.status(409).json({message: e}))
     await User.destroy({where: {id: userId}})
+      .catch(e => res.status(409).json({message: e}))
+    res.status(200).json(userToDelete)
   } catch (e) {
     res.status(500).json({message: e})
   }
