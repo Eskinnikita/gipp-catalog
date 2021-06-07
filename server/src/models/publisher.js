@@ -54,4 +54,5 @@ Publisher.hasMany(Publication, {
 })
 
 
+
 module.exports = Publisher;

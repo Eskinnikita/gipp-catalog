@@ -1,4 +1,5 @@
 const express = require('express')
+const sequelize = require('../database/index')
 const Comment = require('../models/comment')
 const User = require('../models/user')
 const Organ = require('../models/organization')
@@ -11,9 +12,12 @@ const router = express.Router()
 //Добавление комментария
 router.post('/', passport.authenticate("jwt", {session: false}), async (req, res) => {
   try {
-    const comment = await Comment.create(req.body).catch(e => {
-      res.status(401).json({message: e.message})
-    })
+    const comment = await sequelize.transaction(function(t) {
+      return Comment.create(req.body, {transaction: t})
+    });
+    // const comment = await Comment.create(req.body).catch(e => {
+    //   res.status(401).json({message: e.message})
+    // })
     let commentWithAuthor = await Comment.findOne({
       where: { id: comment.id},
       include: [

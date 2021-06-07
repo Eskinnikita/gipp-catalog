@@ -24,9 +24,9 @@ const Comment = sequelize.define("Comment", {
   }
 });
 
-Comment.belongsTo(Publisher, {foreignKey: 'authorId'})
-Comment.belongsTo(Organ, {foreignKey: 'authorId'})
-Comment.belongsTo(User, {foreignKey: 'authorId'})
-Comment.belongsTo(Article, {foreignKey: 'articleId'})
+Comment.belongsTo(Publisher, {foreignKey: 'authorId', onDelete: 'CASCADE'},)
+Comment.belongsTo(Organ, {foreignKey: 'authorId', onDelete: 'CASCADE'})
+Comment.belongsTo(User, {foreignKey: 'authorId', onDelete: 'CASCADE'})
+Comment.belongsTo(Article, {foreignKey: 'articleId', onDelete: 'CASCADE'})
 
 module.exports = Comment;
