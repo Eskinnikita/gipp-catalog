@@ -2,6 +2,8 @@
   <div class="cabinet">
     <div class="cabinet__navbar">
       <el-menu
+        :collapse="collapse"
+        :mode="menuMode"
         :default-active="params.activeTab"
       >
         <el-menu-item @click="changeTab(item.index, item.role)" v-for="(item, index) in navItems" :key="index"
@@ -37,6 +39,10 @@ export default {
     snippetsList
   },
   created() {
+    if (process.browser) {
+      this.onResize()
+      window.addEventListener('resize', this.onResize)
+    }
     const obj = this.$route.query
     if (obj && Object.keys(obj).length === 0 && obj.constructor === Object) {
       this.$router.push({path: '/cabinet', query: {tab: '1', page: '1'}});
@@ -45,7 +51,7 @@ export default {
         const tabInfo = this.navItems.findIndex(el => {
           return el.index === this.$route.query.tab
         })
-        if(tabInfo !== -1) {
+        if (tabInfo !== -1) {
           this.params.activeTab = this.$route.query.tab
           const tabConfig = this.navItems.find(el => el.index === this.$route.query.tab)
           this.params.role = tabConfig.role
@@ -62,10 +68,11 @@ export default {
     }
   },
   mounted() {
-
   },
   data() {
     return {
+      menuMode: '',
+      collapse: false,
       timer: null,
       limit: 10,
       params: {
@@ -115,6 +122,15 @@ export default {
     }
   },
   methods: {
+    onResize() {
+      if (window.innerWidth <= 815) {
+        this.menuMode = 'horizontal'
+        this.collapse = true
+      } else {
+        this.menuMode = 'vertical'
+        this.collapse = false
+      }
+    },
     setSearch(val) {
       this.params.search = val
       this.$router.push({
@@ -138,7 +154,10 @@ export default {
       if (this.params.search.trim() !== '') {
         serverParams.data.params.search = this.params.search.toLowerCase()
       }
-      this.$router.push({path: '/cabinet', query: {tab: this.params.activeTab, page: this.params.page, search: this.params.search}});
+      this.$router.push({
+        path: '/cabinet',
+        query: {tab: this.params.activeTab, page: this.params.page, search: this.params.search}
+      });
       this.$store.dispatch(serverParams.dispatch, serverParams.data)
     },
     defineServerQueryParams(role) {
@@ -183,7 +202,7 @@ export default {
             }
           }
         }
-      } else if(role === 6) {
+      } else if (role === 6) {
         return {
           dispatch: 'admin/getTags',
           data: {
@@ -214,6 +233,7 @@ export default {
   },
   beforeDestroy() {
     this.$store.commit('admin/SET_EMPTY_ITEMS')
+    window.removeEventListener('resize', this.onResize)
   },
   head() {
     return {
@@ -242,4 +262,26 @@ export default {
     align-items: center;
   }
 }
+
+
+@media (max-width: 815px) {
+  .el-menu-item {
+    padding: 0 10px;
+  }
+  .cabinet {
+    flex-direction: column;
+  }
+
+  .el-menu {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .snippet-list {
+    padding: 20px 0 30px 0;
+  }
+}
+
+
 </style>

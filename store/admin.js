@@ -32,10 +32,14 @@ export const mutations = {
     const userIndex = state.adminPanelListItems.notApproved.findIndex(el => {
       return el.id === data.id
     })
-    const user = state.adminPanelListItems.notApproved[userIndex]
-    state.adminPanelListItems.notApproved.splice(userIndex, 1)
+    console.log('INDEX', state.adminPanelListItems.notApproved[userIndex])
+    const user = JSON.parse(JSON.stringify(state.adminPanelListItems.notApproved[userIndex]))
+    console.log(user)
     user.approved = true
-    state.adminPanelListItems.approved.rows.unshift(user)
+    if(user) {
+      state.adminPanelListItems.notApproved.splice(userIndex, 1)
+      state.adminPanelListItems.approved.rows.unshift(user)
+    }
   },
   ADD_ITEM(state, item) {
     state.adminPanelListItems.rows.unshift(item)
@@ -144,7 +148,6 @@ export const actions = {
   },
   async confirmRequest({commit}, data) {
     try {
-      commit('REPLACE_SNIPPET', data)
       let res = null
       res = await this.$axios.$post('/users/confirm', data)
       if (res) {

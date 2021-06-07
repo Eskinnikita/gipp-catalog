@@ -75,7 +75,7 @@
           <div class="recommends__container"
                :style="{ 'justify-content': publication.publisher.Publications.length === 2 ? 'flex-start' : 'space-between'}">
             <rec-publications
-              v-if="index < 4"
+              v-if="index < 3"
               v-for="(recPub, index) in publication.publisher.Publications"
               :rec-pub="recPub"
               :key="index"
@@ -523,6 +523,36 @@ export default {
       .el-button {
         width: 100%;
       }
+    }
+  }
+}
+
+@media (min-width: 576px) and (max-width: 815px) {
+  .left {
+    max-width: 160px;
+  }
+
+  .profile-page {
+    &__image {
+      min-width: 100px;
+    }
+
+    &__right {
+      width: 75%;
+    }
+  }
+
+  .recommends {
+    &__container {
+      overflow-x: scroll;
+    }
+  }
+}
+
+@media (min-width: 815px) and (max-width: 1000px) {
+  .recommends {
+    &__container {
+      overflow-x: scroll;
     }
   }
 }

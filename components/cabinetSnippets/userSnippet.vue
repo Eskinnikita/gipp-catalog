@@ -110,4 +110,15 @@ export default {
     font-size: 16px;
   }
 }
+
+@media (max-width: 575.98px) {
+  .user-snippet {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+
+    &__left {
+      margin-bottom: 15px;
+    }
+  }
+}
 </style>

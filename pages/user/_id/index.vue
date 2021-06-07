@@ -341,4 +341,10 @@ export default {
   }
 }
 
+@media (min-width: 576px) and (max-width: 815px) {
+  .left {
+    max-width: 160px;
+  }
+}
+
 </style>

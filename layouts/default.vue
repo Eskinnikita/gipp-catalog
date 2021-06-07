@@ -170,4 +170,13 @@ textarea {
 
   }
 }
+
+@media (min-width: 576px) and (max-width: 815px) {
+  .page {
+    &__container {
+      margin-top: 65px !important;
+      width: 100%;
+    }
+  }
+}
 </style>

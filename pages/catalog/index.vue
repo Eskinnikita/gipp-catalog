@@ -6,7 +6,8 @@
     <div class="catalog__content">
       <div class="catalog__header catalog-header">
         <h3 class="catalog__title">Каталог</h3>
-        <el-input class="catalog-header__search" type="text" placeholder="Поиск" prefix-icon="el-icon-search" v-model="search"/>
+        <el-input class="catalog-header__search" type="text" placeholder="Поиск" prefix-icon="el-icon-search"
+                  v-model="search"/>
       </div>
       <div
         v-if="publications.rows && publications.rows.length"
@@ -100,7 +101,7 @@ export default {
       this.params.page = `${val}`
     },
     applyFilters() {
-      if(this.params.search) {
+      if (this.params.search) {
         this.params.search = this.params.search.toLocaleLowerCase()
       }
       this.$router.push({path: '/catalog', query: this.params})
@@ -109,7 +110,7 @@ export default {
     setQueryValues(keys) {
       keys.forEach(key => {
         if (this.$route.query[key]) {
-          if(Array.isArray(this.$route.query[key])) {
+          if (Array.isArray(this.$route.query[key])) {
             this.$refs.filters.parameters[key] = this.$route.query[key]
           } else {
             this.$refs.filters.parameters[key] = [this.$route.query[key]]
@@ -163,6 +164,7 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+
   &__title {
     margin-bottom: 10px;
     font-weight: normal;
@@ -226,6 +228,25 @@ export default {
       margin-left: 25px;
     }
   }
+}
+
+@media (min-width: 576px) and (max-width: 815px) {
+  .catalog {
+    flex-direction: column;
+
+    &__filter {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    &__publications-container {
+      grid-template-columns: repeat(auto-fill, 130px);
+    }
+  }
+}
+
+@media (min-width: 815px) and (max-width: 1000px) {
+
 }
 
 </style>

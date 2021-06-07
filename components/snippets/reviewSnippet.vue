@@ -132,4 +132,16 @@ export default {
     align-items: center;
   }
 }
+
+
+@media (max-width: 575.98px) {
+  .comment-snippet {
+    flex-direction: column;
+    align-items: flex-start;
+    &__info {
+      border: none;
+    }
+  }
+}
+
 </style>

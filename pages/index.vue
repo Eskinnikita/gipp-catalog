@@ -217,4 +217,22 @@ export default {
     }
   }
 }
+
+@media (min-width: 815px) and (max-width: 1000px) {
+  .main-page {
+    &__col {
+
+      &_left {
+        width: 70%;
+        padding: 0 !important;
+      }
+    }
+
+    &__block {
+      &_fresh-pubs {
+        overflow-x: scroll;
+      }
+    }
+  }
+}
 </style>

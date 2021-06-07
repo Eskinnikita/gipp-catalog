@@ -198,4 +198,16 @@ export default {
     }
   }
 }
+
+@media (min-width: 576px) and (max-width: 815px) {
+  .news {
+    flex-direction: column;
+
+    &__filter {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+  }
+}
+
 </style>

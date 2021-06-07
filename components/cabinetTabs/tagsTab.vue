@@ -93,4 +93,13 @@ export default {
     margin-top: 20px;
   }
 }
+
+@media (max-width: 575.98px) {
+  .cabinet-tab {
+    &__tag-add {
+      margin-top: 20px;
+      margin-bottom: 40px;
+    }
+  }
+}
 </style>
