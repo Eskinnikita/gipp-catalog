@@ -55,7 +55,7 @@ a {
     max-width: 1020px;
     border-radius: 4px;
     &_transparent {
-      background: none;
+      background: none !important;
     }
   }
 }

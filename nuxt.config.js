@@ -64,7 +64,7 @@ export default {
 
   env: {
     production: false,
-    serverUrl: process.env.production ? '' : 'http://localhost:8082',
+    serverUrl: process.env.production ? '' : 'http://gipp-server.std-272.ist.mospolytech.ru',
     appName: 'Каталог детских СМИ'
   }
 }
