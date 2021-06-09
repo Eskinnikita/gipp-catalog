@@ -1,8 +1,8 @@
 <template>
   <div class="adaptive-menu">
-    <el-button type="text" @click="drawer = true">
+    <button class="adaptive-menu__button" @click="drawer = true">
       <font-awesome-icon :icon="{ prefix: 'fa', iconName: 'bars' }"></font-awesome-icon>
-    </el-button>
+    </button>
     <el-drawer
       :modalAppendToBody="false"
       title="I am the title"
@@ -128,6 +128,13 @@ export default {
 
 <style lang="scss" scoped>
 .adaptive-menu {
+  &__button {
+    display: block;
+    border: none;
+    background: none;
+    color: var(--accent-color);
+    font-size: 30px;
+  }
   &__container {
 
   }
