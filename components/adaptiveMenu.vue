@@ -2,7 +2,7 @@
   <div class="adaptive-menu">
     <button class="adaptive-menu__button" @click="drawer = true">
       <template>
-        <svg class="adaptive-menu__burger-icon" viewBox="0 0 100 80" width="40" height="40">
+        <svg class="adaptive-menu__burger-icon" preserveAspectRatio="none" viewBox="0 0 100 80" width="40" height="40">
           <rect width="100" height="15" rx="8"></rect>
           <rect y="30" width="100" height="15" rx="8"></rect>
           <rect y="60" width="100" height="15" rx="8"></rect>

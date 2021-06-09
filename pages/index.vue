@@ -3,7 +3,7 @@
     <div class="main-page__col main-page__col_left">
       <div class="main-page__left-block">
         <h4 class="main-page__title">
-          Главные
+          Главные новости
         </h4>
         <main-news :articles="mainContent.mainNews"/>
       </div>
