@@ -24,7 +24,7 @@
         </div>
         <div v-else-if="block.type === 'image'">
           <div class="article__image">
-            <img :src="block.data.file.url" alt="Картинка статьи"/>
+            <img :src="serverUrl + '/' + block.data.file.url" alt="Картинка статьи"/>
             <div class="article__image-caption" v-if="block.data.caption">{{ block.data.caption }}</div>
           </div>
         </div>
