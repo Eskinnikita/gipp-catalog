@@ -24,7 +24,7 @@
         </div>
         <div v-else-if="block.type === 'image'">
           <div class="article__image">
-            <img :src="serverUrl + '/' + block.data.file.url" alt="Картинка статьи"/>
+            <img :src="replaceUrl(block.data.file.url)" alt="Картинка статьи"/>
             <div class="article__image-caption" v-if="block.data.caption">{{ block.data.caption }}</div>
           </div>
         </div>
@@ -70,6 +70,12 @@ export default {
     }
   },
   methods: {
+    replaceUrl(url) {
+      const newUrl = new URL(url)
+      newUrl.hostname = this.serverUrl.replace(/(^\w+:|^)\/\//, '');
+      newUrl.port = ''
+      return newUrl.href
+    },
     initArticle() {
       if (this.preview) {
         this.parseArticleToPreview()
