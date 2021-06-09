@@ -238,7 +238,6 @@ export default {
       } else {
         this.$store.dispatch('article/saveArticle', formData)
           .then(res => {
-            console.log('RESSSSS', res)
             this.goToArticle(res.id, 'Статья успешно опубликована!')
           })
       }
@@ -258,7 +257,6 @@ export default {
           this.confirmMessage = message
           this.$refs.confirmModal.opened = true
         } else {
-          console.log('error submit!!');
           return false;
         }
       });
@@ -268,7 +266,6 @@ export default {
         if (valid) {
           this.dialogVisible = true
         } else {
-          console.log('error submit!!');
           return false;
         }
       });

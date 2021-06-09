@@ -42,7 +42,6 @@ export const mutations = {
     state.favouritePublications = favourites
   },
   CHANGE_FAVOURITE(state, data) {
-    console.log('DATA', data)
     let publicationIndex = null
     if (data.publication.isFavPage) {
       if (data.status === 'removed') {
@@ -165,7 +164,6 @@ export const actions = {
     }
   },
   async getFavourites({commit}, data) {
-    console.log(data)
     try {
       let res = null
       res = await this.$axios.$post(`/favourites/all`, data)

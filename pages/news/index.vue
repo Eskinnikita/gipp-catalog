@@ -122,7 +122,6 @@ export default {
   watch: {
     params: {
       handler(val) {
-        console.log(val)
         this.applyFilters()
       },
       deep: true

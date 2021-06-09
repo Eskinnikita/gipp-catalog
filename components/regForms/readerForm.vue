@@ -92,8 +92,6 @@ export default {
               }
             })
         } else {
-          console.log(this.form)
-          console.log('error submit!!');
           return false;
         }
       });

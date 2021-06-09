@@ -22,7 +22,6 @@ export const mutations = {
     state.adminPanelListItems.approved.rows.splice(userIndex, 1)
   },
   REMOVE_ITEM(state, data) {
-    console.log('REMOVE', data)
     const itemIndex = state.adminPanelListItems.rows.findIndex(el => {
       return el.id === data.id
     })
@@ -32,9 +31,7 @@ export const mutations = {
     const userIndex = state.adminPanelListItems.notApproved.findIndex(el => {
       return el.id === data.id
     })
-    console.log('INDEX', state.adminPanelListItems.notApproved[userIndex])
     const user = JSON.parse(JSON.stringify(state.adminPanelListItems.notApproved[userIndex]))
-    console.log(user)
     user.approved = true
     if(user) {
       state.adminPanelListItems.notApproved.splice(userIndex, 1)
@@ -115,7 +112,6 @@ export const actions = {
       let res = null
       res = await this.$axios.$delete(`/tags/${data}`)
       if (res) {
-        console.log(res)
         commit('REMOVE_ITEM', res)
         return res
       }
@@ -125,7 +121,6 @@ export const actions = {
   },
   async getReviews({commit}, data) {
     try {
-      console.log(data)
       commit('SET_EMPTY_ITEMS')
       let res = null
       res = await this.$axios.$post(data.route, data.params)
@@ -198,7 +193,6 @@ export const actions = {
       } else {
         res = await this.$axios.$patch(data.route)
       }
-      console.log(res)
       if (data.role === 1) {
         commit('REMOVE_ITEM', res)
       } else {

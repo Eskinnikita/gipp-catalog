@@ -32,7 +32,6 @@ export const actions = {
         return res
       }
     } catch (e) {
-      console.log(e)
       this.$notify({
         title: 'Успех!',
         message: e.message,
@@ -54,7 +53,6 @@ export const actions = {
   },
   async saveArticle({commit}, data) {
     try {
-      console.log(data)
       let res = null
       res = await this.$axios.$post(`/articles`, data)
       if (res) {
@@ -69,7 +67,6 @@ export const actions = {
     try {
       let res = null
       res = await this.$axios.$patch(`/articles/${data.id}`, data.data)
-      console.log(res)
       if (res) {
         return res
       }
@@ -82,7 +79,6 @@ export const actions = {
       let res = null
       res = await this.$axios.$post(`/comments`, data)
       if (res) {
-        console.log(res)
         commit('ADD_COMMENT', res[0])
         return res
       }

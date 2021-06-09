@@ -200,7 +200,6 @@ export default {
         if (valid) {
           this.$refs.confirmModal.opened = true
         } else {
-          console.log('error submit!!');
           return false;
         }
       });

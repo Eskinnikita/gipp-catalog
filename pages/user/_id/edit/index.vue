@@ -103,7 +103,6 @@ export default {
       this.imageUrl = URL.createObjectURL(file.raw);
     },
     handleChange(file, fileList) {
-      console.log(file)
       this.imageFile = file.raw
     },
     handleRemove(file) {
@@ -114,7 +113,6 @@ export default {
         if (valid) {
           this.$refs.confirmModal.opened = true
         } else {
-          console.log('error submit!!');
           return false;
         }
       });
@@ -151,7 +149,6 @@ export default {
       if (userInfo.logoUrl) {
         this.imageUrl = this.serverUrl + '/' + userInfo.logoUrl
       }
-      console.log(this.user)
     }
   },
   computed: {

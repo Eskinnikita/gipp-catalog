@@ -39,7 +39,6 @@ export const actions = {
         route = 'users'
       }
       res = await this.$axios.$get(`/${route}/${data.id}`)
-      console.log(res)
       if(res) {
         commit('SET_PROFILE', res)
       }

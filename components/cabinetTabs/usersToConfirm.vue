@@ -45,7 +45,6 @@ export default {
   },
   methods: {
     openUsersConfirmModal(type, user) {
-      console.log(user)
       if (type === 'confirm') {
         this.actionType = 'confirm'
         this.userOnConfirm = user

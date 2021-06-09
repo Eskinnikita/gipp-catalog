@@ -20,7 +20,6 @@ export const actions = {
   },
   async updateUser({commit}, data) {
     try {
-      console.log(data)
       let res = null
       if (data.role === 1) {
         res = await this.$axios.$patch(`/users/${data.id}`, data.formData)

@@ -43,7 +43,6 @@ export const actions = {
         commit('SET_USER', res)
       }
     } catch (e) {
-      console.log(e)
       throw e;
     }
   },

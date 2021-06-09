@@ -526,6 +526,10 @@ export default {
     }
   }
 
+  .rec-publication {
+    margin-right: 0;
+  }
+
   .right-header {
     &__info {
       width: 100%;
@@ -553,6 +557,10 @@ export default {
 @media (min-width: 576px) and (max-width: 815px) {
   .left {
     max-width: 160px;
+  }
+
+  .rec-publication {
+    margin-right: 0;
   }
 
   .profile-page {

@@ -62,7 +62,6 @@ export default {
     confirmDialog
   },
   created() {
-    console.log(this.colorPalette)
     this.serverUrl = process.env.serverUrl
     this.publisherId = +this.$route.params.id
     this.$store.dispatch('publisher/getPublisher', +this.publisherId)
@@ -98,7 +97,6 @@ export default {
       this.imageUrl = URL.createObjectURL(file.raw);
     },
     handleChange(file, fileList) {
-      console.log(file)
       this.imageFile = file.raw
     },
     handleRemove(file) {
@@ -109,7 +107,6 @@ export default {
         if (valid) {
           this.$refs.confirmModal.opened = true
         } else {
-          console.log('error submit!!');
           return false;
         }
       });
