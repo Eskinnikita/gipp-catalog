@@ -1,7 +1,14 @@
 <template>
   <div class="adaptive-menu">
     <button class="adaptive-menu__button" @click="drawer = true">
-      <font-awesome-icon :icon="{ prefix: 'fa', iconName: 'bars' }"></font-awesome-icon>
+      <template>
+        <svg class="adaptive-menu__burger-icon" viewBox="0 0 100 80" width="40" height="40">
+          <rect width="100" height="15" rx="8"></rect>
+          <rect y="30" width="100" height="15" rx="8"></rect>
+          <rect y="60" width="100" height="15" rx="8"></rect>
+        </svg>
+<!--        <font-awesome-icon :icon="{ prefix: 'fa', iconName: 'bars' }"></font-awesome-icon>-->
+      </template>
     </button>
     <el-drawer
       :modalAppendToBody="false"
@@ -129,12 +136,18 @@ export default {
 <style lang="scss" scoped>
 .adaptive-menu {
   &__button {
-    display: block;
+    display: flex;
+    align-items: center;
     border: none;
     background: none;
     color: var(--accent-color);
     font-size: 30px;
   }
+
+  &__burger-icon{
+    fill: var(--accent-color) !important;
+  }
+
   &__container {
 
   }
