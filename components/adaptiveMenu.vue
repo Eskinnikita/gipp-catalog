@@ -2,7 +2,7 @@
   <div class="adaptive-menu">
     <button class="adaptive-menu__button" @click="drawer = true">
       <template>
-        <svg class="adaptive-menu__burger-icon" preserveAspectRatio="none" viewBox="0 0 100 80" width="40" height="40">
+        <svg class="adaptive-menu__burger-icon" viewBox="0 0 100 80" width="40" height="40">
           <rect width="100" height="15" rx="8"></rect>
           <rect y="30" width="100" height="15" rx="8"></rect>
           <rect y="60" width="100" height="15" rx="8"></rect>
@@ -136,6 +136,9 @@ export default {
 <style lang="scss" scoped>
 .adaptive-menu {
   &__button {
+    height: 40px;
+    width: 40px;
+    position: relative;
     display: flex;
     align-items: center;
     border: none;
@@ -145,6 +148,11 @@ export default {
   }
 
   &__burger-icon{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
     fill: var(--accent-color) !important;
   }
 
