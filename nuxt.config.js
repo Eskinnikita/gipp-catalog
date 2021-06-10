@@ -65,7 +65,7 @@ export default {
 
   env: {
     production: false,
-    serverUrl: 'https://gipp-server.herokuapp.com',
+    serverUrl: 'http://gipp-server.std-272.ist.mospolytech.ru',
     appName: 'Каталог детских СМИ'
   }
 }
