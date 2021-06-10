@@ -190,7 +190,6 @@ export default {
     grid-gap: 2rem;
     justify-content: space-between;
     margin-bottom: 20px;
-    min-height: calc(100vh - 240px);
     height: auto;
   }
 
