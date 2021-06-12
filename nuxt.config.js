@@ -9,7 +9,6 @@ export default {
     meta: [
       {charset: 'utf-8'},
       {name: 'viewport', content: 'width=device-width, initial-scale=1'},
-      {hid: 'description', name: 'description', content: ''},
     ],
     link: [
       {rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'}
@@ -48,9 +47,47 @@ export default {
   // },
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/sitemap',
+    '@nuxtjs/robots'
   ],
+  robots: {
+    UserAgent: '*',
+    Disallow: [
+      '/cabinet',
+      '/user=',
+      '/organization',
+      '/favourites',
+      '/create',
+      '/editor',
+      '/publication/create'
+    ]
+  },
+  sitemap: {
+    hostname: 'http://detsmi-catalog-gipp.herokuapp.com',
+    gzip: true,
+    exclude: [
+      '/cabinet',
+      '/editor',
+    ],
+    routes: [
+      {
+        url: '/catalog',
+        changefreq: 'daily',
+        priority: 1,
+      },
+      {
+        url: '/news',
+        changefreq: 'daily',
+        priority: 1,
+      },
+      {
+        url: '/publisher',
+        changefreq: 'daily',
+        priority: 1,
+      }
+    ]
+  },
   moment: {
     locales: ['ru']
   },
