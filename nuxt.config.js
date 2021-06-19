@@ -99,8 +99,8 @@ export default {
   },
   env: {
     production: false,
-    serverUrl: 'http://localhost:8082',
-    // serverUrl: 'http://gipp-server.std-272.ist.mospolytech.ru',
+    // serverUrl: 'http://localhost:8082',
+    serverUrl: 'http://gipp-server.std-272.ist.mospolytech.ru',
     appName: 'Каталог детских СМИ'
   }
 }

@@ -10,6 +10,6 @@ export default function ({
     return request
   })
 
-  // $axios.setBaseURL('http://gipp-server.std-272.ist.mospolytech.ru/api')
-  $axios.setBaseURL('http://localhost:8082/api')
+  $axios.setBaseURL('http://gipp-server.std-272.ist.mospolytech.ru/api')
+  // $axios.setBaseURL('http://localhost:8082/api')
 }
