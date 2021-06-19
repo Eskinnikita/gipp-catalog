@@ -15,7 +15,7 @@
         <nuxt-link v-if="showControls" :to="`/publication/${commentInfo.Publication.id}`">
           <el-button type="text" class="comment-snippet__name">Отзыв к «{{ commentInfo.Publication.title }}»</el-button>
         </nuxt-link>
-        <h4 class="comment-snippet__name">{{ commentInfo.author.name }}</h4>
+        <h4 class="comment-snippet__name">{{ commentInfo.author.name }} <span style="color: #ffb656; font-size: 14px;"><font-awesome-icon :icon="{ prefix: 'fa', iconName: 'star' }"></font-awesome-icon>{{commentInfo.rating}}</span></h4>
         <p class="comment-snippet__text">{{ commentInfo.text }}
         </p>
         <span class="comment-snippet__time"> {{ $moment(commentInfo.updatedAt).fromNow(true) }} назад</span>

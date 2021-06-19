@@ -6,11 +6,16 @@
         <Nuxt />
       </div>
     </main>
+    <Footer/>
   </div>
 </template>
 
 <script>
+import footer from "@/components/footer"
 export default {
+  components: {
+    'Footer': footer
+  },
   created() {
   }
 };

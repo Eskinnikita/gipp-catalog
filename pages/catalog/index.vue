@@ -1,7 +1,15 @@
 <template>
   <div class="catalog">
     <div class="catalog__filters">
-      <catalog-filter class="catalog__filter" ref="filters"/>
+      <el-button @click="toggleFilters"
+                 style="width: 100%"
+                 class="catalog__filter-button"
+                 type="primary"
+                 plain>
+        <template v-if="!showFilters">Показать фильтры</template>
+        <template v-else>Скрыть фильтры</template>
+      </el-button>
+      <catalog-filter v-if="showFilters" class="catalog__filter" ref="filters"/>
     </div>
     <div class="catalog__content">
       <div class="catalog__header catalog-header">
@@ -48,6 +56,10 @@ export default {
     catalogFilter
   },
   created() {
+    if (process.browser) {
+      this.onResize()
+      window.addEventListener('resize', this.onResize)
+    }
     if (this.$route.query.page) {
       this.params.page = this.$route.query.page
     }
@@ -86,6 +98,7 @@ export default {
   },
   data() {
     return {
+      showFilters: true,
       search: '',
       params: {
         search: '',
@@ -97,6 +110,12 @@ export default {
     }
   },
   methods: {
+    onResize() {
+      this.showFilters = window.innerWidth > 815;
+    },
+    toggleFilters() {
+      this.showFilters = !this.showFilters
+    },
     handleCurrentChange(val) {
       this.params.page = `${val}`
     },
@@ -171,6 +190,11 @@ export default {
   flex-direction: row;
   justify-content: space-between;
 
+  &__filter-button {
+    display: none;
+    margin-bottom: 15px;
+  }
+
   &__title {
     margin-bottom: 10px;
     font-weight: normal;
@@ -225,6 +249,10 @@ export default {
     &__publications-container {
       grid-template-columns: repeat(auto-fill, 130px);
     }
+
+    &__filter-button {
+      display: block;
+    }
   }
 
   .catalog-header {
@@ -238,6 +266,10 @@ export default {
 @media (min-width: 576px) and (max-width: 815px) {
   .catalog {
     flex-direction: column;
+
+    &__filter-button {
+      display: block;
+    }
 
     &__filter {
       width: 100%;

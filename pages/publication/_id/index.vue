@@ -16,14 +16,6 @@
            v-if="publication && !publication.coverLink && publication.coverLink !== undefined">
       </div>
       <div class="profile-page__controls controls">
-        <!--        <div v-if="isUserAdmin" class="profile-page__admin-controls left__item">-->
-        <!--          <nuxt-link :to="`${publication.id}/edit`">-->
-        <!--            <el-button class="accent-element left__item" style="width: 100%" type="primary">Редактировать</el-button>-->
-        <!--          </nuxt-link>-->
-        <!--          <el-button @click="$refs.confirmModal.opened = true" class="accent-element" style="width: 100%"-->
-        <!--                     type="primary">Удалить-->
-        <!--          </el-button>-->
-        <!--        </div>-->
         <a class="left__item" :href="publication.subsLink" target="_blank">
           <el-button class="accent-element" style="width: 100%" type="primary">Подписаться</el-button>
         </a>
@@ -42,14 +34,21 @@
       <!--      </nuxt-link>-->
       <div class="profile-page__right-header">
         <div class="right-header__info">
-          <h2 class="profile-page__title">{{ publication.title }}</h2>
-          <nuxt-link :to="`/publisher/${publication.publisher.id}`">
-            <el-button class="profile-page__publisher-name" type="text">{{ publication.publisher.name }}</el-button>
-          </nuxt-link>
+          <div class="right-header__title">
+            <h2 class="profile-page__title">{{ publication.title }}</h2>
+            <nuxt-link :to="`/publisher/${publication.publisher.id}`">
+              <el-button class="profile-page__publisher-name" type="text">{{ publication.publisher.name }}</el-button>
+            </nuxt-link>
+          </div>
+          <div class="profile-page__rating profile-rating" v-if="publication.averageRating && publication.averageRating.rows.length">
+            <span style="color: #ffb656"><font-awesome-icon :icon="{ prefix: 'fa', iconName: 'star' }"></font-awesome-icon></span>
+            <span class="profile-rating__rating">{{ averageRating }}</span>
+            <span>({{ this.publication.averageRating.count }})</span>
+          </div>
         </div>
         <div class="right-header__controls" v-if="isUserAdmin">
           <nuxt-link class="right-header__edit" :to="`${publication.id}/edit`">
-            <el-button class="accent-element" type="primary" icon="el-icon-edit" ></el-button>
+            <el-button class="accent-element" type="primary" icon="el-icon-edit"></el-button>
           </nuxt-link>
           <el-button @click="$refs.confirmModal.opened = true"
                      class="accent-element"
@@ -157,7 +156,7 @@ export default {
     deletePublication() {
       this.$store.dispatch('publication/deletePublication', this.publication.id)
         .then(() => {
-          this.$router.push({path: `/publisher/${this.user.id}`, query: {tab: 'catalog', page: '1'}});
+          this.$router.push({path: `/publisher/${this.publication.publisher.id}`, query: {tab: 'catalog', page: '1'}});
         })
     },
     addToFavourite() {
@@ -185,6 +184,11 @@ export default {
     }
   },
   computed: {
+    averageRating() {
+      if(this.publication.averageRating.rows.length) {
+        return Math.round(this.publication.averageRating.rows[0].averageRating * 10) / 10
+      }
+    },
     info() {
       return [
         {
@@ -248,8 +252,8 @@ export default {
       }
     },
     publicationDescription() {
-      if(this.publication.desc) {
-        if(this.publication.desc.length > 220) {
+      if (this.publication.desc) {
+        if (this.publication.desc.length > 220) {
           return this.publication.desc.slice(0, 220) + '...'
         } else {
           return this.publication.desc
@@ -266,7 +270,7 @@ export default {
     this.$store.commit('publication/SET_EMPTY_PUBLICATION')
   },
   head() {
-    if(this.publication.title && this.publication.publisher.name) {
+    if (this.publication.title && this.publication.publisher.name) {
       return {
         title: `${this.publication.title} | ${process.env.appName}`,
         meta: [
@@ -288,6 +292,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.profile-rating {
+  display: flex;
+  align-items: center;
+  &__rating {
+    font-weight: bold;
+    font-size: 20px;
+    margin: 0 4px;
+  }
+}
 .profile-page {
   display: flex;
   flex-direction: row;
@@ -423,6 +436,14 @@ export default {
   &__edit {
     margin-right: 15px;
   }
+
+  &__info {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+    padding-right: 20px;
+  }
 }
 
 .left {
@@ -540,6 +561,7 @@ export default {
       justify-content: center;
       align-items: center;
       width: 100%;
+
       .el-button {
         width: 45%;
       }
@@ -547,6 +569,7 @@ export default {
 
     &__edit {
       width: 45%;
+
       .el-button {
         width: 100%;
       }

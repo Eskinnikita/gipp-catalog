@@ -1,7 +1,7 @@
 <template>
   <div class="main-news">
-    <div class="main-news__left">
-      <img class="main-news__main-image" :src="`${serverUrl}/${articles[0].mainImageUrl}`" alt="Главная обложка">
+    <div class="main-news__left" v-if="articles.length" >
+      <img class="main-news__main-image" v-if="articles[0].mainImageUrl" :src="`${serverUrl}/${articles[0].mainImageUrl}`" alt="Главная обложка">
       <h4 class="main-news__title">{{ articles[0].title }}</h4>
       <nuxt-link :to="`/news/${articles[0].id}`">
         <el-button type="text" class="main-news__read-more">Читать далее</el-button>

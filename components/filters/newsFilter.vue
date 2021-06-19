@@ -53,5 +53,8 @@ export default {
     display: flex;
     flex-direction: column;
   }
+  .el-checkbox {
+    margin-bottom: 5px !important;
+  }
 }
 </style>

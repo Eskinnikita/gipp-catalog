@@ -6,11 +6,17 @@
         <Nuxt/>
       </div>
     </main>
+    <Footer/>
   </div>
 </template>
 
 <script>
-export default {};
+import footer from "@/components/footer"
+export default {
+  components: {
+    'Footer': footer
+  },
+};
 </script>
 
 <style lang="scss">

@@ -53,7 +53,7 @@ export default {
         tags: []
       },
       tags: [],
-      types: ['Журнал', 'Газета'],
+      types: ['Журнал', 'Газета', 'Книга', 'Зарубержное'],
       age: ['0+', '6+', '12+', '16+']
     }
   },
@@ -86,6 +86,10 @@ export default {
   .el-checkbox-group {
     display: flex;
     flex-direction: column;
+  }
+
+  .el-checkbox {
+    margin-bottom: 5px !important;
   }
 
 }

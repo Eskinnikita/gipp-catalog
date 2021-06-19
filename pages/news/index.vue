@@ -1,7 +1,15 @@
 <template>
   <div class="news">
     <div class="news__filters">
-      <news-filter class="news__filter" ref="filters"/>
+      <el-button @click="toggleFilters"
+                 style="width: 100%"
+                 class="news__filter-button"
+                 type="primary"
+                 plain>
+        <template v-if="!showFilters">Показать фильтры</template>
+        <template v-else>Скрыть фильтры</template>
+      </el-button>
+      <news-filter v-if="showFilters"  class="news__filter" ref="filters"/>
     </div>
     <div class="news__content">
       <div class="news__header news-header">
@@ -49,6 +57,10 @@ export default {
     articleSnippet
   },
   created() {
+    if (process.browser) {
+      this.onResize()
+      window.addEventListener('resize', this.onResize)
+    }
     const obj = this.$route.query
     if (obj && Object.keys(obj).length === 0 && obj.constructor === Object) {
       this.$router.push({path: `/news`, query: {page: '1'}});
@@ -77,6 +89,7 @@ export default {
   },
   data() {
     return {
+      showFilters: true,
       search: '',
       params: {
         page: '1',
@@ -86,6 +99,12 @@ export default {
     }
   },
   methods: {
+    onResize() {
+      this.showFilters = window.innerWidth > 815;
+    },
+    toggleFilters() {
+      this.showFilters = !this.showFilters
+    },
     handleCurrentChange(val) {
       this.params.page = `${val}`
     },
@@ -156,6 +175,11 @@ export default {
   flex-direction: row;
   justify-content: space-between;
 
+  &__filter-button {
+    display: none;
+    margin-bottom: 15px;
+  }
+
   &__title {
     margin-bottom: 10px;
     font-weight: normal;
@@ -200,6 +224,10 @@ export default {
       width: 100%;
       margin-bottom: 20px;
     }
+
+    &__filter-button {
+      display: block;
+    }
   }
 
   .news-header {
@@ -217,6 +245,10 @@ export default {
     &__filter {
       width: 100%;
       margin-bottom: 20px;
+    }
+
+    &__filter-button {
+      display: block;
     }
   }
 }
