@@ -6,18 +6,20 @@
     <h3 class="pub-create__title">Создание издания</h3>
     <h4 class="pub-create__title">Обложка <span style="font-weight: normal">(нажмите на обложку для изменения)</span></h4>
     <div class="pub-create__cover">
-      <el-upload
-        class="avatar-uploader"
-        action="#"
-        :show-file-list="false"
-        :on-change="handleChange"
-        :on-success="handleAvatarSuccess">
-        <img v-if="imageUrl" :src="imageUrl" alt="Обложка" class="avatar">
-        <template v-else>
-          <i style="margin-bottom: 15px" slot="default" class="el-icon-plus"></i>
-          <p>Нажмите или перетащите  <br> изображение  <br> для загрузки</p>
-        </template>
-      </el-upload>
+      <client-only>
+        <el-upload
+          class="avatar-uploader"
+          action="#"
+          :show-file-list="false"
+          :on-change="handleChange"
+          :on-success="handleAvatarSuccess">
+          <img v-if="imageUrl" :src="imageUrl" alt="Обложка" class="avatar">
+          <template v-else>
+            <i style="margin-bottom: 15px" slot="default" class="el-icon-plus"></i>
+            <p>Нажмите или перетащите  <br> изображение  <br> для загрузки</p>
+          </template>
+        </el-upload>
+      </client-only>
       <h4 class="pub-create__title"></h4>
       <div class="pub-create__form">
         <el-form :model="publication" status-icon :rules="rules" ref="pubForm">
