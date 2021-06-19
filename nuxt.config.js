@@ -91,15 +91,12 @@ export default {
   moment: {
     locales: ['ru']
   },
-
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
-
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     transpile: [/^element-ui/],
   },
-
   env: {
     production: false,
     serverUrl: 'http://localhost:8082',

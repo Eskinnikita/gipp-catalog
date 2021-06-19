@@ -136,7 +136,8 @@ export default {
     this.publicationId = +this.$route.params.id
     this.$store.dispatch('publication/getPublication', {
       publicationId: this.publicationId,
-      userId: this.user ? this.user.id : null
+      userId: this.user ? this.user.id : null,
+      userRole: this.user ? this.user.role : null
     }).then(() => {
       let root = document.documentElement;
       root.style.setProperty('--main-color', this.publication.publisher.PublisherConfig.mainColor, 'important');
