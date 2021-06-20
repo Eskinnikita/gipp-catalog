@@ -69,19 +69,16 @@ export default {
   },
   computed: {
     avatarUrl() {
-      let photo
-      const role = this.commentInfo.reviewerRole
-      if (role === 1 || role === 4) {
-        return false
-      } else if (role === 2 || role === 3) {
-        photo = this.commentInfo.author.logoUrl
-      }
-      if (photo === null) {
-        return false
+      if (this.commentInfo && this.commentInfo.author) {
+        if (this.commentInfo.author.role === 4 || !this.commentInfo.author.logoUrl) {
+          return false
+        } else {
+          return this.serverUrl + '/' + this.commentInfo.author.logoUrl
+        }
       } else {
-        return this.serverUrl + '/' + photo
+        return false
       }
-    },
+    }
   }
 }
 </script>
