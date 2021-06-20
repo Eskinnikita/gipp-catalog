@@ -1,36 +1,32 @@
 <template>
-  <div class="article-snippet">
-    <div class="article-snippet__avatar" v-if="showAuthor">
-      <el-avatar
-        class="article-snippet__avatar-image"
-        size="large"
-        icon="el-icon-user-solid"
-        :src="logoUrl"
-      />
-    </div>
-    <div class="article-snippet__content">
-      <div class="article-snippet__author-header">
-        <nuxt-link :to="`${authorRole}/${article.author.id}`" v-if="showAuthor">
-          <span class="article-snippet__author-name">{{ article.author.name }}</span>
+  <nuxt-link :to="`/news/${article.id}`">
+    <div class="article-snippet">
+      <div class="article-snippet__image-container"
+           :style="{ backgroundImage: `url(${serverUrl}/${article.mainImageUrl})` }">
+        <nuxt-link v-if="isAdminPage" class="article-snippet__edit" :to="`/editor/${article.id}`">
+          <el-button type="primary" round icon="el-icon-edit"></el-button>
         </nuxt-link>
-        <span>{{ $moment(article.updatedAt).fromNow(true) }} назад</span>
-      </div>
-      <div class="article-snippet__article-info article-info">
-        <nuxt-link :to="`/news/${article.id}`">
-          <h2 class="article-info__title">{{ article.title }}</h2>
-        </nuxt-link>
-        <img v-if="article.mainImageUrl" class="article-info__main-image" :src="`${serverUrl}/${article.mainImageUrl}`" alt="">
-        <div class="article-info__read" :style="{'margin-top': isAdminPage ? '10px' : '0'} ">
-          <nuxt-link :to="`/news/${article.id}`">
-            <el-button type="text">Читать статью</el-button>
-          </nuxt-link>
-          <nuxt-link :to="`/editor/${article.id}`">
-            <el-button style="margin-left: 20px;" type="primary" v-if="isAdminPage">Редактировать</el-button>
-          </nuxt-link>
+        <div class="article-snippet__content">
+          <div class="article-snippet__info">
+            <h2 class="article-info__title">{{ article.title }}</h2>
+            <div class="article-snippet__meta">
+              <div class="article-snippet__author" v-if="showAuthor">
+                <el-avatar
+                  style="margin-right: 10px;"
+                  class="article-snippet__avatar-image"
+                  size="large"
+                  icon="el-icon-user-solid"
+                  :src="logoUrl"
+                />
+                <span class="article-snippet__author-name">{{ article.author.name }}&nbsp;</span>
+                <span class="article-snippet__divider">•</span> &nbsp;
+              </div><span>{{ $moment(article.updatedAt).fromNow(true) }} назад</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </nuxt-link>
 </template>
 
 <script>
@@ -59,7 +55,7 @@ export default {
   },
   computed: {
     logoUrl() {
-      if(this.article.author.logoUrl) {
+      if (this.article.author.logoUrl) {
         return this.serverUrl + '/' + this.article.author.logoUrl
       } else {
         return ''
@@ -74,78 +70,97 @@ export default {
 
 <style lang="scss" scoped>
 .article-snippet {
-  display: flex;
-  justify-content: flex-start;
+  width: 100%;
+  height: 280px;
   margin-bottom: 30px;
+  border-radius: 8px;
+  max-width: 100%;
+  overflow: hidden;
+  transition: 0.3s;
   position: relative;
-  padding-bottom: 10px;
 
-  ::after {
-    content: "";
+  &:hover {
+    transform: scale(1.01);
+  }
+
+  &__image-container {
+    border-radius: 8px;
+    height: 100%;
     width: 100%;
-    height: 1px;
-    background-color: lightgray;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 100%;
+    border-radius: 4px;
+    min-height: 230px;
+    background-image: linear-gradient(
+        -180deg, rgba(0, 0, 0, 0) 7%, rgba(0, 0, 0, 0.08) 12%, rgba(0, 0, 0, 0.16) 17%, rgba(0, 0, 0, 0.22) 21%, rgba(0, 0, 0, 0.32) 26%, rgba(0, 0, 0, 0.42) 32%, rgba(0, 0, 0, 0.52) 38%, rgba(0, 0, 0, 0.62) 47%, rgba(0, 0, 0, 0.72) 57%, rgba(0, 0, 0, 0.82) 65%);
+    flex-grow: 0;
+    justify-content: flex-end;
+    padding: 60px 15px 15px;
     position: absolute;
     bottom: 0;
-    left: 0;
   }
 
-  &__avatar {
-    margin-right: 10px;
-  }
-
-  &__avatar-image {
-    border: 1px solid lightgray;
-  }
-
-  &__author-header {
-    margin-bottom: 10px;
-    font-size: 14px;
-  }
-
-  &__author-name {
-    font-size: 14px;
-    margin-right: 10px;
-  }
-
-
-}
-
-.article-info {
-  &__title {
-    margin-bottom: 15px;
-    font-size: 20px;
-  }
-
-  &__main-image {
-    object-fit: cover;
-    height: 280px;
-    width: 75%;
-  }
-
-  &__read {
+  &__meta {
     display: flex;
-    justify-content: flex-start;
+    flex-direction: row;
     align-items: center;
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  &__author {
+  }
+
+  &__author {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  &__info {
+    color: #fff;
+  }
+
+  &__edit {
+    position: absolute;
+    top: 15px;
+    right: 15px;
   }
 }
 
 @media (max-width: 575.98px) {
+  .article-snippet {
+    height: 230px;
+
+    &__avatar-image {
+      display: none;
+    }
+
+    &__meta {
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    &__divider {
+      display: none;
+    }
+  }
   .article-info {
     &__title {
       font-size: 18px;
     }
-
-    &__main-image {
-      width: 100%;
-      height: 170px;
-    }
-  }
-
-  .article-snippet {
-    &__avatar-image {
-      display: none;
-    }
   }
 }
+
+
 </style>

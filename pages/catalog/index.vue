@@ -237,6 +237,7 @@ export default {
   }
 }
 
+
 @media (max-width: 575.98px) {
   .catalog {
     flex-direction: column;
@@ -247,7 +248,8 @@ export default {
     }
 
     &__publications-container {
-      grid-template-columns: repeat(auto-fill, 130px);
+      grid-gap: 1rem;
+      grid-template-columns: repeat(auto-fill, 120px);
     }
 
     &__filter-button {

@@ -17,7 +17,9 @@
       </div>
       <div class="profile-page__controls controls">
         <a class="left__item" :href="publication.subsLink" target="_blank">
-          <el-button class="accent-element" style="width: 100%" type="primary">Подписаться</el-button>
+          <el-button class="accent-element" style="width: 100%" type="primary">
+            {{publication.type === 'Книга' ? 'Приобрести' : 'Подписаться' }}
+          </el-button>
         </a>
         <div class="controls__bottom left__item">
           <social-sharing class="controls__row-button" :meta-info="socialInfo"/>
@@ -202,7 +204,7 @@ export default {
         },
         {
           label: 'Периодичность',
-          value: `${this.publication.count} в ${this.publication.period}`
+          value: this.publication.type === 'Книга' ? null : `${this.publication.count} в ${this.publication.period}`
         },
         {
           label: 'Средний вес выпуска',
@@ -271,7 +273,7 @@ export default {
     this.$store.commit('publication/SET_EMPTY_PUBLICATION')
   },
   head() {
-    if (this.publication.title && this.publication.publisher.name) {
+    if (this.publication && this.publication.title) {
       return {
         title: `${this.publication.title} | ${process.env.appName}`,
         meta: [
@@ -283,7 +285,7 @@ export default {
           {
             hid: 'publication-keywords',
             name: 'keywords',
-            content: `${this.publication.title}, ${this.publication.publisher.name}, журнал, подписаться на журнал, характеристики издания, оставить отзыв изданию`
+            content: `${this.publication.title}, журнал, подписаться на журнал, характеристики издания, оставить отзыв изданию`
           }
         ]
       }

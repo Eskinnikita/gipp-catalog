@@ -18,7 +18,7 @@ export const mutations = {
     state.articleOnUpdate = article
   },
   ADD_COMMENT(state, comment) {
-    state.article.Comments.push(comment)
+    state.article.Comments.unshift(comment)
   }
 }
 

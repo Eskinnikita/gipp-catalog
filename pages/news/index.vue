@@ -189,7 +189,7 @@ export default {
     width: 100%;
     background-color: #fff;
     border-radius: 4px;
-    padding: 20px 30px 30px 30px;
+    padding: 20px 60px 30px 60px;
   }
 
   &__pagination {
@@ -219,6 +219,11 @@ export default {
 @media (max-width: 575.98px) {
   .news {
     flex-direction: column;
+
+    &__content {
+      padding-right: 20px;
+      padding-left: 20px;
+    }
 
     &__filter {
       width: 100%;

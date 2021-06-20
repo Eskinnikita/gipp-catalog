@@ -140,6 +140,7 @@ export default {
     border-radius: 4px;
 
     &_right {
+      height: 100%;
       max-width: 300px;
       min-width: 250px;
       padding: 25px 15px 15px;

@@ -151,14 +151,18 @@ export default {
     width: 100%;
 
     img {
+      max-height: 450px;
       width: 100%;
       margin-bottom: 5px;
       object-fit: cover;
     }
 
     &_main {
+      object-fit: cover;
+      max-height: 450px;
       width: 100%;
       border-radius: 4px;
+      margin-bottom: 20px;
     }
   }
 

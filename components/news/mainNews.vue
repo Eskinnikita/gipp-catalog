@@ -57,6 +57,7 @@ export default {
     height: 250px;
     object-fit: cover;
     margin-bottom: 5px;
+    border-radius: 4px;
   }
 
   &__title {

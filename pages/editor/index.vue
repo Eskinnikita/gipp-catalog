@@ -51,7 +51,7 @@
       </el-button>
       <el-button type="primary" v-else @click="openConfirmDialog('Сохранить изменения?')">Сохранить</el-button>
     </div>
-    <el-dialog width="70%" title="Статья" :visible.sync="dialogVisible">
+    <el-dialog width="70%" :visible.sync="dialogVisible">
       <article-view :article="article" :preview="true"/>
     </el-dialog>
   </div>
