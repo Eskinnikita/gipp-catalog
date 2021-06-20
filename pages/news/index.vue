@@ -9,7 +9,7 @@
         <template v-if="!showFilters">Показать фильтры</template>
         <template v-else>Скрыть фильтры</template>
       </el-button>
-      <news-filter v-if="showFilters"  class="news__filter" ref="filters"/>
+      <news-filter v-show="showFilters"  class="news__filter" ref="filters"/>
     </div>
     <div class="news__content">
       <div class="news__header news-header">
