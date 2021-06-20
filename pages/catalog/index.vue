@@ -210,6 +210,7 @@ export default {
   &__publications-container {
     width: 100%;
     display: grid;
+    justify-items: center;
     grid-template-columns: repeat(auto-fill, 150px);
     grid-gap: 2rem;
     justify-content: space-between;
@@ -248,8 +249,8 @@ export default {
     }
 
     &__publications-container {
-      grid-gap: 1rem;
-      grid-template-columns: repeat(auto-fill, 120px);
+      grid-gap: 1.5rem;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     }
 
     &__filter-button {
@@ -279,7 +280,8 @@ export default {
     }
 
     &__publications-container {
-      grid-template-columns: repeat(auto-fill, 130px);
+      grid-gap: 1.5rem;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
     }
   }
 }

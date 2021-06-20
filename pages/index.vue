@@ -130,6 +130,7 @@ export default {
 
     &_all-pubs {
       display: grid;
+      justify-items: center;
       grid-template-columns: repeat(auto-fill, 130px);
       grid-gap: 2rem;
       justify-content: space-between;
@@ -178,6 +179,13 @@ export default {
       margin: 20px auto;
     }
 
+    &__block {
+      &_all-pubs {
+        grid-gap: 1.5rem;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      }
+    }
+
     &__col {
       &_right {
         display: none;
@@ -213,6 +221,13 @@ export default {
 
 @media (min-width: 576px) and (max-width: 815px) {
   .main-page {
+    &__block {
+      &_all-pubs {
+        grid-gap: 1.5rem;
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      }
+    }
+
     &__col {
       &_right {
         display: none;

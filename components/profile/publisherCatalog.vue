@@ -18,6 +18,7 @@
 
 <script>
 import coverSnippet from "@/components/snippets/coverSnippet"
+
 export default {
   components: {
     coverSnippet
@@ -35,13 +36,33 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.publisher-catalog {
+  &__grid {
+    justify-items: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 150px);
+    grid-gap: 2rem;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 575.98px) {
   .publisher-catalog {
     &__grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, 150px);
-      grid-gap: 2rem;
-      justify-content: space-between;
+      grid-gap: 1.5rem;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     }
   }
+
+  @media (min-width: 576px) and (max-width: 815px) {
+    .publisher-catalog {
+      &__grid {
+        grid-gap: 1.5rem;
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      }
+    }
+  }
+}
+
 
 </style>
