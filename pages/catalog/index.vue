@@ -9,7 +9,7 @@
         <template v-if="!showFilters">Показать фильтры</template>
         <template v-else>Скрыть фильтры</template>
       </el-button>
-      <catalog-filter v-if="showFilters" class="catalog__filter" ref="filters"/>
+      <catalog-filter v-show="showFilters" class="catalog__filter" ref="filters"/>
     </div>
     <div class="catalog__content">
       <div class="catalog__header catalog-header">
